@@ -9,4 +9,5 @@
 misc.xml
 modules.xml
 vcs.xml
-src/src.iml
+src-client/src-client.iml
+src-server/src-server.iml
