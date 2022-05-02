@@ -23,11 +23,17 @@ public class Server {
      */
     ServerSocket serverSocket;
 
-    /*
-    This is the client socket. It represents the connection to the client, it has all his info in such a way we can send information to it.
-    NOTE: IF WE ARE EXPECTING MULTIPLE CONNECTIONS THIS DOESN'T WORK
-     */
-    Socket clientSocket;
+
+
+
+    //TODO: Toca pensar con mucho cuidado que pasara cuando pasemos esto a tener threads. Porque el servidor tendra un pool of threads para lidiar con cada conexion de cliente. Tener como variable global cietos datos no serviria, no me acuerdo como se manejaria en teoria eso con threads.
+    //TODO: https://stackoverflow.com/questions/10131377/socket-programming-multiple-client-to-one-server en este stack hablan de eso , toca revisarlo para ver que hacemos. Depronto es una buena idea comenzar con threads y no intentar integrarlo mas tarde.
+    //Socket clientSocket //goes in servere thread
+    //Servers private key (K_S-)
+    //Servers public key (K_S+)
+    //Shared secret (LS) //won't work having it as an attribute if we use threads and plan to connect to many clients. Goes in ServerThread
+    //Reto (r) //won't work having it as a variable if we use threads and plan to connect to many clients. Goes in server thread.
+    //Client username (u) //won't work having it as a variable if we use threads and plan to connect to many clients. Goes in serverthread.
 
     //----------------------------------------------------------------------
     // CONSTRUCTOR
