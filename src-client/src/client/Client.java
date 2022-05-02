@@ -1,5 +1,13 @@
 package client;
 
+import java.net.Socket;
+
+/**
+ * Client
+ *
+ * @author Veronica Escobar
+ * @author Santiago Vela
+ */
 public class Client {
     //----------------------------------------------------------------------
     // CONSTANTS
@@ -8,6 +16,11 @@ public class Client {
     //----------------------------------------------------------------------
     // ATTRIBUTES
     //----------------------------------------------------------------------
+
+    /*
+    This is the server socket. It represents the connection to the server, it has all his info in such a way we can send information to it.
+     */
+    Socket serverSocket;
 
     //----------------------------------------------------------------------
     // CONSTRUCTOR
@@ -24,4 +37,8 @@ public class Client {
     //----------------------------------------------------------------------
     // MAIN
     //----------------------------------------------------------------------
+
+    public static void main(String[] args){
+        System.out.println("Im the client");
+    }
 }
