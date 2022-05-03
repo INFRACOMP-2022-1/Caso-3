@@ -21,7 +21,7 @@ public class RecordList {
     /*
     The file path of the csv with all the information
      */
-    String csvFileName;
+    String csvFileName = "recordTable";
 
     //----------------------------------------------------------------------
     // CONSTRUCTOR
@@ -29,10 +29,9 @@ public class RecordList {
 
     /**
      * Constructor for a record list
-     * @param fileName the csv file name
      */
-    public RecordList(String fileName) {
-        this.csvFileName = fileName;
+    public RecordList() {
+        this.csvFileName = csvFileName;
         this.recordList = new ArrayList<Record>();
     }
 
