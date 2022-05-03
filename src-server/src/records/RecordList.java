@@ -74,6 +74,13 @@ public class RecordList {
     }
 
     //TODO: Metodo para buscar si existe un paquete con el id dado asociado con un usuario (revisar con geovanny o harold si es asi)
+
+    /**
+     * Searches to check if a package with a certain packageId and username exists
+     * @param username
+     * @param packageId
+     * @return
+     */
     public boolean searchForPackage(String username,String packageId){
 
         try{
@@ -94,13 +101,19 @@ public class RecordList {
 
     //TODO: Search for status for given username and package
 
-    public Status getPackageStatus(String username,String packageId){
+    /**
+     * Gets a package status with the given id and associated username
+     * @param username
+     * @param packageId
+     * @return
+     */
+    public String getPackageStatus(String username,String packageId){
 
         try{
             for(Record rec: recordList){
                 if(rec.getUsername().toLowerCase() == username.toLowerCase()){
                     if(rec.getPackageId() == Integer.parseInt(packageId)){
-                        return rec.getStatus();
+                        return rec.getStatus().toString();
                     }
                 }
             }
@@ -109,9 +122,25 @@ public class RecordList {
             e.printStackTrace();
         }
 
-        return null;
+        return "";
     }
     //----------------------------------------------------------------------
     // GETTERS AND SETTERS
     //----------------------------------------------------------------------
+
+    public ArrayList<Record> getRecordList() {
+        return recordList;
+    }
+
+    public void setRecordList(ArrayList<Record> recordList) {
+        this.recordList = recordList;
+    }
+
+    public String getCsvFileName() {
+        return csvFileName;
+    }
+
+    public void setCsvFileName(String csvFileName) {
+        this.csvFileName = csvFileName;
+    }
 }
