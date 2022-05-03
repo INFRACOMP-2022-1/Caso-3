@@ -1,5 +1,7 @@
 package server;
 
+import records.RecordList;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -22,8 +24,6 @@ public class Server {
     //TODO: Definir que puerto vamos a usar por ahora puse uno random
     public static final int PORT = 2022;
 
-
-
     //----------------------------------------------------------------------
     // ATTRIBUTES
     //----------------------------------------------------------------------
@@ -37,16 +37,17 @@ public class Server {
     /*
     This is the servers private key. K_S-
      */
-    public long privateKeyServer;
+    public static long privateKey;
 
     /*
     This is the servers public key. K_S+
      */
-    public long publicKeyServer;
+    public static long publicKey;
 
-
-
-
+    /*
+    This contains the list to access all the records
+     */
+    public RecordList recordList;
 
     //TODO: Toca pensar con mucho cuidado que pasara cuando pasemos esto a tener threads. Porque el servidor tendra un pool of threads para lidiar con cada conexion de cliente. Tener como variable global cietos datos no serviria, no me acuerdo como se manejaria en teoria eso con threads.
     //TODO: https://stackoverflow.com/questions/10131377/socket-programming-multiple-client-to-one-server en este stack hablan de eso , toca revisarlo para ver que hacemos. Depronto es una buena idea comenzar con threads y no intentar integrarlo mas tarde.
@@ -58,23 +59,14 @@ public class Server {
     //Client username (u) //won't work having it as a variable if we use threads and plan to connect to many clients. Goes in serverthread.
 
     //----------------------------------------------------------------------
-    // CONSTRUCTOR
-    //----------------------------------------------------------------------
-
-    //----------------------------------------------------------------------
-    // METHODS
-    //----------------------------------------------------------------------
-
-    //----------------------------------------------------------------------
-    // GETTERS AND SETTERS
-    //----------------------------------------------------------------------
-
-    //----------------------------------------------------------------------
     // MAIN
     //----------------------------------------------------------------------
     public static void main(String[] args){
         System.out.println("Im the server");
 
+        //TODO: En recordList crear un metodo para automatiamente cargar todos los records de recordTable.csv
+        //recordList = new RecordList();
+        //recordList.loadTable();
 
         //This socket will hold the endpoint of the network connection with the client. It holds the clients direction and port that the server will be sending information to.
         Socket socket = null;
@@ -100,7 +92,7 @@ public class Server {
 
             //Launches a new thread to deal with the client connection
             //TODO: Activar esto cuando ya hallamos terminado la clase de server socket
-            //new ServerThread(socket).start();
+            //new ServerThread(socket,privateKey,publicKey,recordList).start();
         }
     }
 }
