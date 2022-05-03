@@ -1,22 +1,11 @@
 package records;
 
+import java.util.ArrayList;
+
 /**
  * This class is used for saving the different records in the table (users,package_id,status)
  */
 public class Record {
-    //----------------------------------------------------------------------
-    // CONSTANTS
-    //----------------------------------------------------------------------
-    enum Status {
-        PKT_EN_OFICINA,
-        PKT_RECOGIDO,
-        PKT_EN_CLASIFICACION,
-        PKT_DESPACHADO,
-        PKT_EN_ENTREGA,
-        PKT_ENTREGADO,
-        PKT_DESCONOCIDO
-    }
-
     //----------------------------------------------------------------------
     // ATTRIBUTES
     //----------------------------------------------------------------------
@@ -40,10 +29,65 @@ public class Record {
     // CONSTRUCTOR
     //----------------------------------------------------------------------
 
-    public Record(String username, int packageId, Status status) {
+    /**
+     * A record containing information on a package, its id and the username associated to it
+     * @param username
+     * @param packageId
+     * @param status
+     */
+    public Record(String username, String packageId, String status) {
         this.username = username;
-        this.packageId = packageId;
-        this.status = status;
+        this.packageId = strToIntPackageId(packageId);
+        this.status = strToStatus(status);
+    }
+
+    //----------------------------------------------------------------------
+    // METHODS
+    //----------------------------------------------------------------------
+
+    /**
+     * Converts a string related to a package id into an integer
+     * @param packageId
+     * @return
+     */
+    public int strToIntPackageId(String packageId){
+        int number = -1;
+        try{
+            number = Integer.parseInt(packageId);
+        }
+        catch (NumberFormatException ex){
+            ex.printStackTrace();
+        }
+        return number;
+    }
+
+    /**
+     * Converts a status that is a string into a Status enum value
+     * @param strStatus
+     * @return
+     */
+    public Status strToStatus(String strStatus){
+        if(strStatus == Status.PKT_DESCONOCIDO.toString()){
+            return Status.PKT_DESCONOCIDO;
+        }
+        else if(strStatus == Status.PKT_DESPACHADO.toString()){
+            return Status.PKT_DESPACHADO;
+        }
+        else if(strStatus == Status.PKT_EN_CLASIFICACION.toString()){
+            return Status.PKT_EN_CLASIFICACION;
+        }
+        else if(strStatus == Status.PKT_EN_ENTREGA.toString()){
+            return Status.PKT_EN_ENTREGA;
+        }
+        else if(strStatus == Status.PKT_EN_OFICINA.toString()){
+            return Status.PKT_EN_OFICINA;
+        }
+        else if(strStatus == Status.PKT_ENTREGADO.toString()){
+            return Status.PKT_ENTREGADO;
+        }
+        else{
+            return Status.PKT_RECOGIDO;
+        }
     }
 
     //----------------------------------------------------------------------
