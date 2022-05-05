@@ -104,8 +104,6 @@ public class ServerThread extends Thread{
     // METHODS
     //----------------------------------------------------------------------
 
-    //TODO: Crear un metodo para mandar al cliente la public key del server (unencrypted)
-
     /**
      * This method is responsible for sending to the client the servers private key. It does so unencrypted and in plain text.
      */
@@ -113,21 +111,34 @@ public class ServerThread extends Thread{
         outgoingMessageChanel.println(privateKeyServer);
     }
 
-    //TODO: Crear un metodo solo para mandar 'ACK'
+    /**
+     * Sends a message to the client indicating that it has acknowledged ("ACK" in the protocol) the previous received message
+     */
+    public void acknowledgeClient(){
+        outgoingMessageChanel.println("ACK");
+    }
 
     //TODO: Crear metodo para generar el digest
+    public void generateDigest(){
+
+    }
 
     //TODO: Crear metodo para llamar en RecordList el metodo que busque usuarios existentes
+    public void searchForExistingUsers(){
+
+    }
 
     //TODO: Crear metodo para llamar en RecordList el metodo que busque paquetes existentes (paquetes asociados a usaurios, pero toca antes preguntar si es asi)
+    public void searchForExistingPackages(){
 
-    //TODO: Crear metodo para cerrar el socket, el printwriter, el buffer reader
+    }
 
     /**
      * This closes all the connections. It closes the clientSocket, the incomingMessageChannel(BufferedReader) and the outgoingMessageChannel(PrintWriter).
      * This method will be called when the connection is to be terminated, either because of an error in the protocol (like the username or id haven't been found in the table) or when the protocol ends with "TERMINAR"
      * @throws IOException Exception in closing the incomingMessageChannel (BufferedReader)
      */
+    //TODO: Crear metodo para cerrar el socket, el printwriter, el buffer reader
     public void closeAllConnectionsToClient() throws IOException {
         incomingMessageChanel.close();
         outgoingMessageChanel.close();
@@ -141,18 +152,43 @@ public class ServerThread extends Thread{
     //----------------------------------------------------------------------
 
     //TODO: ENCRYPT MESSAGE WITH LS KEY
+    public void encryptWithSymmetricKey(Long unencryptedMessage){
+
+    }
 
     //TODO: ENCRYPT MESSAGE WITH PRIVATE KEY (K_S-)
+    public void encryptWithPrivateKey(Long unencryptedMessage){
+
+    }
 
     //TODO: ENCRYPT MESSAGE USING HMAC
+    public void encryptWithHMAC(Long unencryptedMessage){
+
+    }
+
+    //TODO: ENCRYPT RETOO USING PRIVATE KEY
+    public void encryptRetoWithPrivateKey(){
+        encryptWithPrivateKey(reto);
+    }
 
     //----------------------------------------------------------------------
     // DECRYPTION
     //----------------------------------------------------------------------
 
     //TODO: DECRYPT MESSAGE USANDO PRIVATE KEY
+    public void decryptWithPrivateKey(Long encryptedMessage){
+
+    }
 
     //TODO: DECRYPT MESSAGE USANDO LS KEY
+    public void decryptWithSymmetricKey(Long encryptedMessage){
+
+    }
+
+    //TODO: DECRYPT SYMETRIC KEY USING PRIVATE KEY
+    public void decryptSharedSymmetricKeyWithPrivateKey(Long encryptedSharedSymmetricKey){
+        //sharedSecretKey = decryptWithPrivateKey(encryptedSharedSymmetricKey);
+    }
 
     //----------------------------------------------------------------------
     // GETTERS AND SETTERS
@@ -174,28 +210,48 @@ public class ServerThread extends Thread{
             String currentReceivedMessage;//The latest message that the server has read from the client.
 
             //1) SEND THE SERVERS PUBLIC KEY TO THE CLIENT
+            sendServerPrivateKey();
 
             //2) WAIT FOR CLIENT TO SEND "INICIO" MESSAGE (UNENCRYPTED)
+            while(!(currentReceivedMessage = incomingMessageChanel.readLine()).equals("INICIO")){
+                Thread.yield();
+            }
 
             //3) ACKNOWLEDGE CLIENTS INICIO WITH "ACK"
+            acknowledgeClient();
 
             //4&5&6) WAIT FOR CLIENT TO GENERATE THE reto AND SEND IT. SAVE THE reto
+            while((currentReceivedMessage = incomingMessageChanel.readLine()) == null){
+                Thread.yield();
+            }
+
+            //Stores the reto in its unencrypted form in the corresponding attribute (long)
+            reto = Long.parseLong(currentReceivedMessage);
 
             //7) ENCRYPT THE reto USING SERVER PRIVATE KEY -> reto' = C(K_S-,reto)
+            encryptRetoWithPrivateKey();
 
             //8&9) WAIT FOR CLIENT TO DECRYPT AND CHECK PREVIOUSLY SENT ENCRYPTED reto
 
+
             //10&11&12) WAIT FOR CLIENT TO GENERATE SHARED SECRET (LS) AND SEND IT ENCRYPTED WITH THE SERVERS PUBLIC KEY-> LS'=C(K_S+,LS)
+            while((currentReceivedMessage = incomingMessageChanel.readLine()) != null){
+                Thread.yield();
+            }
+
+            decryptSharedSymmetricKeyWithPrivateKey(Long.parseLong(currentReceivedMessage));
 
             //13) RECEIVE ENCRYPTED SHARED SECRET (LS') AND DECRYPT IT -> LS = D(K_S-,LS')
 
             //14) ACKNOWLEDGE CLIENTS LS WITH "ACK"
+            acknowledgeClient();
 
             //15) WAIT FOR USER TO SEND THE ENCRYPTED USERNAME TO BE SEARCHED -> username'=C(K_S+,username)
 
             //16) DECRYPT RECEIVED USERNAME -> username = D(K_S-,username'). SEARCH IF USERNAME IN DATABASE, ACT ACCORDINGLY.
 
             //17) ACKNOWLEDGE CLIENTS EXISTING USERNAME WITH "ACK"
+            acknowledgeClient();
 
             //18) WAIT FOR CLIENT TO SEND ENCRYPTED PACKAGE ID -> id_pkg' = C(LS,id_pkg)
 
