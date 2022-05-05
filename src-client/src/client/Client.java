@@ -1,5 +1,6 @@
 package client;
 
+import java.io.IOException;
 import java.net.Socket;
 
 /**
@@ -31,6 +32,12 @@ public class Client {
     //----------------------------------------------------------------------
     // METHODS
     //----------------------------------------------------------------------
+
+    public void closeAllConnectionsToServer() throws IOException {
+        //incomingMessageChanel.close();
+        //outgoingMessageChanel.close();
+        //clientSocket.close();
+    }
 
     //----------------------------------------------------------------------
     // GETTERS AND SETTERS
