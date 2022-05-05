@@ -1,7 +1,5 @@
 package records;
 
-import java.util.ArrayList;
-
 /**
  * This class is used for saving the different records in the table (users,package_id,status)
  */

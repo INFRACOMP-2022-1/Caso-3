@@ -8,10 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.nio.Buffer;
 import java.util.ArrayList;
-
-import static java.lang.System.out;
 
 public class ServerThread extends Thread{
 
