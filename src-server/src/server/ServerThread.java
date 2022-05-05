@@ -1,5 +1,6 @@
 package server;
 
+import encryptionDecryption.Encryption;
 import records.Record;
 
 import java.io.BufferedReader;
@@ -151,41 +152,18 @@ public class ServerThread extends Thread{
     // ENCRYPTION
     //----------------------------------------------------------------------
 
-    //TODO: ENCRYPT MESSAGE WITH LS KEY
-    public void encryptWithSymmetricKey(Long unencryptedMessage){
-
-    }
-
-    //TODO: ENCRYPT MESSAGE WITH PRIVATE KEY (K_S-)
-    public void encryptWithPrivateKey(Long unencryptedMessage){
-
-    }
-
-    //TODO: ENCRYPT MESSAGE USING HMAC
-    public void encryptWithHMAC(Long unencryptedMessage){
-
-    }
-
     //TODO: ENCRYPT RETOO USING PRIVATE KEY
-    public void encryptRetoWithPrivateKey(){
-        encryptWithPrivateKey(reto);
+    public static void encryptRetoWithPrivateKey(){
+        //Encryption.encryptWithPrivateKey(reto);
     }
 
     //----------------------------------------------------------------------
     // DECRYPTION
     //----------------------------------------------------------------------
 
-    //TODO: DECRYPT MESSAGE USANDO PRIVATE KEY
-    public void decryptWithPrivateKey(Long encryptedMessage){
 
-    }
 
-    //TODO: DECRYPT MESSAGE USANDO LS KEY
-    public void decryptWithSymmetricKey(Long encryptedMessage){
-
-    }
-
-    //TODO: DECRYPT SYMETRIC KEY USING PRIVATE KEY
+    //TODO: DECRYPT SYMMETRIC KEY USING PRIVATE KEY
     public void decryptSharedSymmetricKeyWithPrivateKey(Long encryptedSharedSymmetricKey){
         //sharedSecretKey = decryptWithPrivateKey(encryptedSharedSymmetricKey);
     }
