@@ -1,5 +1,6 @@
 package server;
 
+import encryptionDecryption.KeyGenerators;
 import records.RecordList;
 
 import java.io.IOException;
@@ -48,32 +49,7 @@ public class Server {
     This contains the list to access all the records
      */
     private static RecordList recordList;
-    //----------------------------------------------------------------------
-    // METHODS
-    //----------------------------------------------------------------------
 
-    /**
-     * Method responsible for generating the private and public key of the server.
-     * It stores the generated keys in their respective attributes.
-     */
-    private static void generateKeyPair(){
-        try{
-            int keySize = 1024;//Safe key size
-            String algorithm = "RSA";//RSA is Asymmetric
-
-            //Chooses the algorithm to be used and the key size for the keys
-            KeyPairGenerator kpg = KeyPairGenerator.getInstance(algorithm);
-            kpg.initialize(keySize);
-
-            //Generates a pair of private and public keys
-            KeyPair kp = kpg.generateKeyPair();
-            privateKey = kp.getPrivate();
-            publicKey = kp.getPublic();
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-    }
 
     //----------------------------------------------------------------------
     // MAIN
@@ -82,7 +58,9 @@ public class Server {
         System.out.println("Im the server");
 
         //Generates the private and public key
-        generateKeyPair();
+        KeyPair kp = KeyGenerators.generateKeyPair();
+        privateKey = kp.getPrivate();
+        publicKey = kp.getPublic();
 
         //Creates a record list with all the usernames, package ids and statuses
         recordList = new RecordList();

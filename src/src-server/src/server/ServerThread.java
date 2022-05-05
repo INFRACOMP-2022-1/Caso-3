@@ -132,8 +132,18 @@ public class ServerThread extends Thread{
     }
 
     //TODO: Crear metodo para llamar en RecordList el metodo que busque usuarios existentes
-    public void searchForExistingUsers(){
 
+    /**
+     * Searches for existing users in the record list. If the user exists then its saved as username in the thread and returns true. The contrary its returned false.
+     * @param searchedUsername the searched username
+     * @return True if searchedUsername exists, false the contary
+     */
+    public boolean searchForExistingUsers(String searchedUsername){
+        if(recordList.searchForUsername(searchedUsername)){
+            username = searchedUsername;
+            return true;
+        }
+        return false;
     }
 
     //TODO: Crear metodo para llamar en RecordList el metodo que busque paquetes existentes (paquetes asociados a usaurios, pero toca antes preguntar si es asi)
