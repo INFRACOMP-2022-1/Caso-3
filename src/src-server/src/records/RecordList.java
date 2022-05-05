@@ -72,6 +72,7 @@ public class RecordList {
         return false;
     }
 
+
     //TODO: Metodo para buscar si existe un paquete con el id dado asociado con un usuario (revisar con geovanny o harold si es asi)
 
     /**
@@ -80,12 +81,12 @@ public class RecordList {
      * @param packageId
      * @return
      */
-    public String searchForPackage(String username,String packageId){
+    public String searchForPackage(String username,int packageId){
 
         try{
             for(Record rec: recordList){
                 if(rec.getUsername().toLowerCase() == username.toLowerCase()){
-                    if(rec.getPackageId() == Integer.parseInt(packageId)){
+                    if(rec.getPackageId() == packageId){
                         return rec.getStatus().toString();
                     }
                 }
@@ -95,7 +96,26 @@ public class RecordList {
             e.printStackTrace();
         }
 
-        return "FAILURE";//TODO: CHECK THIS
+        return "FAILURE";//IT SHOULD NEVER REACH THIS BECAUSE IT WAS ALREADY CHECKED THAT THE PACKAGE EXISTS
+    }
+
+    //TODO: Documents
+    public boolean checkIfPackageExists(String username,int packageId){
+
+        try{
+            for(Record rec: recordList){
+                if(rec.getUsername().toLowerCase() == username.toLowerCase()){
+                    if(rec.getPackageId() == packageId){
+                        return true;
+                    }
+                }
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return false;
     }
 
     //TODO: Search for status for given username and package

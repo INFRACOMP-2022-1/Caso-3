@@ -54,7 +54,7 @@ public class Server {
     //----------------------------------------------------------------------
     // MAIN
     //----------------------------------------------------------------------
-    public static void main(String[] args){
+    public static void main(String[] args) throws NoSuchAlgorithmException {
         System.out.println("Im the server");
 
         //Generates the private and public key

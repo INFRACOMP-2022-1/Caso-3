@@ -62,7 +62,7 @@ public class ServerThread extends Thread{
     /*
     The package id given by the client to be searched in the recordList to then be able to ask for package status
      */
-    public String packageId;
+    public int packageId;
 
     //TODO: Descripcion
     public String status;
@@ -147,8 +147,12 @@ public class ServerThread extends Thread{
     }
 
     //TODO: Crear metodo para llamar en RecordList el metodo que busque paquetes existentes (paquetes asociados a usaurios, pero toca antes preguntar si es asi)
-    public void searchForExistingPackages(){
-
+    public boolean searchForExistingPackages(String username,int packageId){
+        if(recordList.checkIfPackageExists(username,packageId)){
+            status = recordList.searchForPackage(username,packageId);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -196,10 +200,9 @@ public class ServerThread extends Thread{
     }
 
     //TODO: DECRYPT SYMMETRIC KEY USING SYMMETRIC KEY
-    private Long decryptPackageIdWithSymmetricKey(Long encryptedPackageId) {
+    private int decryptPackageIdWithSymmetricKey(Long encryptedPackageId) {
         //TODO: Borrar esto y remplazar cuando este listo
-        Integer i = 0 ;
-        return Long.valueOf(i.longValue());
+        return 0;
     }
 
     //TODO: DECRYPT USERNAME WITH PRIVATE KEY
@@ -290,7 +293,7 @@ public class ServerThread extends Thread{
             //SEARCH FOR PACKAGE ASSOCIATED TO USERNAME, ACT ACCORDINGLY.
             //ENCRYPT PACKAGE STATUS  -> es' = C(LS,es)
 
-            packageId = decryptPackageIdWithSymmetricKey(Long.parseLong(currentReceivedMessage)).toString();
+            packageId = decryptPackageIdWithSymmetricKey(Long.parseLong(currentReceivedMessage));
             //TODO: Revisar que toca hacer en los casos en esta parte del protocolo
             status = recordList.searchForPackage(username,packageId);
 
