@@ -5,6 +5,7 @@ import records.RecordList;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.security.*;
 
 /**
  * Server
@@ -36,17 +37,43 @@ public class Server {
     /*
     This is the servers private key. K_S-
      */
-    private static long privateKey;
+    private static PrivateKey privateKey;
 
     /*
     This is the servers public key. K_S+
      */
-    private static long publicKey;
+    private static PublicKey publicKey;
 
     /*
     This contains the list to access all the records
      */
     private static RecordList recordList;
+    //----------------------------------------------------------------------
+    // METHODS
+    //----------------------------------------------------------------------
+
+    /**
+     * Method responsible for generating the private and public key of the server.
+     * It stores the generated keys in their respective attributes.
+     */
+    private static void generateKeyPair(){
+        try{
+            int keySize = 1024;//Safe key size
+            String algorithm = "RSA";//RSA is Asymmetric
+
+            //Chooses the algorithm to be used and the key size for the keys
+            KeyPairGenerator kpg = KeyPairGenerator.getInstance(algorithm);
+            kpg.initialize(keySize);
+
+            //Generates a pair of private and public keys
+            KeyPair kp = kpg.generateKeyPair();
+            privateKey = kp.getPrivate();
+            publicKey = kp.getPublic();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
     //----------------------------------------------------------------------
     // MAIN
@@ -54,7 +81,10 @@ public class Server {
     public static void main(String[] args){
         System.out.println("Im the server");
 
-        //TODO: En recordList crear un metodo para automatiamente cargar todos los records de recordTable.csv
+        //Generates the private and public key
+        generateKeyPair();
+
+        //Creates a record list with all the usernames, package ids and statuses
         recordList = new RecordList();
         recordList.load();
 
@@ -82,7 +112,7 @@ public class Server {
 
             //Launches a new thread to deal with the client connection
             //TODO: Activar esto cuando ya hallamos terminado la clase de server socket
-            //new ServerThread(socket,privateKey,publicKey,recordList).start();
+            new ServerThread(socket,privateKey,publicKey,recordList).start();
         }
     }
 }

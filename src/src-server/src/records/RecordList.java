@@ -65,7 +65,7 @@ public class RecordList {
     //TODO: Metodo para buscar si un usuario dado existe en la tabla
     public boolean searchForUsername(String username){
         for(Record rec:recordList){
-            if(rec.getUsername().toLowerCase() == username.toLowerCase()){
+            if(rec.getUsername().toLowerCase().equals(username.toLowerCase())){
                 return true;
             }
         }

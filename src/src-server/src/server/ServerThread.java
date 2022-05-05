@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.util.ArrayList;
 
 public class ServerThread extends Thread{
@@ -30,12 +32,12 @@ public class ServerThread extends Thread{
     /*
     This is the servers private key. K_S-
      */
-    public long privateKeyServer;
+    public PrivateKey privateKeyServer;
 
     /*
     This is the servers public key. K_S+
      */
-    public long publicKeyServer;
+    public PublicKey publicKeyServer;
 
     /*
     A table containing all the information of usernames,package id's and statuses
@@ -90,7 +92,7 @@ public class ServerThread extends Thread{
      * @param publicKeyServer the servers public key (K_S+)
      * @param recordList the table that contains all the records of usernames, package id's and statuses
      */
-    public ServerThread(Socket clientSocket, long privateKeyServer, long publicKeyServer,RecordList recordList){
+    public ServerThread(Socket clientSocket, PrivateKey privateKeyServer, PublicKey publicKeyServer, RecordList recordList){
         this.clientSocket = clientSocket;
         this.privateKeyServer = privateKeyServer;
         this.publicKeyServer = publicKeyServer;
