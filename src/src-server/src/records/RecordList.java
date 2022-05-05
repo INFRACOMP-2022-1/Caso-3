@@ -80,13 +80,13 @@ public class RecordList {
      * @param packageId
      * @return
      */
-    public boolean searchForPackage(String username,String packageId){
+    public String searchForPackage(String username,String packageId){
 
         try{
             for(Record rec: recordList){
                 if(rec.getUsername().toLowerCase() == username.toLowerCase()){
                     if(rec.getPackageId() == Integer.parseInt(packageId)){
-                        return true;
+                        return rec.getStatus().toString();
                     }
                 }
             }

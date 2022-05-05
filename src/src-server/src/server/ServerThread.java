@@ -65,6 +65,9 @@ public class ServerThread extends Thread{
     //TODO: Descripcion
     public String status;
 
+    //TODO: Description
+    public String digest;
+
     /*
     The chanel where the serverThread will be writing the messages that it sends to the client. Prints formatted representation of objects into a text-output stream. It's the socket who actually sends it, but it makes it easier to use.
      */
@@ -122,8 +125,8 @@ public class ServerThread extends Thread{
     }
 
     //TODO: Crear metodo para generar el digest
-    public void generateDigest(){
-
+    public String generateDigest(){
+        return " ";
     }
 
     //TODO: Crear metodo para llamar en RecordList el metodo que busque usuarios existentes
@@ -160,8 +163,15 @@ public class ServerThread extends Thread{
     }
 
     //TODO: ENCRYPT STATUS WITH SYMMETRIC KEY
-    public void encryptPackageStatusWithSymmetricKey(){
+    public void encryptPackageStatusWithSymmetricKey(String status){
 
+    }
+
+    //TODO: ENCRYPT DIGEST WITH HMAC
+    public void encryptDigestWithHMAC(){
+        //TODO: Va a tocar convertir todo lo de strings a un bytestream asumo
+        //Long encryptedDigest = Encryption.encryptWithHMAC(digest);
+        //use digest
     }
 
     //----------------------------------------------------------------------
@@ -270,17 +280,24 @@ public class ServerThread extends Thread{
 
             packageId = decryptPackageIdWithSymmetricKey(Long.parseLong(currentReceivedMessage)).toString();
             //TODO: Revisar que toca hacer en los casos en esta parte del protocolo
-            //status = recordList.searchForPackage(username,packageId);
-
-            encryptPackageStatusWithSymmetricKey();
+            status = recordList.searchForPackage(username,packageId);
 
             //20) SEND ENCRYPTED es TO CLIENT
 
+            encryptPackageStatusWithSymmetricKey(status);
+
             //21&22) WAIT FOR CLIENT TO EXTRACT PACKAGE STATUS AND RECEIVE ACK (from client)
+
+            while(!(currentReceivedMessage = incomingMessageChanel.readLine()).equals("ACK")){
+                Thread.yield();
+            }
 
             //23) GENERATE DIGEST WITH HMAC -> HMAC(LS,digest)
 
+            digest = generateDigest();
+
             //24) SEND HMAC DIGEST TO CLIENT
+            encryptDigestWithHMAC();
 
             //25) WAIT FOR CLIENT TO READ DIGEST INFORMATION
 
