@@ -1,7 +1,9 @@
 package server;
 
+import encryptionDecryption.Decryption;
 import encryptionDecryption.Encryption;
 import records.Record;
+import records.RecordList;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -38,7 +40,7 @@ public class ServerThread extends Thread{
     /*
     A table containing all the information of usernames,package id's and statuses
      */
-    public ArrayList<Record> informationTable;
+    public RecordList recordList;
 
     /*
     The "reto" sent by the client
@@ -60,6 +62,9 @@ public class ServerThread extends Thread{
      */
     public String packageId;
 
+    //TODO: Descripcion
+    public String status;
+
     /*
     The chanel where the serverThread will be writing the messages that it sends to the client. Prints formatted representation of objects into a text-output stream. It's the socket who actually sends it, but it makes it easier to use.
      */
@@ -80,13 +85,13 @@ public class ServerThread extends Thread{
      * @param clientSocket the socket containing the endpoint of the network connection with the client.
      * @param privateKeyServer the servers private key (K_S-)
      * @param publicKeyServer the servers public key (K_S+)
-     * @param informationTable the table that contains all the records of usernames, package id's and statuses
+     * @param recordList the table that contains all the records of usernames, package id's and statuses
      */
-    public ServerThread(Socket clientSocket, long privateKeyServer, long publicKeyServer,ArrayList<Record> informationTable){
+    public ServerThread(Socket clientSocket, long privateKeyServer, long publicKeyServer,RecordList recordList){
         this.clientSocket = clientSocket;
         this.privateKeyServer = privateKeyServer;
         this.publicKeyServer = publicKeyServer;
-        this.informationTable = informationTable;
+        this.recordList = recordList;
 
         try{
             outgoingMessageChanel = new PrintWriter(clientSocket.getOutputStream(),true);
@@ -151,18 +156,35 @@ public class ServerThread extends Thread{
 
     //TODO: ENCRYPT RETOO USING PRIVATE KEY
     public static void encryptRetoWithPrivateKey(){
-        //Encryption.encryptWithPrivateKey(reto);
+        //Long encryptedReto =Encryption.encryptWithPrivateKey(reto);
+    }
+
+    //TODO: ENCRYPT STATUS WITH SYMMETRIC KEY
+    public void encryptPackageStatusWithSymmetricKey(){
+
     }
 
     //----------------------------------------------------------------------
     // DECRYPTION
     //----------------------------------------------------------------------
 
-
-
     //TODO: DECRYPT SYMMETRIC KEY USING PRIVATE KEY
     public void decryptSharedSymmetricKeyWithPrivateKey(Long encryptedSharedSymmetricKey){
-        //sharedSecretKey = decryptWithPrivateKey(encryptedSharedSymmetricKey);
+        //sharedSecretKey = Decryption.decryptWithPrivateKey(encryptedSharedSymmetricKey);
+    }
+
+    //TODO: DECRYPT SYMMETRIC KEY USING SYMMETRIC KEY
+    private Long decryptPackageIdWithSymmetricKey(Long encryptedPackageId) {
+        //TODO: Borrar esto y remplazar cuando este listo
+        Integer i = 0 ;
+        return Long.valueOf(i.longValue());
+    }
+
+    //TODO: DECRYPT USERNAME WITH PRIVATE KEY
+    public Long decryptUsernameWithPrivateKey(Long encryptedUsername){
+        //TODO: Borrar esto y remplazar cuando este listo
+        Integer i = 0 ;
+        return Long.valueOf(i.longValue());
     }
 
     //----------------------------------------------------------------------
@@ -222,6 +244,15 @@ public class ServerThread extends Thread{
             acknowledgeClient();
 
             //15) WAIT FOR USER TO SEND THE ENCRYPTED USERNAME TO BE SEARCHED -> username'=C(K_S+,username)
+            while((currentReceivedMessage = incomingMessageChanel.readLine()) != null){
+                Thread.yield();
+            }
+
+            username = decryptUsernameWithPrivateKey(Long.parseLong(currentReceivedMessage)).toString();
+            //TODO: Revisar que toca hacer en este caso en el protocolo
+            if(recordList.searchForUsername(username) != true){
+                closeAllConnectionsToClient();
+            }
 
             //16) DECRYPT RECEIVED USERNAME -> username = D(K_S-,username'). SEARCH IF USERNAME IN DATABASE, ACT ACCORDINGLY.
 
@@ -229,10 +260,19 @@ public class ServerThread extends Thread{
             acknowledgeClient();
 
             //18) WAIT FOR CLIENT TO SEND ENCRYPTED PACKAGE ID -> id_pkg' = C(LS,id_pkg)
+            while((currentReceivedMessage = incomingMessageChanel.readLine()) != null){
+                Thread.yield();
+            }
 
             //19) DECRYPT RECEIVED PACKAGE ID -> id = D(LS,id_pkg')
             //SEARCH FOR PACKAGE ASSOCIATED TO USERNAME, ACT ACCORDINGLY.
             //ENCRYPT PACKAGE STATUS  -> es' = C(LS,es)
+
+            packageId = decryptPackageIdWithSymmetricKey(Long.parseLong(currentReceivedMessage)).toString();
+            //TODO: Revisar que toca hacer en los casos en esta parte del protocolo
+            //status = recordList.searchForPackage(username,packageId);
+
+            encryptPackageStatusWithSymmetricKey();
 
             //20) SEND ENCRYPTED es TO CLIENT
 
@@ -258,4 +298,6 @@ public class ServerThread extends Thread{
             e.printStackTrace();
         }
     }
+
+
 }
