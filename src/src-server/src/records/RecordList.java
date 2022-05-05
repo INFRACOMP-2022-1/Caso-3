@@ -95,7 +95,7 @@ public class RecordList {
             e.printStackTrace();
         }
 
-        return false;
+        return "FAILURE";//TODO: CHECK THIS
     }
 
     //TODO: Search for status for given username and package
