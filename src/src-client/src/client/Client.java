@@ -18,11 +18,6 @@ public class Client {
     // CONSTANTS
     //----------------------------------------------------------------------
 
-    //todo: document
-    private static final String CIPHER_AES = "AES";
-
-    //Todo document
-    private static final int SECRET_KEY_SIZE = 256;
 
     //----------------------------------------------------------------------
     // ATTRIBUTES
@@ -53,6 +48,9 @@ public class Client {
 
     //TODO: Generate Secret Key
     public static SecretKey generateSecretKey() throws NoSuchAlgorithmException {
+        String CIPHER_AES = "AES";
+        int SECRET_KEY_SIZE = 256;
+
         KeyGenerator kg = KeyGenerator.getInstance(CIPHER_AES);
         kg.init(SECRET_KEY_SIZE);
         return kg.generateKey();
