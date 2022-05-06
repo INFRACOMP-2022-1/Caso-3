@@ -57,17 +57,23 @@ public class Client {
     }
 
     //----------------------------------------------------------------------
-    // GETTERS AND SETTERS
-    //----------------------------------------------------------------------
-
-    //----------------------------------------------------------------------
     // MAIN
     //----------------------------------------------------------------------
 
     public static void main(String[] args) throws NoSuchAlgorithmException {
         System.out.println("Im the client");
 
-        //Generate LS (SecretKey)
-        secretKey = generateSecretKey();
+        try {
+
+            //TODO: ESCRIBIR EL PROTOCOLO DETALLADO EN LAS NOTAS (VERONOTAS) AQUI (DE LA MISMA FORMA QUE ESTA EN SERVERTHREAD
+            //Generate LS (SecretKey)
+            secretKey = generateSecretKey();
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
+
     }
 }
