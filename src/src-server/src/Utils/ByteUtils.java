@@ -2,7 +2,13 @@ package Utils;
 
 import java.nio.ByteBuffer;
 
-//TODO: Descripcion
+/**
+ * The byte utils class contains a range of methods that convert from a variety of
+ * data types (String,Long,Integer,etc) to Byte Arrays (byte[]) and vice versa.
+ *
+ * @author Veronica Escobar
+ * @author Santiago Vela
+ */
 public class ByteUtils {
 
     /**
@@ -13,11 +19,16 @@ public class ByteUtils {
     // METHODS
     //----------------------------------------------------------------------
 
-    //TODO: DOCUMENTAR
-    //TODO: ESTAS SON LOS METODOS QUE RECOMIENDAN USAR PARA CONVERTIR LOS BYTES A STR ANTES DE TRANSMITIR Y PARA PASAR DE STR A BYTES CUANDO UNO RECIBE
+
+    /**
+     * Transforms bytes to strings.
+     * In relation to sockets , this is normally done before writing on the socket.
+     * @param b is the byte array
+     * @return String corresponding to the given byte array
+     */
     public static String byte2str(byte[] b)
     {
-        // Encapsulamiento con hexadecimales
+        // Encapsulation with hexadecimals
         String ret = "";
         for (int i = 0 ; i < b.length ; i++) {
             String g = Integer.toHexString(((char)b[i])&0x00ff);
@@ -26,11 +37,15 @@ public class ByteUtils {
         return ret;
     }
 
-    //TODO: DOCUMENTAR
-    //TODO: ESTAS SON LOS METODOS QUE RECOMIENDAN USAR PARA CONVERTIR LOS BYTES A STR ANTES DE TRANSMITIR Y PARA PASAR DE STR A BYTES CUANDO UNO RECIBE
+    /**
+     * Reads the chains and converts them to bytes.
+     * In relation to sockets, this is normally done after it's read from a socket
+     * @param ss the string that is to be converted
+     * @return A byte array , byte[] , of the corresponding string
+     */
     public static byte[] str2byte( String ss)
     {
-        // Encapsulamiento con hexadecimales
+        // Encapsulation with hexadecimals
         byte[] ret = new byte[ss.length()/2];
         for (int i = 0 ; i < ret.length ; i++) {
             ret[i] = (byte) Integer.parseInt(ss.substring(i*2,(i+1)*2), 16);
@@ -38,17 +53,25 @@ public class ByteUtils {
         return ret;
     }
 
-    //TODO: DOCUMENTAR
-    public static byte[] longToBytes(long x) {
+    /**
+     * Reads the long and converts them to bytes.
+     * @param ll the long that is to be converted
+     * @return A byte array , byte[] , of the corresponding long
+     */
+    public static byte[] longToBytes(long ll) {
         ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
-        buffer.putLong(x);
+        buffer.putLong(ll);
         return buffer.array();
     }
 
-    //TODO: DOCUMENTAR
-    public static long bytesToLong(byte[] bytes) {
+    /**
+     * Transforms bytes to long.
+     * @param b is the byte array
+     * @return Long corresponding to the given byte array
+     */
+    public static long bytesToLong(byte[] b) {
         ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
-        buffer.put(bytes);
+        buffer.put(b);
         buffer.flip();//need flip
         return buffer.getLong();
     }

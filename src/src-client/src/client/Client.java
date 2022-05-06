@@ -79,6 +79,11 @@ public class Client {
         return kg.generateKey();
     }
 
+    //TODO: Document
+    public static void saveServerPublicKey(String serverPublicKey){
+        //byte[] serverPublicKeyByteArray = ByteUtils.
+    }
+
     //----------------------------------------------------------------------
     // ENCRYPTION
     //----------------------------------------------------------------------
@@ -100,9 +105,69 @@ public class Client {
             outgoingMessageChanel = new PrintWriter(serverSocket.getOutputStream(),true);
             incomingMessageChanel = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
 
-            //TODO: ESCRIBIR EL PROTOCOLO DETALLADO EN LAS NOTAS (VERONOTAS) AQUI (DE LA MISMA FORMA QUE ESTA EN SERVERTHREAD
-            //Generate LS (SecretKey)
+            //TODO: Document
+            String currentReceivedMessage;
+
+            //1) Guardar la clave publica del servidor
+            while((currentReceivedMessage = incomingMessageChanel.readLine()) == null){
+                Thread.yield();
+            }
+
+            saveServerPublicKey(currentReceivedMessage);
+
+            //2) Manda mensaje de incio
+
+            //3) Espera mensaje de ACK de parte del servidor
+
+            //4) Generar reto
+
+            //5) Mandar reto
+
+            //6) Esperar a que el servidor cifre el reto
+
+            //7) Esperar a que el servidro mande el reto cifrado
+
+            //8) Decifrar reto cifrado
+
+            //9) Comparar reto decifrado con el reto original que se mando al servidor
+
+            //10) Generar LS
             secretKey = generateSecretKey();
+
+            //11) Cifrar LS con llave publica del servidor
+
+            //12) Mandar llave secreta a servidor
+
+            //13) Esperar a que el servidor decifre la llave secreta
+
+            //14) Esperar a que el servidor haga "ACK"
+
+            //15) Encriptar nombre de usuario a sacar y mandar nombre de usuario encriptado
+
+            //16) Esperar a que el servidor busque en la tabla de usuarios
+            //TODO: Ver protocolo para el caso donde no se encuentra el nombre de usuario
+
+            //17) Esperar a que el servidor haga "ACK"
+
+            //18) Encriptar id del paquete y mandar id del paquete encriptado
+
+            //19) esperar a que el seervidor busque el paquete
+
+            //20) esperar a que busque  el estado del paquete encriptado y esperar a recibir el estado del paquete encriptado
+
+            //21) Decifrar el estado del paquete encriptado con la llave secreta
+
+            //22) Mandar ACK
+
+            //23) esperara a que se genere digest y que se firme
+
+            //24) esperar a que se mande digest con hmac certificado de autentica cion
+
+            //25) Sacar digest, ver si el certificado encaja
+
+            //26) Mandar mensaje de  "TERMINAR"
+
+
 
         }
         catch (Exception e){
