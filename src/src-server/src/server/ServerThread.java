@@ -168,6 +168,31 @@ public class ServerThread extends Thread{
         clientSocket.close();
     }
 
+    //TODO: DOCUMENTAR
+    //TODO: ESTAS SON LOS METODOS QUE RECOMIENDAN USAR PARA CONVERTIR LOS BYTES A STR ANTES DE TRANSMITIR Y PARA PASAR DE STR A BYTES CUANDO UNO RECIBE
+    public String byte2str( byte[] b )
+    {
+        // Encapsulamiento con hexadecimales
+        String ret = "";
+        for (int i = 0 ; i < b.length ; i++) {
+            String g = Integer.toHexString(((char)b[i])&0x00ff);
+            ret += (g.length()==1?"0":"") + g;
+        }
+        return ret;
+    }
+
+    //TODO: DOCUMENTAR
+    //TODO: ESTAS SON LOS METODOS QUE RECOMIENDAN USAR PARA CONVERTIR LOS BYTES A STR ANTES DE TRANSMITIR Y PARA PASAR DE STR A BYTES CUANDO UNO RECIBE
+    public byte[] str2byte( String ss)
+    {
+        // Encapsulamiento con hexadecimales
+        byte[] ret = new byte[ss.length()/2];
+        for (int i = 0 ; i < ret.length ; i++) {
+            ret[i] = (byte) Integer.parseInt(ss.substring(i*2,(i+1)*2), 16);
+        }
+        return ret;
+    }
+
     //TODO: EN GENERAL CREAR PUROS METODOS PARA MANEJAR CADA PARTE DEL PROTOCOLO
 
     //----------------------------------------------------------------------
