@@ -1,7 +1,4 @@
-package client;
-
-import Utils.ByteUtils;
-import Utils.Decryption;
+package Client;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;

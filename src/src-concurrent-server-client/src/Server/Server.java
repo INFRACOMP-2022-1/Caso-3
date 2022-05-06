@@ -1,7 +1,7 @@
-package server;
+package Server;
 
 import Utils.KeyGenerators;
-import records.RecordList;
+import Records.RecordList;
 
 import java.io.IOException;
 import java.net.ServerSocket;

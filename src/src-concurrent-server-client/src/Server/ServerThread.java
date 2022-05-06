@@ -1,9 +1,9 @@
-package server;
+package Server;
 
 import Utils.ByteUtils;
 import Utils.Decryption;
 import Utils.Encryption;
-import records.RecordList;
+import Records.RecordList;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;

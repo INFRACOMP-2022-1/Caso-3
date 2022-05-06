@@ -1,4 +1,4 @@
-package records;
+package Records;
 
 /**
  * This class is used for saving the different records in the table (users,package_id,status)

@@ -1,4 +1,4 @@
-package records;
+package Records;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
