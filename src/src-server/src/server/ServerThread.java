@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.security.Key;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.ArrayList;
@@ -195,7 +196,7 @@ public class ServerThread extends Thread{
     //----------------------------------------------------------------------
 
     //TODO: DECRYPT SYMMETRIC KEY USING PRIVATE KEY
-    public void decryptSharedSymmetricKeyWithPrivateKey(Long encryptedSharedSymmetricKey){
+    public Key decryptSharedSymmetricKeyWithPrivateKey(Long encryptedSharedSymmetricKey){
         //sharedSecretKey = Decryption.decryptWithPrivateKey(encryptedSharedSymmetricKey);
     }
 
@@ -206,10 +207,9 @@ public class ServerThread extends Thread{
     }
 
     //TODO: DECRYPT USERNAME WITH PRIVATE KEY
-    public Long decryptUsernameWithPrivateKey(Long encryptedUsername){
+    public String decryptUsernameWithPrivateKey(Long encryptedUsername){
         //TODO: Borrar esto y remplazar cuando este listo
-        Integer i = 0 ;
-        return Long.valueOf(i.longValue());
+        return "";
     }
 
     //----------------------------------------------------------------------
