@@ -176,6 +176,11 @@ public class ServerThread extends Thread{
 
     //TODO: EN GENERAL CREAR PUROS METODOS PARA MANEJAR CADA PARTE DEL PROTOCOLO
 
+    //TODO: Document. This is a general purpose method. As all messages are sent as strings (even if encrypted) then this is a general message sender
+    public void sendMessage(String message){
+        outgoingMessageChanel.println(message);
+    }
+
     //----------------------------------------------------------------------
     // ENCRYPTION
     //----------------------------------------------------------------------
@@ -224,23 +229,34 @@ public class ServerThread extends Thread{
         //Decrypts the key with decrypt method and returns byte array
         byte[] decryptedSharedSymmetricKeyByteArray = Decryption.decryptWithPrivateKey(encryptedSharedSymmetricKeyByteArray,privateKeyServer);
 
-        //Converts decrypted byte array to string
+        //Converts decrypted byte array to a secret key
         //TODO: "REPLACE AES WITH REFERENCE TO KEY GENERATORS
         //TODO: Could use SecretKeySpec(byte[] key,String algorithm) but I found the example with parameters public SecretKeySpec(byte[] key,int offset,int len,String algorithm)
-        SecretKey secretKey = new SecretKeySpec(decryptedSharedSymmetricKeyByteArray,0,decryptedSharedSymmetricKeyByteArray.length, "AES");
-        return secretKey;
+        return new SecretKeySpec(decryptedSharedSymmetricKeyByteArray,0,decryptedSharedSymmetricKeyByteArray.length, "AES");
     }
 
     //TODO: DECRYPT SYMMETRIC KEY USING SYMMETRIC KEY
-    private int decryptPackageIdWithSymmetricKey(Long encryptedPackageId) {
-        //TODO: Borrar esto y remplazar cuando este listo
-        return 0;
+    private int decryptPackageIdWithSymmetricKey(String encryptedPackageId) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+        //Since there are problems with byte transmission through sockets the encrypted package id string is converted to a byte array
+        byte[] encryptedPackageIdWithSymmetricKey = ByteUtils.str2byte(encryptedPackageId);
+
+        //Decrypts the package id with decrypt method and returns byte array
+        byte[] decryptedPackageId = Decryption.decryptWithSymmetricKey(encryptedPackageIdWithSymmetricKey,sharedSecretKey);
+
+        //Converts decrypted byte array to string and then to integer(because package id is an int)
+        return Integer.parseInt(ByteUtils.byte2str(decryptedPackageId));
     }
 
     //TODO: DECRYPT USERNAME WITH PRIVATE KEY
-    public String decryptUsernameWithPrivateKey(Long encryptedUsername){
-        //TODO: Borrar esto y remplazar cuando este listo
-        return "";
+    public String decryptUsernameWithPrivateKey(String encryptedUsername) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+        //Since there are problems with byte transmission through sockets the encrypted username string is converted to a byte array
+        byte[] encryptedPackageIdWithSymmetricKey = ByteUtils.str2byte(encryptedUsername);
+
+        //Decrypts the username with decrypt method and returns byte array
+        byte[] decryptedPackageId = Decryption.decryptWithPrivateKey(encryptedPackageIdWithSymmetricKey,privateKeyServer);
+
+        //Converts decrypted byte array to string
+        return ByteUtils.byte2str(decryptedPackageId);
     }
 
     //----------------------------------------------------------------------
@@ -281,8 +297,9 @@ public class ServerThread extends Thread{
             //Stores the reto in its unencrypted form in the corresponding attribute (long)
             reto = Long.parseLong(currentReceivedMessage);
 
-            //7) ENCRYPT THE reto USING SERVER PRIVATE KEY -> reto' = C(K_S-,reto)
-            encryptRetoWithPrivateKey();
+            //7) ENCRYPT THE reto USING SERVER PRIVATE KEY AND SEND IT -> reto' = C(K_S-,reto)
+            String encryptedRetoStr = encryptRetoWithPrivateKey(reto);
+            sendMessage(encryptedRetoStr);
 
             //8&9) WAIT FOR CLIENT TO DECRYPT AND CHECK PREVIOUSLY SENT ENCRYPTED reto
 
@@ -306,7 +323,7 @@ public class ServerThread extends Thread{
 
             username = decryptUsernameWithPrivateKey(Long.parseLong(currentReceivedMessage)).toString();
             //TODO: Revisar que toca hacer en este caso en el protocolo
-            if(recordList.searchForUsername(username) != true){
+            if(!recordList.searchForUsername(username)){
                 closeAllConnectionsToClient();
             }
 
@@ -343,7 +360,8 @@ public class ServerThread extends Thread{
             digest = generateDigest();
 
             //24) SEND HMAC DIGEST TO CLIENT
-            encryptDigestWithHMAC();
+            String authCodeHMAC = encryptDigestWithHMAC(digest);
+            //TODO: Need to send both the digest and the authCodeHMAC
 
             //25) WAIT FOR CLIENT TO READ DIGEST INFORMATION
 
