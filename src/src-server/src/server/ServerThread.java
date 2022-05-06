@@ -165,10 +165,6 @@ public class ServerThread extends Thread{
         clientSocket.close();
     }
 
-
-
-    //TODO: EN GENERAL CREAR PUROS METODOS PARA MANEJAR CADA PARTE DEL PROTOCOLO
-
     //TODO: Document. This is a general purpose method. As all messages are sent as strings (even if encrypted) then this is a general message sender
     public void sendMessage(String message){
         outgoingMessageChanel.println(message);
