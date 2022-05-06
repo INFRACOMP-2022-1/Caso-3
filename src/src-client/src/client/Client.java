@@ -1,5 +1,8 @@
 package client;
 
+import Utils.ByteUtils;
+import Utils.Decryption;
+
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import java.io.BufferedReader;
@@ -9,6 +12,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
+import java.util.Random;
 
 /**
  * Client represents a client that wants to request information on the status of a package through a connection with the server.
@@ -39,7 +43,7 @@ public class Client {
     protected static PublicKey publicKeyServer;
 
     //TODO: Documentar
-    public long reto;
+    public static Long reto;
 
     //TODO: Documentar
     public String username;
@@ -84,6 +88,31 @@ public class Client {
         //byte[] serverPublicKeyByteArray = ByteUtils.
     }
 
+
+
+    //TODO: DOCUMENT
+    public static void sendMessage(String message){
+        outgoingMessageChanel.println(message);
+    }
+
+    //TODO:Document
+    public static String generateReto(){
+
+        //This is in charge of generating a 24 character string composed of numbers
+        StringBuilder str = new StringBuilder();
+        Random random = new Random();
+        for(int i = 0; i < 24; i++) {
+            str.append(random.nextInt(10));
+        }
+
+        //Gets the string format and the long format of the reto
+        String retoStr = str.toString();
+        reto = Long.parseLong(retoStr);//stores long reto in its corresponding atribute
+
+        //This is in charge returning the 24 numeric string
+        return retoStr;
+    }
+
     //----------------------------------------------------------------------
     // ENCRYPTION
     //----------------------------------------------------------------------
@@ -91,6 +120,11 @@ public class Client {
     //----------------------------------------------------------------------
     // DECRYPTION
     //----------------------------------------------------------------------
+
+    public Long decryptRetoWithServerPublicKey(String encryptedReto){
+        //TODO: REVISAR ESTO POR QUE ME TOCA DESENCRIPTAR CON LA LLAVE PUBLICA Y NO CREO QUE TENGA ESE METODO EN DECRYPTION
+        return Long.parseLong("0");
+    }
 
     //----------------------------------------------------------------------
     // MAIN
@@ -116,16 +150,24 @@ public class Client {
             saveServerPublicKey(currentReceivedMessage);
 
             //2) Manda mensaje de incio
+            sendMessage("INICIO");
 
             //3) Espera mensaje de ACK de parte del servidor
+            while(!(currentReceivedMessage = incomingMessageChanel.readLine()).equals("ACK")){
+                Thread.yield();
+            }
 
             //4) Generar reto
+            String retoStr = generateReto();//By default, the method also saves the long format version of the reto
 
             //5) Mandar reto
+            sendMessage(retoStr);
 
             //6) Esperar a que el servidor cifre el reto
-
             //7) Esperar a que el servidro mande el reto cifrado
+            while((currentReceivedMessage = incomingMessageChanel.readLine()) == null){
+                Thread.yield();
+            }
 
             //8) Decifrar reto cifrado
 
@@ -168,7 +210,7 @@ public class Client {
             //26) Mandar mensaje de  "TERMINAR"
 
 
-
+            closeAllConnectionsToServer();
         }
         catch (Exception e){
             e.printStackTrace();
