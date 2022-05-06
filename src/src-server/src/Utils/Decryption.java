@@ -1,12 +1,13 @@
 package Utils;
 
 import javax.crypto.*;
-import javax.crypto.spec.SecretKeySpec;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 
-//TODO: Descripcion de la clase
+/**
+ * Class responsible for encrypting data with a variety of algorithms and encryption types.
+ */
 public class Decryption {
 
     /**
@@ -17,30 +18,53 @@ public class Decryption {
     // CONSTANTS
     //---------------------------------------------------------------------
 
-    //TODO: Document
+    /*
+    The private key algorithm to implement asymmetric encryption. RSA
+     */
     public static final String PRIVATE_KEY_ALGORITHM = "RSA";
 
-    //TODO: Document
+    /*
+    The public key algorithm to implement symmetric encryption. AES with ECB
+     */
     public static final String SYMMETRIC_KEY_ALGORITHM = "AES/ECB/PKCS5Padding";
 
     //----------------------------------------------------------------------
     // METHODS
     //----------------------------------------------------------------------
 
-    //TODO: DECRYPT MESSAGE USANDO PRIVATE KEY
+    /**
+     * Decrypts a message using the private key given by parameter.
+     * This method will only work if the private key used is a pair to the public key used to encrypt the message.
+     * @param encryptedMessageBytes the encrypted message in the format of a byte array
+     * @param privateKey the private key used to decrypt the message. (It should be the pair of the public key used to encrypt the message)
+     * @return A byte array with the unencrypted message
+     * @throws NoSuchPaddingException
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidKeyException
+     * @throws IllegalBlockSizeException
+     * @throws BadPaddingException
+     */
     public static byte[] decryptWithPrivateKey(byte[] encryptedMessageBytes, PrivateKey privateKey) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
-        Cipher cipher = Cipher.getInstance(PRIVATE_KEY_ALGORITHM);
+        Cipher cipher = Cipher.getInstance(PRIVATE_KEY_ALGORITHM);//Uses RSA
         cipher.init(Cipher.DECRYPT_MODE,privateKey);
         return cipher.doFinal(encryptedMessageBytes);
     }
 
-    //TODO: DECRYPT MESSAGE USANDO LS KEY
+    /**
+     * Decrypts a message using the shared secret key given by parameter.
+     * This method will only work if the secret key used is the same as the key used to encrypt the message
+     * @param encryptedMessageBytes the encrypted message in a byte array format
+     * @param secretKey the secret key used to decrypt the message
+     * @return an unencrypted byte array with the message content.
+     * @throws NoSuchPaddingException
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidKeyException
+     * @throws IllegalBlockSizeException
+     * @throws BadPaddingException
+     */
     public static byte[] decryptWithSymmetricKey(byte[] encryptedMessageBytes, SecretKey secretKey) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
         Cipher cipher = Cipher.getInstance(SYMMETRIC_KEY_ALGORITHM);
         cipher.init(Cipher.DECRYPT_MODE, secretKey);
         return cipher.doFinal(encryptedMessageBytes);
     }
-
-
-
 }
