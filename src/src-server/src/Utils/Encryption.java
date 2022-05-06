@@ -1,4 +1,4 @@
-package encryptionDecryption;
+package Utils;
 
 import javax.crypto.*;
 import javax.crypto.spec.IvParameterSpec;
@@ -7,7 +7,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 
-//TODO: Descripcion de la clase
+//TODO: Descripcion de la clase (decir que el signature de HMAC tambien esta aqui)
 public class Encryption {
 
     /**
@@ -38,8 +38,8 @@ public class Encryption {
         return encryptedMessageBytes;
     }
 
-    //TODO: ENCRYPT MESSAGE USING HMAC
-    public static byte[] encryptWithHMAC(byte[] unencryptedMessageBytes, SecretKey secretKey) throws NoSuchAlgorithmException, InvalidKeyException {
+    //TODO: SIGN MESSAGE USING HMAC
+    public static byte[] signWithHMAC(byte[] unencryptedMessageBytes, SecretKey secretKey) throws NoSuchAlgorithmException, InvalidKeyException {
         //TODO: No tengo muy claro si HMAC usa la llave LS o no
         String hmacSHA256Algorithm = "HmacSHA256";
 

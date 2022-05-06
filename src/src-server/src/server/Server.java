@@ -1,6 +1,6 @@
 package server;
 
-import encryptionDecryption.KeyGenerators;
+import Utils.KeyGenerators;
 import records.RecordList;
 
 import java.io.IOException;

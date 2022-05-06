@@ -1,19 +1,23 @@
 package server;
 
-import encryptionDecryption.Decryption;
-import encryptionDecryption.Encryption;
-import records.Record;
+import Utils.ByteUtils;
+import Utils.Decryption;
+import Utils.Encryption;
 import records.RecordList;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.security.Key;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.util.ArrayList;
+import java.security.*;
+
+import static Utils.ByteUtils.byte2str;
 
 public class ServerThread extends Thread{
 
@@ -38,7 +42,7 @@ public class ServerThread extends Thread{
     /*
     This is the servers public key. K_S+
      */
-    public PublicKey publicKeyServer;
+    public static PublicKey publicKeyServer;
 
     /*
     A table containing all the information of usernames,package id's and statuses
@@ -53,7 +57,7 @@ public class ServerThread extends Thread{
     /*
     The LS secret key shared by the client and the server
      */
-    public long sharedSecretKey;
+    public SecretKey sharedSecretKey;
 
     /*
     The username given by the client to be searched in the recordList to then be able to ask for package status
@@ -168,30 +172,7 @@ public class ServerThread extends Thread{
         clientSocket.close();
     }
 
-    //TODO: DOCUMENTAR
-    //TODO: ESTAS SON LOS METODOS QUE RECOMIENDAN USAR PARA CONVERTIR LOS BYTES A STR ANTES DE TRANSMITIR Y PARA PASAR DE STR A BYTES CUANDO UNO RECIBE
-    public String byte2str( byte[] b )
-    {
-        // Encapsulamiento con hexadecimales
-        String ret = "";
-        for (int i = 0 ; i < b.length ; i++) {
-            String g = Integer.toHexString(((char)b[i])&0x00ff);
-            ret += (g.length()==1?"0":"") + g;
-        }
-        return ret;
-    }
 
-    //TODO: DOCUMENTAR
-    //TODO: ESTAS SON LOS METODOS QUE RECOMIENDAN USAR PARA CONVERTIR LOS BYTES A STR ANTES DE TRANSMITIR Y PARA PASAR DE STR A BYTES CUANDO UNO RECIBE
-    public byte[] str2byte( String ss)
-    {
-        // Encapsulamiento con hexadecimales
-        byte[] ret = new byte[ss.length()/2];
-        for (int i = 0 ; i < ret.length ; i++) {
-            ret[i] = (byte) Integer.parseInt(ss.substring(i*2,(i+1)*2), 16);
-        }
-        return ret;
-    }
 
     //TODO: EN GENERAL CREAR PUROS METODOS PARA MANEJAR CADA PARTE DEL PROTOCOLO
 
@@ -200,20 +181,33 @@ public class ServerThread extends Thread{
     //----------------------------------------------------------------------
 
     //TODO: ENCRYPT RETOO USING PRIVATE KEY
-    public static void encryptRetoWithPrivateKey(){
-        //Long encryptedReto =Encryption.encryptWithPrivateKey(reto);
+    public String encryptRetoWithPrivateKey(Long reto) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+        //Encrypts byte[] version of the parameter
+        byte[] retoByteArray = ByteUtils.longToBytes(reto);
+        byte[] encryptedReto =Encryption.encryptWithPrivateKey(retoByteArray, publicKeyServer);
+
+        //Since there are problems with byte transmission through sockets the encrypted reto byte array is converted to a string
+        return byte2str(encryptedReto);
     }
 
     //TODO: ENCRYPT STATUS WITH SYMMETRIC KEY
-    public void encryptPackageStatusWithSymmetricKey(String status){
+    public String encryptPackageStatusWithSymmetricKey(String status) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+        //Encrypts byte[] version of the parameter
+        byte[] statusByteArray = ByteUtils.str2byte(status);
+        byte[] encryptedStatus = Encryption.encryptWithSymmetricKey(statusByteArray,sharedSecretKey);
 
+        //Since there are problems with byte transmission through sockets the encrypted status byte array is converted to a string
+        return byte2str(encryptedStatus);
     }
 
     //TODO: ENCRYPT DIGEST WITH HMAC
-    public void encryptDigestWithHMAC(){
-        //TODO: Va a tocar convertir todo lo de strings a un bytestream asumo
-        //Long encryptedDigest = Encryption.encryptWithHMAC(digest);
-        //use digest
+    public String encryptDigestWithHMAC(String digest) throws NoSuchAlgorithmException, InvalidKeyException {
+        //Encrypts byte[] version of the parameter
+        byte[] digestByteArray = ByteUtils.str2byte(digest);
+        byte[] authenticationCodeHMAC = Encryption.signWithHMAC(digestByteArray,sharedSecretKey);
+
+        //Since there are problems with byte transmission through sockets the encrypted authentication code byte array is converted to a string
+        return byte2str(authenticationCodeHMAC);
     }
 
     //----------------------------------------------------------------------
@@ -223,10 +217,18 @@ public class ServerThread extends Thread{
     //TODO: TOCA PROCESAR EN TODOS LADOS LO DE BYTES
 
     //TODO: DECRYPT SYMMETRIC KEY USING PRIVATE KEY
-    public void decryptSharedSymmetricKeyWithPrivateKey(Long encryptedSharedSymmetricKey){
-        //sharedSecretKey = Decryption.decryptWithPrivateKey(encryptedSharedSymmetricKey);
-        //TODO: TOCA PROCESAR BYTES EN TODOS LADOS
+    public SecretKey decryptSharedSymmetricKeyWithPrivateKey(String encryptedSharedSymmetricKey) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+        //Since there are problems with byte transmission through sockets the encrypted sharedSymmetricKey string is converted to a byte array
+        byte[] encryptedSharedSymmetricKeyByteArray = ByteUtils.str2byte(encryptedSharedSymmetricKey);
 
+        //Decrypts the key with decrypt method and returns byte array
+        byte[] decryptedSharedSymmetricKeyByteArray = Decryption.decryptWithPrivateKey(encryptedSharedSymmetricKeyByteArray,privateKeyServer);
+
+        //Converts decrypted byte array to string
+        //TODO: "REPLACE AES WITH REFERENCE TO KEY GENERATORS
+        //TODO: Could use SecretKeySpec(byte[] key,String algorithm) but I found the example with parameters public SecretKeySpec(byte[] key,int offset,int len,String algorithm)
+        SecretKey secretKey = new SecretKeySpec(decryptedSharedSymmetricKeyByteArray,0,decryptedSharedSymmetricKeyByteArray.length, "AES");
+        return secretKey;
     }
 
     //TODO: DECRYPT SYMMETRIC KEY USING SYMMETRIC KEY
@@ -286,11 +288,11 @@ public class ServerThread extends Thread{
 
 
             //10&11&12) WAIT FOR CLIENT TO GENERATE SHARED SECRET (LS) AND SEND IT ENCRYPTED WITH THE SERVERS PUBLIC KEY-> LS'=C(K_S+,LS)
-            while((currentReceivedMessage = incomingMessageChanel.readLine()) != null){
+            while((currentReceivedMessage = incomingMessageChanel.readLine()) == null){
                 Thread.yield();
             }
 
-            decryptSharedSymmetricKeyWithPrivateKey(Long.parseLong(currentReceivedMessage));
+            decryptSharedSymmetricKeyWithPrivateKey(currentReceivedMessage);
 
             //13) RECEIVE ENCRYPTED SHARED SECRET (LS') AND DECRYPT IT -> LS = D(K_S-,LS')
 
@@ -298,7 +300,7 @@ public class ServerThread extends Thread{
             acknowledgeClient();
 
             //15) WAIT FOR USER TO SEND THE ENCRYPTED USERNAME TO BE SEARCHED -> username'=C(K_S+,username)
-            while((currentReceivedMessage = incomingMessageChanel.readLine()) != null){
+            while((currentReceivedMessage = incomingMessageChanel.readLine()) == null){
                 Thread.yield();
             }
 
@@ -314,7 +316,7 @@ public class ServerThread extends Thread{
             acknowledgeClient();
 
             //18) WAIT FOR CLIENT TO SEND ENCRYPTED PACKAGE ID -> id_pkg' = C(LS,id_pkg)
-            while((currentReceivedMessage = incomingMessageChanel.readLine()) != null){
+            while((currentReceivedMessage = incomingMessageChanel.readLine()) == null){
                 Thread.yield();
             }
 

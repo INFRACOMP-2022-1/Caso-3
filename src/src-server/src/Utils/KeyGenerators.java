@@ -1,4 +1,4 @@
-package encryptionDecryption;
+package Utils;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
