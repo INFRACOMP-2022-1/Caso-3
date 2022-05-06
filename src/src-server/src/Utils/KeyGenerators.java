@@ -10,6 +10,9 @@ import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
+/**
+ * This class contains the key generators used to generate key paris (asymmetric) and secret keys (symmetric)
+ */
 public class KeyGenerators {
 
     //----------------------------------------------------------------------
@@ -34,8 +37,12 @@ public class KeyGenerators {
 
     }
 
-    //TODO: Documentar
-    //TODO: Preguntar si esto cumple con el req de AES. Modo ECB, esquema de relleno PKCS5, llave de 256 bits.? Solo he visto que el keusize con kg va hasta 128
+    /**
+     * This generates a secret key (symmetric) using the AES algorithm
+     * @return A secret key object
+     * @throws NoSuchAlgorithmException
+     * @throws NoSuchPaddingException
+     */
     public static SecretKey generateSecretKeyLS() throws NoSuchAlgorithmException, NoSuchPaddingException {
         String algorithm = "AES";
         int keySize = 256;
