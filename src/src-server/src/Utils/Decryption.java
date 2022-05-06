@@ -6,7 +6,10 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 
 /**
- * Class responsible for encrypting data with a variety of algorithms and encryption types.
+ * Class responsible for decrypting data with a variety of algorithms and decryption types.
+ *
+ * @author Veronica Escobar
+ * @author Santiago Vela
  */
 public class Decryption {
 

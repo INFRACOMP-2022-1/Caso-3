@@ -7,7 +7,13 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 
-//TODO: Descripcion de la clase (decir que el signature de HMAC tambien esta aqui)
+/**
+ * Class responsible for encrypting data with a variety of algorithms and encryption types.
+ * This class also contains the HMAC algorithm used to create a authentication certificate for a message.
+ *
+ * @author Veronica Escobar
+ * @author Santiago Vela
+ */
 public class Encryption {
 
     /**
@@ -18,7 +24,19 @@ public class Encryption {
     // METHODS
     //----------------------------------------------------------------------
 
-    //TODO: ENCRYPT MESSAGE WITH LS KEY
+
+    /**
+     * Encrypts a message using a given secret key (symmetric).
+     * @param unencryptedMessageBytes the unencrypted message in a byte array format.
+     * @param secretKey the secret key used to encrypt the message
+     * @return a byte array containing the encrypted message.
+     * @throws NoSuchPaddingException
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidAlgorithmParameterException
+     * @throws InvalidKeyException
+     * @throws IllegalBlockSizeException
+     * @throws BadPaddingException
+     */
     //TODO: REVISAR CON GEOVANNY SI ESTO ESTA BIEN
     public static byte[] encryptWithSymmetricKey(byte[] unencryptedMessageBytes, SecretKey secretKey) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
         byte[] iv = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -29,7 +47,17 @@ public class Encryption {
         return encryptedMessageBytes;
     }
 
-    //TODO: ENCRYPT MESSAGE WITH PRIVATE KEY (K_S-)
+    /**
+     * Encrypts the given message using the given private key.
+     * @param unencryptedMessageBytes the unencrypted message in the format of a byte array
+     * @param publicKey the public key used to encrypt the message
+     * @return the encrypted message in the format of a byte array
+     * @throws InvalidKeyException
+     * @throws NoSuchPaddingException
+     * @throws NoSuchAlgorithmException
+     * @throws IllegalBlockSizeException
+     * @throws BadPaddingException
+     */
     public static byte[] encryptWithPrivateKey(byte[] unencryptedMessageBytes, PublicKey publicKey) throws InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException, IllegalBlockSizeException, BadPaddingException {
         //REFERENCE -> https://www.baeldung.com/java-rsa
         Cipher cipher = Cipher.getInstance("RSA");
@@ -38,13 +66,21 @@ public class Encryption {
         return encryptedMessageBytes;
     }
 
-    //TODO: SIGN MESSAGE USING HMAC
-    public static byte[] signWithHMAC(byte[] unencryptedMessageBytes, SecretKey secretKey) throws NoSuchAlgorithmException, InvalidKeyException {
+    /**
+     * The signature of a given message using HMAC. This is used to create the authentication certificate.
+     * @param messageBytes the message in a byte array format (the message shouldn´t be encrypted)
+     * @param secretKey the secret key used to sign the HMAC
+     * @return a byte array with the HMAC signature
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidKeyException
+     */
+    //TODO: GENUINAMENTE NO SE SI ENTENDI BIEN COMO HACER ESTO Y SI ES LO DE CERTIFICADOS DE AUTENTICCION
+    public static byte[] signWithHMAC(byte[] messageBytes, SecretKey secretKey) throws NoSuchAlgorithmException, InvalidKeyException {
         //TODO: No tengo muy claro si HMAC usa la llave LS o no
         String hmacSHA256Algorithm = "HmacSHA256";
 
         Mac mac = Mac.getInstance(hmacSHA256Algorithm);
         mac.init(secretKey);
-        return mac.doFinal(unencryptedMessageBytes);
+        return mac.doFinal(messageBytes);
     }
 }
