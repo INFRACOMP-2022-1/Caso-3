@@ -47,6 +47,4 @@ public class Encryption {
         mac.init(secretKey);
         return mac.doFinal(unencryptedMessageBytes);
     }
-
-
 }
