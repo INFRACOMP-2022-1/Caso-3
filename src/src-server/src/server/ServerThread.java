@@ -4,7 +4,6 @@ import Utils.ByteUtils;
 import Utils.Decryption;
 import Utils.Encryption;
 import records.RecordList;
-
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
@@ -16,15 +15,9 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.security.*;
-
 import static Utils.ByteUtils.byte2str;
 
 public class ServerThread extends Thread{
-
-    //----------------------------------------------------------------------
-    // CONSTANTS
-    //----------------------------------------------------------------------
-
     //----------------------------------------------------------------------
     // ATTRIBUTES
     //----------------------------------------------------------------------
@@ -37,12 +30,12 @@ public class ServerThread extends Thread{
     /*
     This is the servers private key. K_S-
      */
-    public PrivateKey privateKeyServer;
+    protected PrivateKey privateKeyServer;
 
     /*
     This is the servers public key. K_S+
      */
-    public static PublicKey publicKeyServer;
+    protected static PublicKey publicKeyServer;
 
     /*
     A table containing all the information of usernames,package id's and statuses
@@ -57,7 +50,7 @@ public class ServerThread extends Thread{
     /*
     The LS secret key shared by the client and the server
      */
-    public SecretKey sharedSecretKey;
+    protected SecretKey sharedSecretKey;
 
     /*
     The username given by the client to be searched in the recordList to then be able to ask for package status
@@ -357,7 +350,6 @@ public class ServerThread extends Thread{
 
             //25) WAIT FOR CLIENT TO READ DIGEST INFORMATION
 
-
             //26) WAIT UNTIL CLIENT SENDS "TERMINAL" AND CULMINATE THE THREAD
             while(!(currentReceivedMessage = incomingMessageChanel.readLine()).equals("TERMINAR")){
                 Thread.yield();
@@ -365,12 +357,9 @@ public class ServerThread extends Thread{
 
             //Closes all connections to the client,closes the incomingMessageChanel(BufferedReader), the outgoingMessageChannel(PrintWriter)
             closeAllConnectionsToClient();
-
         }
         catch (Exception e){
             e.printStackTrace();
         }
     }
-
-
 }
