@@ -195,9 +195,13 @@ public class ServerThread extends Thread{
     // DECRYPTION
     //----------------------------------------------------------------------
 
+    //TODO: TOCA PROCESAR EN TODOS LADOS LO DE BYTES
+
     //TODO: DECRYPT SYMMETRIC KEY USING PRIVATE KEY
-    public Key decryptSharedSymmetricKeyWithPrivateKey(Long encryptedSharedSymmetricKey){
+    public void decryptSharedSymmetricKeyWithPrivateKey(Long encryptedSharedSymmetricKey){
         //sharedSecretKey = Decryption.decryptWithPrivateKey(encryptedSharedSymmetricKey);
+        //TODO: TOCA PROCESAR BYTES EN TODOS LADOS
+
     }
 
     //TODO: DECRYPT SYMMETRIC KEY USING SYMMETRIC KEY
