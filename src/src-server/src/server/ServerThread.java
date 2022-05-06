@@ -17,6 +17,13 @@ import java.net.Socket;
 import java.security.*;
 import static Utils.ByteUtils.byte2str;
 
+/**
+ * ServerThread represents a thread created by the server to attend to a clients request for package status.
+ * The dispatched thread will deal with the server side of the established protocol.
+ *
+ * @author Veronica Escobar
+ * @author Santiago Vela
+ */
 public class ServerThread extends Thread{
     //----------------------------------------------------------------------
     // ATTRIBUTES

@@ -11,7 +11,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 
 /**
- * Client
+ * Client represents a client that wants to request information on the status of a package through a connection with the server.
+ * The client will deal with the client side of the established protocol.
  *
  * @author Veronica Escobar
  * @author Santiago Vela
