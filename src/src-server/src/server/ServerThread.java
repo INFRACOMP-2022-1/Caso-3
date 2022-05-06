@@ -321,7 +321,7 @@ public class ServerThread extends Thread{
                 Thread.yield();
             }
 
-            username = decryptUsernameWithPrivateKey(Long.parseLong(currentReceivedMessage)).toString();
+            username = decryptUsernameWithPrivateKey(currentReceivedMessage).toString();
             //TODO: Revisar que toca hacer en este caso en el protocolo
             if(!recordList.searchForUsername(username)){
                 closeAllConnectionsToClient();
@@ -341,7 +341,7 @@ public class ServerThread extends Thread{
             //SEARCH FOR PACKAGE ASSOCIATED TO USERNAME, ACT ACCORDINGLY.
             //ENCRYPT PACKAGE STATUS  -> es' = C(LS,es)
 
-            packageId = decryptPackageIdWithSymmetricKey(Long.parseLong(currentReceivedMessage));
+            packageId = decryptPackageIdWithSymmetricKey(currentReceivedMessage);
             //TODO: Revisar que toca hacer en los casos en esta parte del protocolo
             status = recordList.searchForPackage(username,packageId);
 
