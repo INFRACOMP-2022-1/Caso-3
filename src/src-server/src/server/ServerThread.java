@@ -279,6 +279,7 @@ public class ServerThread extends Thread{
             String currentReceivedMessage;//The latest message that the server has read from the client.
 
             //1) SEND THE SERVERS PUBLIC KEY TO THE CLIENT
+            //TODO: Check con Geovanny si da problema mandar un tipo PublicKey (no string)
             sendServerPrivateKey();
 
             //2) WAIT FOR CLIENT TO SEND "INICIO" MESSAGE (UNENCRYPTED)
@@ -303,15 +304,13 @@ public class ServerThread extends Thread{
 
             //8&9) WAIT FOR CLIENT TO DECRYPT AND CHECK PREVIOUSLY SENT ENCRYPTED reto
 
-
             //10&11&12) WAIT FOR CLIENT TO GENERATE SHARED SECRET (LS) AND SEND IT ENCRYPTED WITH THE SERVERS PUBLIC KEY-> LS'=C(K_S+,LS)
             while((currentReceivedMessage = incomingMessageChanel.readLine()) == null){
                 Thread.yield();
             }
 
-            decryptSharedSymmetricKeyWithPrivateKey(currentReceivedMessage);
-
             //13) RECEIVE ENCRYPTED SHARED SECRET (LS') AND DECRYPT IT -> LS = D(K_S-,LS')
+            sharedSecretKey = decryptSharedSymmetricKeyWithPrivateKey(currentReceivedMessage);
 
             //14) ACKNOWLEDGE CLIENTS LS WITH "ACK"
             acknowledgeClient();
@@ -321,13 +320,12 @@ public class ServerThread extends Thread{
                 Thread.yield();
             }
 
+            //16) DECRYPT RECEIVED USERNAME -> username = D(K_S-,username'). SEARCH IF USERNAME IN DATABASE, ACT ACCORDINGLY.
             username = decryptUsernameWithPrivateKey(currentReceivedMessage).toString();
             //TODO: Revisar que toca hacer en este caso en el protocolo
             if(!recordList.searchForUsername(username)){
                 closeAllConnectionsToClient();
             }
-
-            //16) DECRYPT RECEIVED USERNAME -> username = D(K_S-,username'). SEARCH IF USERNAME IN DATABASE, ACT ACCORDINGLY.
 
             //17) ACKNOWLEDGE CLIENTS EXISTING USERNAME WITH "ACK"
             acknowledgeClient();
@@ -346,17 +344,15 @@ public class ServerThread extends Thread{
             status = recordList.searchForPackage(username,packageId);
 
             //20) SEND ENCRYPTED es TO CLIENT
-
-            encryptPackageStatusWithSymmetricKey(status);
+            String packageStatusStr = encryptPackageStatusWithSymmetricKey(status);
+            sendMessage(packageStatusStr);
 
             //21&22) WAIT FOR CLIENT TO EXTRACT PACKAGE STATUS AND RECEIVE ACK (from client)
-
             while(!(currentReceivedMessage = incomingMessageChanel.readLine()).equals("ACK")){
                 Thread.yield();
             }
 
             //23) GENERATE DIGEST WITH HMAC -> HMAC(LS,digest)
-
             digest = generateDigest();
 
             //24) SEND HMAC DIGEST TO CLIENT
