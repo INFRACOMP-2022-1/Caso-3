@@ -2,6 +2,9 @@ package Main;
 
 import Client.Client;
 import Server.Server;
+
+import java.io.File;
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
 
@@ -13,7 +16,7 @@ public class Main {
     /*
     This contains the info of the file where the servers public key is writen to
      */
-    private static final String publicKeyStorageFileName = "publicKeyStorage";
+    private static final String publicKeyStorageFileName = "Client/publicKeyStorage";
 
     /*
     This contains the information of how many active clients are to be initialized.
@@ -43,15 +46,19 @@ public class Main {
      * @param args the arguments of the program
      * @throws NoSuchAlgorithmException
      */
-    public static void main(String[] args) throws NoSuchAlgorithmException {
+    public static void main(String[] args) throws NoSuchAlgorithmException, IOException {
+        //Create public key file on Client module
+        File file = new File(publicKeyStorageFileName);
+        file.createNewFile();
+
+        //Record data
+        //TODO: Ver que metricas me toca keep track of toca configurar todo para que se generen reportes de todos los datos que toque recolectar
+
         //Firsts it has to initialize the server
         serverManager = new Server(publicKeyStorageFileName);
 
         //Then it has to initialize a given number of clients and make each client thread run
         clientManager = new Client(publicKeyStorageFileName,numberOfActiveClients);
-
-        //Record data
-        //TODO: Ver que metricas me toca keep track of.
     }
 
     //----------------------------------------------------------------------

@@ -3,6 +3,7 @@ package Server;
 import Utils.KeyGenerators;
 import Records.RecordList;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -10,7 +11,7 @@ import java.net.Socket;
 import java.security.*;
 
 /**
- * Server
+ * Server. Its responsible for dispatching the server threads to respond to client requests.
  *
  * @author Veronica Escobar
  * @author Santiago Vela
@@ -23,7 +24,6 @@ public class Server {
     /*
     The port the server will connect to . Its the logical endpoint of the network connection that is used to exchange information between a server and a client. This is what the client socket will be attached to
      */
-    //TODO: Definir que puerto vamos a usar por ahora puse uno random
     public static final int PORT = 2022;
 
     //----------------------------------------------------------------------
@@ -72,7 +72,7 @@ public class Server {
         publicKey = kp.getPublic();
 
         //Writes the public key storage file name
-        publicKeyStorageFileName = publicKeyStorageFileName;
+        this.publicKeyStorageFileName = publicKeyStorageFileName;
 
         //Writes the servers public key to a file accesible by the client
         writePublicKeyToFile();
@@ -104,7 +104,6 @@ public class Server {
             }
 
             //Launches a new thread to deal with the client connection
-            //TODO: Activar esto cuando ya hallamos terminado la clase de server socket
             new ServerThread(socket,privateKey,publicKey,recordList).start();
         }
     }
@@ -118,14 +117,14 @@ public class Server {
      */
     public void writePublicKeyToFile(){
         try{
-            /* save the public key in a file */
+            /* save the public key in a file on the Client module*/
             byte[] publicKeyByteArray = publicKey.getEncoded();
-            FileOutputStream fos = new FileOutputStream("PublicKeyStorage");
-            fos.write(publicKeyByteArray);
-            fos.close();
+            FileOutputStream fileOutputStream = new FileOutputStream(publicKeyStorageFileName,false);//makes sure to rewrite the key every time
+            fileOutputStream.write(publicKeyByteArray);
+            fileOutputStream.close();
         }
         catch (Exception e){
-
+            e.printStackTrace();
         }
     }
 }

@@ -72,9 +72,6 @@ public class ServerThread extends Thread{
     //TODO: Descripcion
     public String status;
 
-    //TODO: Description
-    public String digest;
-
     /*
     The chanel where the serverThread will be writing the messages that it sends to the client. Prints formatted representation of objects into a text-output stream. It's the socket who actually sends it, but it makes it easier to use.
      */
@@ -110,7 +107,6 @@ public class ServerThread extends Thread{
         catch (Exception e){
             e.printStackTrace();
         }
-
     }
 
     //----------------------------------------------------------------------
@@ -185,7 +181,7 @@ public class ServerThread extends Thread{
     public String encryptRetoWithPrivateKey(Long reto) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         //Encrypts byte[] version of the parameter
         byte[] retoByteArray = ByteUtils.longToBytes(reto);
-        byte[] encryptedReto =Encryption.encryptWithPrivateKey(retoByteArray, publicKeyServer);
+        byte[] encryptedReto = Encryption.encryptWithPrivateKey(retoByteArray, publicKeyServer);
 
         //Since there are problems with byte transmission through sockets the encrypted reto byte array is converted to a string
         return byte2str(encryptedReto);
@@ -271,9 +267,9 @@ public class ServerThread extends Thread{
             String currentReceivedMessage;//The latest message that the server has read from the client.
 
             //1) SEND THE SERVERS PUBLIC KEY TO THE CLIENT
-            //TODO: Check con Geovanny si da problema mandar un tipo PublicKey (no string)
-            sendServerPrivateKey();
+            //TODO: IMPLEMENTAR QUE EL CLIENTE LEA LA LLAVE PUBLICA DEL SERVIDOR DEL ARCHIVO
 
+            //TODO: Arreglar esto de yield
             //2) WAIT FOR CLIENT TO SEND "INICIO" MESSAGE (UNENCRYPTED)
             while(!(currentReceivedMessage = incomingMessageChanel.readLine()).equals("INICIO")){
                 Thread.yield();
@@ -314,8 +310,9 @@ public class ServerThread extends Thread{
 
             //16) DECRYPT RECEIVED USERNAME -> username = D(K_S-,username'). SEARCH IF USERNAME IN DATABASE, ACT ACCORDINGLY.
             username = decryptUsernameWithPrivateKey(currentReceivedMessage).toString();
-            //TODO: Revisar que toca hacer en este caso en el protocolo
             if(!recordList.searchForUsername(username)){
+                sendMessage("ERROR");
+                //TODO: Revisar si se para de ejecutar el protocolo ahi, o ver como hacer para eso (poner nested ifs)
                 closeAllConnectionsToClient();
             }
 
@@ -345,11 +342,10 @@ public class ServerThread extends Thread{
             }
 
             //23) GENERATE DIGEST WITH HMAC -> HMAC(LS,digest)
-            digest = generateDigest();
+            //TODO: SEGUN SANDRA DIGEST ES LO MISMO QUE ESTATUS
 
             //24) SEND HMAC DIGEST TO CLIENT
-            String authCodeHMAC = encryptDigestWithHMAC(digest);
-            //TODO: Need to send both the digest and the authCodeHMAC
+            String authCodeHMAC = encryptDigestWithHMAC(status);
 
             //25) WAIT FOR CLIENT TO READ DIGEST INFORMATION
 
