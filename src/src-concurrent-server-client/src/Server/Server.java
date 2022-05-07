@@ -3,9 +3,7 @@ package Server;
 import Utils.KeyGenerators;
 import Records.RecordList;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.*;
@@ -24,7 +22,7 @@ public class Server {
     /*
     The port the server will connect to . Its the logical endpoint of the network connection that is used to exchange information between a server and a client. This is what the client socket will be attached to
      */
-    public static final int PORT = 2022;
+    public static final int PORT = 3333;
 
     //----------------------------------------------------------------------
     // ATTRIBUTES
@@ -63,7 +61,7 @@ public class Server {
      * The server constructor. It manages the creation of server threads according to user demand.
      * @throws NoSuchAlgorithmException
      */
-    public Server(String publicKeyStorageFileName) throws NoSuchAlgorithmException {
+    public Server(String publicKeyStorageFileName) throws NoSuchAlgorithmException, IOException {
         System.out.println("Im the server");
 
         //Generates the private and public key
@@ -93,7 +91,6 @@ public class Server {
         }
 
         //The server will be permanently listening for any incoming connection until its shut off.
-        //TODO: Hablar con Geovanny si hay algun problema con esto.
         while(true){
             try{
                 //Listens for a connection and if there is one it accepts it. This creates a socket that its tied to the client in such a way that the server can communicate with him.
@@ -113,18 +110,19 @@ public class Server {
     //----------------------------------------------------------------------
 
     /**
-     * Writes the public key to a file within the main package for it to be latter accesed by the client.
+     * Writes the serialized public key to a file within the main package for it to be latter accessed by the client.
      */
-    public void writePublicKeyToFile(){
-        try{
-            /* save the public key in a file on the Client module*/
-            byte[] publicKeyByteArray = publicKey.getEncoded();
-            FileOutputStream fileOutputStream = new FileOutputStream(publicKeyStorageFileName,false);//makes sure to rewrite the key every time
-            fileOutputStream.write(publicKeyByteArray);
-            fileOutputStream.close();
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
+    public void writePublicKeyToFile() throws IOException {
+        //Creates a file output stream with the given file name
+        FileOutputStream file = new FileOutputStream(publicKeyStorageFileName);
+
+        //Creates an object output stream anchored to the given file, in such a way that an object can be written.
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(file);
+
+        //Writes the public key to the file
+        objectOutputStream.writeObject(publicKey);
+
+        //Closes the object output stream
+        objectOutputStream.close();
     }
 }

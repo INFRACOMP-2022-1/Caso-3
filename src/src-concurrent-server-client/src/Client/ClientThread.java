@@ -63,8 +63,16 @@ public class ClientThread extends Thread {
     // CONSTRUCTOR
     //----------------------------------------------------------------------
 
-    public ClientThread(){
-
+    /**
+     * The constructor for a client thread. It builds a client thread with a specific request in hand.
+     * @param serverSocket the server socket where the client will be conecting to in the server
+     * @param publicKeyServer the public key of the server
+     */
+    public ClientThread(Socket serverSocket , PublicKey publicKeyServer,String username, int packageId){
+        this.serverSocket = serverSocket;
+        this.publicKeyServer = publicKeyServer;
+        this.username = username;
+        this.packageId = packageId;
     }
 
     //----------------------------------------------------------------------
@@ -137,10 +145,7 @@ public class ClientThread extends Thread {
     //----------------------------------------------------------------------
 
     public void run(){
-
-
         try {
-
             //TODO: Document
             outgoingMessageChanel = new PrintWriter(serverSocket.getOutputStream(),true);
             incomingMessageChanel = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));

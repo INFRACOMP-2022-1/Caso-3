@@ -48,8 +48,9 @@ public class Main {
      */
     public static void main(String[] args) throws NoSuchAlgorithmException, IOException {
         //Create public key file on Client module
-        File file = new File(publicKeyStorageFileName);
-        file.createNewFile();
+        //TODO: Fix esto
+        //File file = new File(publicKeyStorageFileName);
+        //file.createNewFile();
 
         //Record data
         //TODO: Ver que metricas me toca keep track of toca configurar todo para que se generen reportes de todos los datos que toque recolectar
