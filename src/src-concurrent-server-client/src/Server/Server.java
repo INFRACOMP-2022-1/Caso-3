@@ -34,7 +34,6 @@ public class Server {
      */
     private static ServerSocket serverSocket;
 
-
     /*
     This is the servers private key. K_S-
      */
@@ -50,11 +49,11 @@ public class Server {
      */
     private static RecordList recordList;
 
+    //----------------------------------------------------------------------
+    // CONSTRUCTOR
+    //----------------------------------------------------------------------
 
-    //----------------------------------------------------------------------
-    // MAIN
-    //----------------------------------------------------------------------
-    public static void main(String[] args) throws NoSuchAlgorithmException {
+    public Server(String[] args) throws NoSuchAlgorithmException {
         System.out.println("Im the server");
 
         //Generates the private and public key
