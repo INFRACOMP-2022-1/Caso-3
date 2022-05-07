@@ -48,7 +48,7 @@ public class Main {
      * @param args the arguments of the program
      * @throws NoSuchAlgorithmException
      */
-    public static void main(String[] args) throws NoSuchAlgorithmException, IOException {
+    public static void main(String[] args) throws NoSuchAlgorithmException, IOException, ClassNotFoundException {
         //Create public key file on Client module
         //TODO: Fix esto
         //File file = new File(publicKeyStorageFileName);

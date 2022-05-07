@@ -66,8 +66,8 @@ public class Client {
      * The client constructor. It manages the creation of client threads.
      * Each client makes a request to the server, which will dispatch a thread in order to deal with his petition.
      * @param publicKeyStorageFileName the file where the servers public key is stored
-     * @param numberOfActiveClients the number of clients that are going to be making a petition to the server. It will also correspond to the number of created server threads to deal with the petitions.
-     * @param
+     * @param clientRequestsNumber the number of clients that are going to be making a petition to the server. It will also correspond to the number of created server threads to deal with the petitions.
+     * @param packageStatusRequestList the list that contains the information for making the client requests that each thread will be doing (username, packageId)
      */
     public Client(String publicKeyStorageFileName, int clientRequestsNumber, ArrayList<PackageStatusRequests> packageStatusRequestList) throws IOException, NoSuchAlgorithmException, ClassNotFoundException {
         System.out.println("Im the client");
