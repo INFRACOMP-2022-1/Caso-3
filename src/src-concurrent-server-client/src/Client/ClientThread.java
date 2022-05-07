@@ -137,7 +137,7 @@ public class ClientThread extends Thread {
     //----------------------------------------------------------------------
 
     public void run(){
-        System.out.println("Im the client");
+
 
         try {
 

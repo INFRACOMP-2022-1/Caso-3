@@ -3,6 +3,7 @@ package Server;
 import Utils.KeyGenerators;
 import Records.RecordList;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -20,7 +21,7 @@ public class Server {
     //----------------------------------------------------------------------
 
     /*
-    The port the server. Its the logical endpoint of the network connection that is used to exchange information between a server and a client. This is what the client socket will be attached to
+    The port the server will connect to . Its the logical endpoint of the network connection that is used to exchange information between a server and a client. This is what the client socket will be attached to
      */
     //TODO: Definir que puerto vamos a usar por ahora puse uno random
     public static final int PORT = 2022;
@@ -49,17 +50,32 @@ public class Server {
      */
     private static RecordList recordList;
 
+    /*
+    This contains the info of the file where the servers public key is writen to
+     */
+    private static String publicKeyStorageFileName;
+
     //----------------------------------------------------------------------
     // CONSTRUCTOR
     //----------------------------------------------------------------------
 
-    public Server(String[] args) throws NoSuchAlgorithmException {
+    /**
+     * The server constructor. It manages the creation of server threads according to user demand.
+     * @throws NoSuchAlgorithmException
+     */
+    public Server(String publicKeyStorageFileName) throws NoSuchAlgorithmException {
         System.out.println("Im the server");
 
         //Generates the private and public key
         KeyPair kp = KeyGenerators.generateKeyPair();
         privateKey = kp.getPrivate();
         publicKey = kp.getPublic();
+
+        //Writes the public key storage file name
+        publicKeyStorageFileName = publicKeyStorageFileName;
+
+        //Writes the servers public key to a file accesible by the client
+        writePublicKeyToFile();
 
         //Creates a record list with all the usernames, package ids and statuses
         recordList = new RecordList();
@@ -90,6 +106,26 @@ public class Server {
             //Launches a new thread to deal with the client connection
             //TODO: Activar esto cuando ya hallamos terminado la clase de server socket
             new ServerThread(socket,privateKey,publicKey,recordList).start();
+        }
+    }
+
+    //----------------------------------------------------------------------
+    // METHODS
+    //----------------------------------------------------------------------
+
+    /**
+     * Writes the public key to a file within the main package for it to be latter accesed by the client.
+     */
+    public void writePublicKeyToFile(){
+        try{
+            /* save the public key in a file */
+            byte[] publicKeyByteArray = publicKey.getEncoded();
+            FileOutputStream fos = new FileOutputStream("PublicKeyStorage");
+            fos.write(publicKeyByteArray);
+            fos.close();
+        }
+        catch (Exception e){
+
         }
     }
 }
