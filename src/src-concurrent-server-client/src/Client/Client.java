@@ -69,7 +69,7 @@ public class Client {
      * @param numberOfActiveClients the number of clients that are going to be making a petition to the server. It will also correspond to the number of created server threads to deal with the petitions.
      * @param
      */
-    public Client(String publicKeyStorageFileName, int clientRequestsNumber, ArrayList<PackageStatusRequests> packageStatusRequestList) throws IOException {
+    public Client(String publicKeyStorageFileName, int clientRequestsNumber, ArrayList<PackageStatusRequests> packageStatusRequestList) throws IOException, NoSuchAlgorithmException, ClassNotFoundException {
         System.out.println("Im the client");
 
         //Stores the file name where the public key is going to be retreived from
