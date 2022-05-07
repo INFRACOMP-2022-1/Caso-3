@@ -1,5 +1,6 @@
 package Client;
 
+import StatusRequests.PackageStatusRequests;
 import Utils.KeyGenerators;
 
 import javax.crypto.KeyGenerator;
@@ -33,6 +34,11 @@ public class Client {
      */
     public static final int PORT = 3333;
 
+    /*
+    The host that the client socket is going to be attached to
+     */
+    public static final String HOST = "127.0.0.1";
+
     //----------------------------------------------------------------------
     // ATTRIBUTES
     //----------------------------------------------------------------------
@@ -45,7 +51,7 @@ public class Client {
     /*
     The number of active client threads to be generated to make petitions to the server.
      */
-    private static int numberOfActiveClients;
+    private static int clientRequestsNumber;
 
     /*
     The file name for the file where the server public key has been stored
@@ -63,19 +69,31 @@ public class Client {
      * @param numberOfActiveClients the number of clients that are going to be making a petition to the server. It will also correspond to the number of created server threads to deal with the petitions.
      * @param
      */
-    public Client(String publicKeyStorageFileName, int numberOfActiveClients, ArrayList<PackageStatusRequests> packageStatusRequestList) throws IOException {
+    public Client(String publicKeyStorageFileName, int clientRequestsNumber, ArrayList<PackageStatusRequests> packageStatusRequestList) throws IOException {
         System.out.println("Im the client");
 
         //Stores the file name where the public key is going to be retreived from
         this.publicKeyStorageFileName = publicKeyStorageFileName;
 
+        //The number of clients that need to be created to fullfil all the requests
+        this.clientRequestsNumber = clientRequestsNumber;
+
         //Read the servers public key from the storage file
         serverPublicKey = readPrivateKeyFromFile();
 
         //"127.0.0.1"
-        for(int i = 0; i < numberOfActiveClients; i++){
-            Socket socketToServer = new Socket("127.0.0.1", PORT);
-            Thread thread = new ClientThread(socketToServer,serverPublicKey);
+        for(int i = 0; i < clientRequestsNumber; i++){
+            //Get the request that this client thread is going to make
+            PackageStatusRequests request = packageStatusRequestList.get(i);
+
+            //Creates the socket that the client is going to be attached to
+            //TODO: Check if i need to use different ports for different sockets
+            Socket socketToServer = new Socket(HOST, PORT);
+
+            //Creates the client thread that is going to be launched and follow the request making protocol
+            ClientThread thread = new ClientThread(socketToServer,serverPublicKey,request);
+
+            //Starts the client thread protocol
             thread.start();
         }
     }

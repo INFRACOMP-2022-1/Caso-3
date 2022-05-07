@@ -1,5 +1,7 @@
 package Client;
 
+import StatusRequests.PackageStatusRequests;
+
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import java.io.BufferedReader;
@@ -68,11 +70,11 @@ public class ClientThread extends Thread {
      * @param serverSocket the server socket where the client will be conecting to in the server
      * @param publicKeyServer the public key of the server
      */
-    public ClientThread(Socket serverSocket , PublicKey publicKeyServer,String username, int packageId){
+    public ClientThread(Socket serverSocket , PublicKey publicKeyServer, PackageStatusRequests packageStatusRequest){
         this.serverSocket = serverSocket;
         this.publicKeyServer = publicKeyServer;
-        this.username = username;
-        this.packageId = packageId;
+        this.username = packageStatusRequest.getUsername();
+        this.packageId = packageStatusRequest.getPackageId();
     }
 
     //----------------------------------------------------------------------

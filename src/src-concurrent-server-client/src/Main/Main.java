@@ -2,10 +2,12 @@ package Main;
 
 import Client.Client;
 import Server.Server;
+import StatusRequests.PackageStatusRequests;
 
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 
 
 public class Main {
@@ -21,7 +23,7 @@ public class Main {
     /*
     This contains the information of how many active clients are to be initialized.
      */
-    public static final int numberOfActiveClients = 1;
+    public static int numberOfActiveClients;
 
     //----------------------------------------------------------------------
     // CONSTANTS
@@ -58,8 +60,26 @@ public class Main {
         //Firsts it has to initialize the server
         serverManager = new Server(publicKeyStorageFileName);
 
+        //TODO: THIS WILL NOT BE THE FULL TESTING INTERFACE, WHEN I GET TO TESTS MAYBE CREATE A METOD TO DELEGATE THIS
+        //TODO: Should do a check that ensures that there are no repeated user ids
+        //This creates the list of requests that are going to be made
+        ArrayList<PackageStatusRequests> packageStatusRequestsList = new ArrayList<>();
+        PackageStatusRequests p1 = new PackageStatusRequests("user1",1);
+        packageStatusRequestsList.add(p1);
+        PackageStatusRequests p2 = new PackageStatusRequests("user2",2);
+        packageStatusRequestsList.add(p2);
+        PackageStatusRequests p3 = new PackageStatusRequests("user3",3);
+        packageStatusRequestsList.add(p3);
+        PackageStatusRequests p4 = new PackageStatusRequests("user4",4);
+        packageStatusRequestsList.add(p4);
+        PackageStatusRequests p5 = new PackageStatusRequests("user5",5);
+        packageStatusRequestsList.add(p5);
+
+        //Gets the number of clients that need to be created to fulfill all the requests
+        numberOfActiveClients = packageStatusRequestsList.size();
+
         //Then it has to initialize a given number of clients and make each client thread run
-        clientManager = new Client(publicKeyStorageFileName,numberOfActiveClients);
+        clientManager = new Client(publicKeyStorageFileName,numberOfActiveClients,packageStatusRequestsList);
     }
 
     //----------------------------------------------------------------------

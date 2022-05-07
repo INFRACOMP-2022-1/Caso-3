@@ -24,7 +24,7 @@ public class PackageStatusRequests {
      * @param username the username attached to the searched package
      * @param packageId the package id of the searched package
      */
-    PackageStatusRequests(String username,int packageId){
+    public PackageStatusRequests(String username, int packageId){
         this.username = username;
         this.packageId = packageId;
     }
