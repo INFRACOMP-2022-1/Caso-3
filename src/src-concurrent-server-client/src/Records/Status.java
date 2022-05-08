@@ -1,5 +1,8 @@
 package Records;
 
+/**
+ * The Status enums correspond to the possible statuses that a package can have
+ */
 enum Status {
     PKT_EN_OFICINA,
     PKT_RECOGIDO,

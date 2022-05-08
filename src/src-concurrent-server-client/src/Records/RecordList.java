@@ -41,8 +41,8 @@ public class RecordList {
 
     /**
      * Loads the csv containing the existing records.
+     * NOTE: The CSV need to be separated by , (some systems use ';' )
      */
-    //TODO: Me da miedo que por el tipo de sistema me mande error entonces cuando este haciendo pruebas voy a considerar como solo cargar datos pre configurados. Pero eso no es un problema para ya.
     public void load(){
         String line = "";
         String splitBy = ",";
