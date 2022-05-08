@@ -79,7 +79,6 @@ public class ClientThread extends Thread {
      */
     public BufferedReader incomingMessageChanel;
 
-
     //----------------------------------------------------------------------
     // CONSTRUCTOR
     //----------------------------------------------------------------------
@@ -100,14 +99,19 @@ public class ClientThread extends Thread {
     // METHODS
     //----------------------------------------------------------------------
 
-    //TODO: Document
+    /**
+     * Closes all the connections to the server
+     */
     public void closeAllConnectionsToServer() throws IOException {
-        //incomingMessageChanel.close();
-        //outgoingMessageChanel.close();
-        //clientSocket.close();
+        incomingMessageChanel.close();
+        outgoingMessageChanel.close();
+        serverSocket.close();
     }
 
-    //TODO: Generate Secret Key
+    /**
+     * Generates the secret key that is going to be used to do symmetric encryption between the client and the server
+     * @return SecretKey object that has the created symmetric key.
+     */
     public SecretKey generateSecretKey() throws NoSuchAlgorithmException {
         String CIPHER_AES = "AES";
         int SECRET_KEY_SIZE = 256;
@@ -117,19 +121,18 @@ public class ClientThread extends Thread {
         return kg.generateKey();
     }
 
-    //TODO: Document
-    public void saveServerPublicKey(String serverPublicKey){
-        //byte[] serverPublicKeyByteArray = ByteUtils.
-    }
-
-
-
-    //TODO: DOCUMENT
+    /**
+     * Sends a message string to the server. It's a generic method.
+     * @param message String containing the message to be sent to the server.
+     */
     public void sendMessage(String message){
         outgoingMessageChanel.println(message);
     }
 
-    //TODO:Document
+    /**
+     * Generates the 24-digit reto randomly
+     * @return String that represents a 24 digit random number
+     */
     public String generateReto(){
 
         //This is in charge of generating a 24 character string composed of numbers
@@ -141,7 +144,7 @@ public class ClientThread extends Thread {
 
         //Gets the string format and the long format of the reto
         String retoStr = str.toString();
-        reto = Long.parseLong(retoStr);//stores long reto in its corresponding atribute
+        reto = Long.parseLong(retoStr);//stores long reto in its corresponding attribute
 
         //This is in charge returning the 24 numeric string
         return retoStr;
@@ -154,12 +157,6 @@ public class ClientThread extends Thread {
     //----------------------------------------------------------------------
     // DECRYPTION
     //----------------------------------------------------------------------
-
-    //TODO:Document
-    public Long decryptRetoWithServerPublicKey(String encryptedReto){
-        //TODO: REVISAR ESTO POR QUE ME TOCA DESENCRIPTAR CON LA LLAVE PUBLICA Y NO CREO QUE TENGA ESE METODO EN DECRYPTION
-        return Long.parseLong("0");
-    }
 
     //----------------------------------------------------------------------
     // RUN
@@ -174,12 +171,6 @@ public class ClientThread extends Thread {
             //TODO: Document
             String currentReceivedMessage;
 
-            //1) Guardar la clave publica del servidor
-            while((currentReceivedMessage = incomingMessageChanel.readLine()) == null){
-                Thread.yield();
-            }
-
-            saveServerPublicKey(currentReceivedMessage);
 
             //2) Manda mensaje de incio
             sendMessage("INICIO");
