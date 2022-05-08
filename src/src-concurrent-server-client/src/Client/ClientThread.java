@@ -3,6 +3,8 @@ package Client;
 import StatusRequests.PackageStatusRequests;
 import Utils.ByteUtils;
 import Utils.Decryption;
+import Utils.Encryption;
+import Utils.KeyGenerators;
 
 import javax.crypto.*;
 import java.io.BufferedReader;
@@ -13,7 +15,10 @@ import java.net.Socket;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
+import java.util.Objects;
 import java.util.Random;
+
+import static Utils.ByteUtils.byte2str;
 
 /**
  * ClientThread represents a client entity that is realizing a request to the server about the state of a package.
@@ -111,19 +116,6 @@ public class ClientThread extends Thread {
     }
 
     /**
-     * Generates the secret key that is going to be used to do symmetric encryption between the client and the server
-     * @return SecretKey object that has the created symmetric key.
-     */
-    public SecretKey generateSecretKey() throws NoSuchAlgorithmException {
-        String CIPHER_AES = "AES";
-        int SECRET_KEY_SIZE = 256;
-
-        KeyGenerator kg = KeyGenerator.getInstance(CIPHER_AES);
-        kg.init(SECRET_KEY_SIZE);
-        return kg.generateKey();
-    }
-
-    /**
      * Sends a message string to the server. It's a generic method.
      * @param message String containing the message to be sent to the server.
      */
@@ -155,6 +147,19 @@ public class ClientThread extends Thread {
     //----------------------------------------------------------------------
     // ENCRYPTION
     //----------------------------------------------------------------------
+
+    /**
+     * Encrypts the secret key (LS) using the servers public key.
+     * @return String corresponding to the encrypted bytes of the secret key
+     */
+    public String encryptSecretKeyWithPublicKey(){
+        //Encrypts byte[] version of the parameter
+        byte[] secretKeyByteArray = secretKey.getEncoded();
+        byte[] encryptedSecretKey = Encryption.encryptWithPublicKey(secretKeyByteArray, publicKeyServer);
+
+        //Since there are problems with byte transmission through sockets the encrypted reto byte array is converted to a string
+        return byte2str(encryptedSecretKey);
+    }
 
     //----------------------------------------------------------------------
     // DECRYPTION
@@ -214,22 +219,21 @@ public class ClientThread extends Thread {
             }
 
             //DECRYPT SENT RETO
-            Long serverReto = unencryptRetoWithPublicKey(currentReceivedMessage);
+            Long serverReto = decryptServerRetoWithPublicKey(currentReceivedMessage);
 
+            //VALIDATE IF SERVER_RETO CORRESPONDS TO THE ORIGINALLY CALCULATED RETO
+            if(!Objects.equals(serverReto, reto)){
+                //If the decrypted server reto isn't the same as the original reto the communication to the server should end
+                closeAllConnectionsToServer();
+                return;
+            }
 
+            //GENERATE THE SECRET KEY (SYMMETRIC KEY, LS)
+            secretKey = KeyGenerators.generateSecretKeyLS();
 
+            //ENCRYPT THE SECRET KEY/LS WITH THE SERVERS PUBLIC KEY -> LS'=C(K_S+,LS)
+            sendMessage(encryptSecretKeyWithPublicKey());
 
-
-
-
-
-
-            //8) Decifrar reto cifrado
-
-            //9) Comparar reto decifrado con el reto original que se mando al servidor
-
-            //10) Generar LS
-            secretKey = generateSecretKey();
 
             //11) Cifrar LS con llave publica del servidor
 

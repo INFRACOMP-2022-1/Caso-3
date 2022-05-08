@@ -160,7 +160,7 @@ public class ServerThread extends Thread{
     public String encryptRetoWithPrivateKey(Long reto){
         //Encrypts byte[] version of the parameter
         byte[] retoByteArray = ByteUtils.longToBytes(reto);
-        byte[] encryptedReto = Encryption.encryptWithPrivateKey(retoByteArray, publicKeyServer);
+        byte[] encryptedReto = Encryption.encryptWithPrivateKey(retoByteArray, privateKeyServer);
 
         //Since there are problems with byte transmission through sockets the encrypted reto byte array is converted to a string
         return byte2str(encryptedReto);
