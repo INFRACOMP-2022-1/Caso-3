@@ -1,14 +1,13 @@
-package Main;
+package Client;
 
-import Client.Client;
 import Server.Server;
 import StatusRequests.PackageStatusRequests;
+
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
-
-public class Main {
+public class ClientMain {
     //----------------------------------------------------------------------
     // CONSTANTS
     //----------------------------------------------------------------------
@@ -26,11 +25,6 @@ public class Main {
     //----------------------------------------------------------------------
     // CONSTANTS
     //----------------------------------------------------------------------
-
-    /*
-    The server manager. Its responsible for dispatching the serverThreads that handle client requests according to demand.
-     */
-    private static Server serverManager;
 
     /*
     The client manager. Its responsible for initializing a set number of client threads to send petitions to the server regarding package statuses.
@@ -51,8 +45,6 @@ public class Main {
         //Record data
         //TODO: Ver que metricas me toca keep track of toca configurar todo para que se generen reportes de todos los datos que toque recolectar
 
-        //Firsts it has to initialize the server
-        serverManager = new Server(publicKeyStorageFileName);
 
         //TODO: THIS WILL NOT BE THE FULL TESTING INTERFACE, WHEN I GET TO TESTS MAYBE CREATE A METOD TO DELEGATE THIS
         //TODO: Should do a check that ensures that there are no repeated user ids
