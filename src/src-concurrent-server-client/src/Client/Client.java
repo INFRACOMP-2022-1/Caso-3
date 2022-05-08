@@ -1,20 +1,12 @@
 package Client;
 
 import StatusRequests.PackageStatusRequests;
-import Utils.KeyGenerators;
-
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
-import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
-import java.security.spec.KeySpec;
-import java.security.spec.RSAPublicKeySpec;
 import java.util.ArrayList;
 
 /**
@@ -73,21 +65,19 @@ public class Client {
         System.out.println("Im the client");
 
         //Stores the file name where the public key is going to be retreived from
-        this.publicKeyStorageFileName = publicKeyStorageFileName;
+        Client.publicKeyStorageFileName = publicKeyStorageFileName;
 
         //The number of clients that need to be created to fullfil all the requests
-        this.clientRequestsNumber = clientRequestsNumber;
+        Client.clientRequestsNumber = clientRequestsNumber;
 
         //Read the servers public key from the storage file
         serverPublicKey = readPrivateKeyFromFile();
 
-        //"127.0.0.1"
         for(int i = 0; i < clientRequestsNumber; i++){
             //Get the request that this client thread is going to make
             PackageStatusRequests request = packageStatusRequestList.get(i);
 
             //Creates the socket that the client is going to be attached to
-            //TODO: Check if i need to use different ports for different sockets
             Socket socketToServer = new Socket(HOST, PORT);
 
             //Creates the client thread that is going to be launched and follow the request making protocol
@@ -105,11 +95,8 @@ public class Client {
     /**
      * Reads the private key from the file where the server stored the serialized object.
      * @return The server public key
-     * @throws IOException
-     * @throws NoSuchAlgorithmException
-     * @throws ClassNotFoundException
      */
-    public PublicKey readPrivateKeyFromFile() throws IOException, NoSuchAlgorithmException, ClassNotFoundException {
+    public PublicKey readPrivateKeyFromFile() throws IOException, ClassNotFoundException {
         //Creates file input stream for the file with the public key
         FileInputStream file = new FileInputStream(publicKeyStorageFileName);
 
@@ -119,19 +106,5 @@ public class Client {
         //Retrieves the public key stored in the file and returns it
         return (PublicKey) objectInputStream.readObject();
     }
-
-
-
-    //----------------------------------------------------------------------
-    // ENCRYPTION
-    //----------------------------------------------------------------------
-
-    //----------------------------------------------------------------------
-    // DECRYPTION
-    //----------------------------------------------------------------------
-
-    //----------------------------------------------------------------------
-    // MAIN
-    //----------------------------------------------------------------------
 
 }
