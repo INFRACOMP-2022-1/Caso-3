@@ -75,4 +75,27 @@ public class ByteUtils {
         buffer.flip();//need flip
         return buffer.getLong();
     }
+
+    /**
+     * Reads the int and converts them to bytes.
+     * @param ii the int that is to be converted
+     * @return A byte array , byte[] , of the corresponding int
+     */
+    public static byte[] intToBytes(int ii) {
+        ByteBuffer buffer = ByteBuffer.allocate(Integer.BYTES);
+        buffer.putLong(ii);
+        return buffer.array();
+    }
+
+    /**
+     * Transforms bytes to int.
+     * @param b is the byte array
+     * @return int corresponding to the given byte array
+     */
+    public static int bytesToInt(byte[] b) {
+        ByteBuffer buffer = ByteBuffer.allocate(Integer.BYTES);
+        buffer.put(b);
+        buffer.flip();//need flip
+        return buffer.getInt();
+    }
 }

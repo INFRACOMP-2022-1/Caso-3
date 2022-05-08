@@ -175,6 +175,18 @@ public class ClientThread extends Thread {
         return byte2str(encryptedUsername);
     }
 
+
+    public String encryptPackageIdWithSymmetricKey(int packageId){
+        //Since there are problems with byte transmission through sockets the encrypted username string is converted to a byte array
+        byte[] encryptedRetoWithPublicKeyByteArray = ByteUtils.str2byte(encryptedServerReto);
+
+        //Decrypts the reto with decrypt method and returns byte array
+        byte[] decryptedReto = Decryption.decryptWithPublicKey(encryptedRetoWithPublicKeyByteArray,publicKeyServer);
+
+        //Converts decrypted byte array to Long
+        return Long.parseLong(ByteUtils.byte2str(decryptedReto));
+    }
+
     //----------------------------------------------------------------------
     // DECRYPTION
     //----------------------------------------------------------------------
@@ -257,14 +269,19 @@ public class ClientThread extends Thread {
             //ENCRYPT THE USERNAME ASSOCIATED TO THE SEARCHED PACKAGE AND SENT IT TO THE SERVER
             sendMessage(encryptUsernameWithPublicKey(username));
 
+            //WAIT FOR THE SERVER TO SEARCH IN THE RECORD TABLE FOR THE USERNAME
+
+            //Note: This will cover for the case that the server sends error because it couldn't find that username
+            if(!((currentReceivedMessage = incomingMessageChanel.readLine()).equals("ACK"))){
+                closeAllConnectionsToServer();
+                return;
+            }
+
+            //ENCRYPT THE PACKAGE ID ASSOCIATED TO THE SEARCHED PACKAGE AND SEND IT TO THE SERVER
+            sendMessage(encryptPackageIdWithSymmetricKey(packageId));
 
 
-            //15) Encriptar nombre de usuario a sacar y mandar nombre de usuario encriptado
 
-            //16) Esperar a que el servidor busque en la tabla de usuarios
-            //TODO: Ver protocolo para el caso donde no se encuentra el nombre de usuario
-
-            //17) Esperar a que el servidor haga "ACK"
 
             //18) Encriptar id del paquete y mandar id del paquete encriptado
 
