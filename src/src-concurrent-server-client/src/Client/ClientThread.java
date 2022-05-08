@@ -34,30 +34,49 @@ public class ClientThread extends Thread {
      */
     protected Socket serverSocket;
 
-    //TODO: Documentar
+    /*
+    The secret key for asymmetric encryption between the client and the server (LS)
+     */
     protected SecretKey secretKey;
 
-    //TODO: Documentar
+    /*
+    The public key of the server (K_S+)
+     */
     protected PublicKey publicKeyServer;
 
-    //TODO: Documentar
+    /*
+    The reto is a 24-digit number that is sent to the server
+     */
     public Long reto;
 
-    //TODO: Documentar
+    /*
+    The username associated to the package that is going to be searched
+     */
     public String username;
 
-    //TODO: Documentar
+    /*
+    The package id associated to the package that is going to be searched
+     */
     public int packageId;
 
-    //TODO: Documentar
+    /*
+    The status of the searched package
+     */
     public String status;
 
-    //TODO: Documentar
+    /*
+    The digest of the status(response) sent by the server
+     */
     public String digest;
 
-    //TODO: Documentar
+    /*
+    The chanel where the clientThread will be writing the messages that it sends to the server.
+     */
     public PrintWriter outgoingMessageChanel;
 
+    /*
+    The chanel where the clientThread will be receiving the messages that the server sends to it.
+     */
     public BufferedReader incomingMessageChanel;
 
 

@@ -82,12 +82,12 @@ public class ServerThread extends Thread{
     public String digest;
 
     /*
-    The chanel where the serverThread will be writing the messages that it sends to the client. Prints formatted representation of objects into a text-output stream. It's the socket who actually sends it, but it makes it easier to use.
-     */
+    The chanel where the serverThread will be writing the messages that it sends to the client.
+    */
     public PrintWriter outgoingMessageChanel;
 
     /*
-    The chanel where the serverThread will be receiving the messages that the client sends to it. It makes it easier to read the messages received.
+    The chanel where the serverThread will be receiving the messages that the client sends to it.
      */
     public BufferedReader incomingMessageChanel;
 
