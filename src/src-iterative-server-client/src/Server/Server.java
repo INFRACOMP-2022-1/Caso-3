@@ -12,6 +12,7 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.*;
+import java.util.ArrayList;
 
 import static Utils.ByteUtils.byte2str;
 
@@ -98,6 +99,9 @@ public class Server {
             e.printStackTrace();
         }
 
+        //Response list
+        ArrayList<String> responseList = new ArrayList<>();
+
         //The server will be permanently listening for any incoming connection until its shut off.
         while(true){
             try{
@@ -110,7 +114,7 @@ public class Server {
 
             //Iteratively answers each client request
             String statusResponse = serverProtocol(socket,privateKey,publicKey,recordList);
-
+            responseList.add(statusResponse);
         }
     }
 
