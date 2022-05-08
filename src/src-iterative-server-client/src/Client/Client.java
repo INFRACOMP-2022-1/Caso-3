@@ -70,7 +70,7 @@ public class Client {
      * @param clientRequestsNumber the number of clients that are going to be making a petition to the server. It will also correspond to the number of created server threads to deal with the petitions.
      * @param packageStatusRequestList the list that contains the information for making the client requests that each thread will be doing (username, packageId)
      */
-    public Client(String publicKeyStorageFileName, int clientRequestsNumber, ArrayList<PackageStatusRequests> packageStatusRequestList,Socket serverSocket) throws IOException, NoSuchAlgorithmException, ClassNotFoundException {
+    public Client(String publicKeyStorageFileName, int clientRequestsNumber, ArrayList<PackageStatusRequests> packageStatusRequestList) throws IOException, NoSuchAlgorithmException, ClassNotFoundException {
         System.out.println("Im the client");
 
         //Stores the file name where the public key is going to be retreived from
@@ -93,7 +93,7 @@ public class Client {
             PackageStatusRequests currentPackageStatusRequest = packageStatusRequestList.get(i);
 
             //In this form the requests are done iteratively and each request is fulfilled in the order that they are in the list
-            String status = clientProtocol(serverSocket,serverPublicKey,currentPackageStatusRequest);
+            String status = clientProtocol(socketToServer,serverPublicKey,currentPackageStatusRequest);
 
             //Put response in responseList
             String response = String.format("Package request with username %s and package id %d had status %s" ,currentPackageStatusRequest.getUsername(),currentPackageStatusRequest.getPackageId(),status );
