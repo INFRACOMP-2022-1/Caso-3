@@ -16,7 +16,7 @@ public class Main {
     /*
     This contains the info of the file where the servers public key is writen to
      */
-    private static final String publicKeyStorageFileName = "Client/publicKeyStorage";
+    private static final String publicKeyStorageFileName = "src/src-concurrent-server-client/src/Client/publicKeyStorageFile";
 
     /*
     This contains the information of how many active clients are to be initialized.
@@ -47,10 +47,6 @@ public class Main {
      * @throws NoSuchAlgorithmException
      */
     public static void main(String[] args) throws NoSuchAlgorithmException, IOException, ClassNotFoundException {
-        //Create public key file on Client module
-        //TODO: Fix esto
-        //File file = new File(publicKeyStorageFileName);
-        //file.createNewFile();
 
         //Record data
         //TODO: Ver que metricas me toca keep track of toca configurar todo para que se generen reportes de todos los datos que toque recolectar
