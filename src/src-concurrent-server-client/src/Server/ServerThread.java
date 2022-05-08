@@ -248,8 +248,8 @@ public class ServerThread extends Thread{
         //Decrypts the package id with decrypt method and returns byte array
         byte[] decryptedPackageId = Decryption.decryptWithSymmetricKey(encryptedPackageIdWithSymmetricKey,sharedSecretKey);
 
-        //Converts decrypted byte array to string and then to integer(because package id is an int)
-        return Integer.parseInt(ByteUtils.byte2str(decryptedPackageId));
+        //Converts decrypted byte array to int
+        return ByteUtils.bytesToInt(decryptedPackageId);
     }
 
     /**

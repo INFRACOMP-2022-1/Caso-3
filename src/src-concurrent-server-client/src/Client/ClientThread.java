@@ -175,16 +175,18 @@ public class ClientThread extends Thread {
         return byte2str(encryptedUsername);
     }
 
-
+    /**
+     * Encrypts the package id using the secret key LS
+     * @param packageId package id of the package that is being searched
+     * @return String corresponding to the encrypted bytes of the package id
+     */
     public String encryptPackageIdWithSymmetricKey(int packageId){
         //Since there are problems with byte transmission through sockets the encrypted username string is converted to a byte array
-        byte[] encryptedRetoWithPublicKeyByteArray = ByteUtils.str2byte(encryptedServerReto);
+        byte[] packageIdByteArray = ByteUtils.intToBytes(packageId);
+        byte[] encryptedPackageId = Encryption.encryptWithSymmetricKey(packageIdByteArray,secretKey);
 
-        //Decrypts the reto with decrypt method and returns byte array
-        byte[] decryptedReto = Decryption.decryptWithPublicKey(encryptedRetoWithPublicKeyByteArray,publicKeyServer);
-
-        //Converts decrypted byte array to Long
-        return Long.parseLong(ByteUtils.byte2str(decryptedReto));
+        //Since there are problems with byte transmission through sockets the encrypted reto byte array is converted to a string
+        return byte2str(encryptedPackageId);
     }
 
     //----------------------------------------------------------------------
@@ -204,8 +206,10 @@ public class ClientThread extends Thread {
         byte[] decryptedReto = Decryption.decryptWithPublicKey(encryptedRetoWithPublicKeyByteArray,publicKeyServer);
 
         //Converts decrypted byte array to Long
-        return Long.parseLong(ByteUtils.byte2str(decryptedReto));
+        return ByteUtils.bytesToLong(decryptedReto);
     }
+
+    public String decryptPackageStatusWithSymmetricKey
 
     //----------------------------------------------------------------------
     // RUN
@@ -280,14 +284,20 @@ public class ClientThread extends Thread {
             //ENCRYPT THE PACKAGE ID ASSOCIATED TO THE SEARCHED PACKAGE AND SEND IT TO THE SERVER
             sendMessage(encryptPackageIdWithSymmetricKey(packageId));
 
+            //WAIT FOR THE SERVER TO SEARCH FOR THE PACKAGE ID
+            if((currentReceivedMessage = incomingMessageChanel.readLine()).equals("ERROR")){
+                closeAllConnectionsToServer();
+                return;
+            }
 
+            //WAIT FOR THE SERVER TO SEARCH FOR THE PACKAGE AND SENDING IT ENCRYPTED
+            if((currentReceivedMessage = incomingMessageChanel.readLine()) == null){
+                closeAllConnectionsToServer();
+                return;
+            }
 
-
-            //18) Encriptar id del paquete y mandar id del paquete encriptado
-
-            //19) esperar a que el seervidor busque el paquete
-
-            //20) esperar a que busque  el estado del paquete encriptado y esperar a recibir el estado del paquete encriptado
+            //DECRYPT STATUS(response) ASSOCIATED TO THE SEARCHED PACKAGE
+            status = decryptPackageStatusWithSymmetricKey(currentReceivedMessage);
 
             //21) Decifrar el estado del paquete encriptado con la llave secreta
 

@@ -53,49 +53,4 @@ public class ByteUtils {
         return ret;
     }
 
-    /**
-     * Reads the long and converts them to bytes.
-     * @param ll the long that is to be converted
-     * @return A byte array , byte[] , of the corresponding long
-     */
-    public static byte[] longToBytes(long ll) {
-        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
-        buffer.putLong(ll);
-        return buffer.array();
-    }
-
-    /**
-     * Transforms bytes to long.
-     * @param b is the byte array
-     * @return Long corresponding to the given byte array
-     */
-    public static long bytesToLong(byte[] b) {
-        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
-        buffer.put(b);
-        buffer.flip();//need flip
-        return buffer.getLong();
-    }
-
-    /**
-     * Reads the int and converts them to bytes.
-     * @param ii the int that is to be converted
-     * @return A byte array , byte[] , of the corresponding int
-     */
-    public static byte[] intToBytes(int ii) {
-        ByteBuffer buffer = ByteBuffer.allocate(Integer.BYTES);
-        buffer.putLong(ii);
-        return buffer.array();
-    }
-
-    /**
-     * Transforms bytes to int.
-     * @param b is the byte array
-     * @return int corresponding to the given byte array
-     */
-    public static int bytesToInt(byte[] b) {
-        ByteBuffer buffer = ByteBuffer.allocate(Integer.BYTES);
-        buffer.put(b);
-        buffer.flip();//need flip
-        return buffer.getInt();
-    }
 }
