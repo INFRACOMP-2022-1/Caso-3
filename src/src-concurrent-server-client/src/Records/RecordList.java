@@ -39,15 +39,16 @@ public class RecordList {
     // METHODS
     //----------------------------------------------------------------------
 
-    //TODO: Toca probar esto
-    //TODO: Metodo para cargar del csv todos los records
+    /**
+     * Loads the csv containing the existing records.
+     */
+    //TODO: Me da miedo que por el tipo de sistema me mande error entonces cuando este haciendo pruebas voy a considerar como solo cargar datos pre configurados. Pero eso no es un problema para ya.
     public void load(){
         String line = "";
         String splitBy = ",";
         try{
             BufferedReader br = new BufferedReader(new FileReader(csvFileName +".csv"));
-            while ((line = br.readLine()) != null)   //returns a Boolean value
-            {
+            while ((line = br.readLine()) != null){
                 String[] splitedLine = line.split(splitBy);    // use comma as separator
                 String username = splitedLine[0];
                 String packageId = splitedLine[1];
@@ -62,27 +63,41 @@ public class RecordList {
         }
     }
 
-    //TODO: Metodo para buscar si un usuario dado existe en la tabla
+    /**
+     * Checks if a given username exists in the record list table
+     * @param username the username to be searched
+     * @return True if the searched username exists
+     */
     public boolean searchForUsername(String username){
         for(Record rec:recordList){
-            if(rec.getUsername().toLowerCase().equals(username.toLowerCase())){
+            if(rec.getUsername().equalsIgnoreCase(username)){
                 return true;
             }
         }
         return false;
     }
 
-
-    //TODO: Metodo para buscar si existe un paquete con el id dado asociado con un usuario (revisar con geovanny o harold si es asi)
+    /**
+     * Searches if a package with the given id exists on the record list
+     * @param packageId integer containing a possible package id
+     * @return true if a package id with that number exists, false the contrary
+     */
+    public boolean searchForPackageId(int packageId){
+        for(Record rec: recordList){
+            if(rec.getPackageId() == packageId){
+                return true;
+            }
+        }
+        return false;
+    }
 
     /**
      * Searches to check if a package with a certain packageId and username exists
-     * @param username
-     * @param packageId
-     * @return
+     * @param username the username associated with the package
+     * @param packageId the package id associated with a package
+     * @return String containing the status of the package
      */
-    public String searchForPackage(String username,int packageId){
-
+    public String searchForPackage(String username,int packageId) {
         try{
             for(Record rec: recordList){
                 if(rec.getUsername().toLowerCase() == username.toLowerCase()){
@@ -99,7 +114,12 @@ public class RecordList {
         return "FAILURE";//IT SHOULD NEVER REACH THIS BECAUSE IT WAS ALREADY CHECKED THAT THE PACKAGE EXISTS
     }
 
-    //TODO: Documents
+    /**
+     * Checks if a package with a give username and package id exists in the recordList
+     * @param username the username associated with the package
+     * @param packageId the package id associated with the package
+     * @return True if there exists a package associated with that username and package id, False the contrary
+     */
     public boolean checkIfPackageExists(String username,int packageId){
 
         try{
@@ -118,31 +138,6 @@ public class RecordList {
         return false;
     }
 
-    //TODO: Search for status for given username and package
-
-    /**
-     * Gets a package status with the given id and associated username
-     * @param username
-     * @param packageId
-     * @return
-     */
-    public String getPackageStatus(String username,String packageId){
-
-        try{
-            for(Record rec: recordList){
-                if(rec.getUsername().toLowerCase() == username.toLowerCase()){
-                    if(rec.getPackageId() == Integer.parseInt(packageId)){
-                        return rec.getStatus().toString();
-                    }
-                }
-            }
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-
-        return "";
-    }
     //----------------------------------------------------------------------
     // GETTERS AND SETTERS
     //----------------------------------------------------------------------

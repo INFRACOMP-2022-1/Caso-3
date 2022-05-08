@@ -4,6 +4,8 @@ import Utils.ByteUtils;
 import Utils.Decryption;
 import Utils.Encryption;
 import Records.RecordList;
+import Utils.HashingAndAuthCodes;
+
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
@@ -201,7 +203,7 @@ public class ServerThread extends Thread{
     public String encryptDigestWithHMAC(String digest) throws NoSuchAlgorithmException, InvalidKeyException {
         //Encrypts byte[] version of the parameter
         byte[] digestByteArray = ByteUtils.str2byte(digest);
-        byte[] authenticationCodeHMAC = Encryption.signWithHMAC(digestByteArray,sharedSecretKey);
+        byte[] authenticationCodeHMAC = HashingAndAuthCodes.signWithHMAC(digestByteArray,sharedSecretKey);
 
         //Since there are problems with byte transmission through sockets the encrypted authentication code byte array is converted to a string
         return byte2str(authenticationCodeHMAC);
@@ -264,10 +266,14 @@ public class ServerThread extends Thread{
         //Como la veo con esto tocaria poner muchos whiles internos
         //Voy a meter un try catch por que se queja con los read lines
         try{
-            String currentReceivedMessage;//The latest message that the server has read from the client.
+            //The latest message that the server has read from the client.
+            String currentReceivedMessage;
 
-            //2) WAIT FOR CLIENT TO SEND "INICIO" MESSAGE (UNENCRYPTED)
+            /*
+            PROTOCOL BEGINS
+             */
 
+            //WAIT FOR CLIENT TO SEND "INICIO" MESSAGE (UNENCRYPTED)
             //TODO: Preguntar si se tiene que como hacer algo especial si alguien rompe el protoclo (digamos aqui se le olvido andar inicio al cliente por x o y razon, como que hago solo paro todo?
             if(!(currentReceivedMessage = incomingMessageChanel.readLine()).equals("INICIO")){
                 //If the received message is anything different from INICIO then the connection to the client is closed(protocol has not been followed) and the protocol of communication is immediately terminated
@@ -275,70 +281,75 @@ public class ServerThread extends Thread{
                 return;
             }
 
-            //3) ACKNOWLEDGE CLIENTS INICIO WITH "ACK"
+            //ACKNOWLEDGE CLIENTS INICIO WITH "ACK"
             acknowledgeClient();
 
-            //4&5&6) WAIT FOR CLIENT TO GENERATE THE reto AND SEND IT. SAVE THE reto
+            //WAIT FOR CLIENT TO GENERATE THE reto
             if((currentReceivedMessage = incomingMessageChanel.readLine()) == null){
                 //If the received message is anything different from INICIO then the connection to the client is closed(protocol has not been followed) and the protocol of communication is immediately terminated
                 closeAllConnectionsToClient();
                 return;
             }
+
+            //RECEIVE THE RETO AND SAVE IT
 
             //Stores the reto in its unencrypted form in the corresponding attribute (long)
             reto = Long.parseLong(currentReceivedMessage);
 
-            //7) ENCRYPT THE reto USING SERVER PRIVATE KEY AND SEND IT -> reto' = C(K_S-,reto)
-            String encryptedRetoStr = encryptRetoWithPrivateKey(reto);
-            sendMessage(encryptedRetoStr);
+            //ENCRYPT THE reto USING SERVER PRIVATE KEY AND SEND IT -> reto' = C(K_S-,reto)
+            sendMessage(encryptRetoWithPrivateKey(reto));
 
-            //8&9) WAIT FOR CLIENT TO DECRYPT AND CHECK PREVIOUSLY SENT ENCRYPTED reto
-
-            //10&11&12) WAIT FOR CLIENT TO GENERATE SHARED SECRET (LS) AND SEND IT ENCRYPTED WITH THE SERVERS PUBLIC KEY-> LS'=C(K_S+,LS)
+            //WAIT FOR CLIENT TO GENERATE SHARED SECRET (LS) AND SEND IT ENCRYPTED WITH THE SERVERS PUBLIC KEY-> LS'=C(K_S+,LS)
             if((currentReceivedMessage = incomingMessageChanel.readLine()) == null){
                 //If the received message is anything different from INICIO then the connection to the client is closed(protocol has not been followed) and the protocol of communication is immediately terminated
                 closeAllConnectionsToClient();
                 return;
             }
 
-            //13) RECEIVE ENCRYPTED SHARED SECRET (LS') AND DECRYPT IT -> LS = D(K_S-,LS')
+            //RECEIVE ENCRYPTED SHARED SECRET (LS') AND DECRYPT IT -> LS = D(K_S-,LS')
             sharedSecretKey = decryptSharedSymmetricKeyWithPrivateKey(currentReceivedMessage);
 
-            //14) ACKNOWLEDGE CLIENTS LS WITH "ACK"
+            //ACKNOWLEDGE CLIENTS LS WITH "ACK"
             acknowledgeClient();
 
-            //15) WAIT FOR USER TO SEND THE ENCRYPTED USERNAME TO BE SEARCHED -> username'=C(K_S+,username)
+            //WAIT FOR USER TO SEND THE ENCRYPTED USERNAME TO BE SEARCHED -> username'=C(K_S+,username)
             if((currentReceivedMessage = incomingMessageChanel.readLine()) == null){
                 //If the received message is anything different from INICIO then the connection to the client is closed(protocol has not been followed) and the protocol of communication is immediately terminated
                 closeAllConnectionsToClient();
                 return;
             }
 
-            //16) DECRYPT RECEIVED USERNAME -> username = D(K_S-,username'). SEARCH IF USERNAME IN DATABASE, ACT ACCORDINGLY.
+            //DECRYPT RECEIVED USERNAME -> username = D(K_S-,username'). SEARCH IF USERNAME IN DATABASE, ACT ACCORDINGLY.
             username = decryptUsernameWithPrivateKey(currentReceivedMessage).toString();
             if(!recordList.searchForUsername(username)){
                 sendMessage("ERROR");
-                //TODO: Revisar si se para de ejecutar el protocolo ahi, o ver como hacer para eso (poner nested ifs)
                 closeAllConnectionsToClient();
+                return;
             }
 
-            //17) ACKNOWLEDGE CLIENTS EXISTING USERNAME WITH "ACK"
+            //ACKNOWLEDGE CLIENTS EXISTING USERNAME WITH "ACK"
             acknowledgeClient();
 
-            //18) WAIT FOR CLIENT TO SEND ENCRYPTED PACKAGE ID -> id_pkg' = C(LS,id_pkg)
+            //WAIT FOR CLIENT TO SEND ENCRYPTED PACKAGE ID -> id_pkg' = C(LS,id_pkg)
             if((currentReceivedMessage = incomingMessageChanel.readLine()) == null){
                 //If the received message is anything different from INICIO then the connection to the client is closed(protocol has not been followed) and the protocol of communication is immediately terminated
                 closeAllConnectionsToClient();
                 return;
             }
 
-            //19) DECRYPT RECEIVED PACKAGE ID -> id = D(LS,id_pkg')
+            //DECRYPT RECEIVED PACKAGE ID -> id = D(LS,id_pkg')
+            packageId = decryptPackageIdWithSymmetricKey(currentReceivedMessage);
+
             //SEARCH FOR PACKAGE ASSOCIATED TO USERNAME, ACT ACCORDINGLY.
+            if(!recordList.searchForPackageId(packageId)){
+
+            }
+            status = recordList.searchForPackage(username,packageId);
             //ENCRYPT PACKAGE STATUS  -> es' = C(LS,es)
 
-            packageId = decryptPackageIdWithSymmetricKey(currentReceivedMessage);
+
             //TODO: Revisar que toca hacer en los casos en esta parte del protocolo
-            status = recordList.searchForPackage(username,packageId);
+
 
             //20) SEND ENCRYPTED es TO CLIENT
             String packageStatusStr = encryptPackageStatusWithSymmetricKey(status);
