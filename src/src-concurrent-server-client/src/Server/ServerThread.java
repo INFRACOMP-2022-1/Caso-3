@@ -71,8 +71,15 @@ public class ServerThread extends Thread{
      */
     public int packageId;
 
-    //TODO: Descripcion
+    /*
+    The status of the searched package corresponding to the username and package id
+     */
     public String status;
+
+    /*
+    The digest is a MessageDigest created using the status(response)
+     */
+    public String digest;
 
     /*
     The chanel where the serverThread will be writing the messages that it sends to the client. Prints formatted representation of objects into a text-output stream. It's the socket who actually sends it, but it makes it easier to use.
@@ -183,11 +190,6 @@ public class ServerThread extends Thread{
      * The encryption of a reto using the servers private key
      * @param reto 24-digit number originally sent by the client
      * @return String corresponding to the encrypted bytes of the reto
-     * @throws NoSuchPaddingException
-     * @throws IllegalBlockSizeException
-     * @throws NoSuchAlgorithmException
-     * @throws BadPaddingException
-     * @throws InvalidKeyException
      */
     public String encryptRetoWithPrivateKey(Long reto) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         //Encrypts byte[] version of the parameter
@@ -202,12 +204,6 @@ public class ServerThread extends Thread{
      * Encrypts a package status using the symmetric key LS
      * @param status the status of the searched package
      * @return String corresponding to the bytes of the encrypted status
-     * @throws InvalidAlgorithmParameterException
-     * @throws NoSuchPaddingException
-     * @throws IllegalBlockSizeException
-     * @throws NoSuchAlgorithmException
-     * @throws BadPaddingException
-     * @throws InvalidKeyException
      */
     public String encryptPackageStatusWithSymmetricKey(String status) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         //Encrypts byte[] version of the parameter
@@ -226,8 +222,6 @@ public class ServerThread extends Thread{
      * Calculates the HMAC (Authentication code) for a given digest
      * @param digest the digest containing the information about the message (its a hash, calculated with message digest, see createDigest for more information)
      * @return String containing the bytes for the HMAC (hash) of the digest
-     * @throws NoSuchAlgorithmException
-     * @throws InvalidKeyException
      */
     public String calculateHMACofDigest(String digest) throws NoSuchAlgorithmException, InvalidKeyException {
         //Converts to byte array
@@ -264,11 +258,6 @@ public class ServerThread extends Thread{
      * Decrypts the shared symmetric key (Secret, LS) using the servers private key
      * @param encryptedSharedSymmetricKey String version of the encrypted bytes of the symmetric key
      * @return SecretKey object that corresonds to the secret key that will be used to do symmetric encryption
-     * @throws NoSuchPaddingException
-     * @throws IllegalBlockSizeException
-     * @throws NoSuchAlgorithmException
-     * @throws BadPaddingException
-     * @throws InvalidKeyException
      */
     public SecretKey decryptSharedSymmetricKeyWithPrivateKey(String encryptedSharedSymmetricKey) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         //Since there are problems with byte transmission through sockets the encrypted sharedSymmetricKey string is converted to a byte array
@@ -285,11 +274,6 @@ public class ServerThread extends Thread{
      * Decrypts the encrypted package id using the servers secret key (symmetric key).
      * @param encryptedPackageId the encrypted package id bytes in a string format
      * @return int corresponding to the encrypted package id.
-     * @throws NoSuchPaddingException
-     * @throws IllegalBlockSizeException
-     * @throws NoSuchAlgorithmException
-     * @throws BadPaddingException
-     * @throws InvalidKeyException
      */
     private int decryptPackageIdWithSymmetricKey(String encryptedPackageId) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         //Since there are problems with byte transmission through sockets the encrypted package id string is converted to a byte array
@@ -306,11 +290,6 @@ public class ServerThread extends Thread{
      * Decrypts the encrypted username using the servers private key
      * @param encryptedUsername the encrypted username bytes in a string format
      * @return String with the unencrypted username
-     * @throws NoSuchPaddingException
-     * @throws IllegalBlockSizeException
-     * @throws NoSuchAlgorithmException
-     * @throws BadPaddingException
-     * @throws InvalidKeyException
      */
     public String decryptUsernameWithPrivateKey(String encryptedUsername) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         //Since there are problems with byte transmission through sockets the encrypted username string is converted to a byte array
@@ -327,14 +306,10 @@ public class ServerThread extends Thread{
     // RUN
     //----------------------------------------------------------------------
 
+    /**
+     * The server side of the communication protocol
+     */
     public void run(){
-        //TODO: Completar el run con todos los protocolos
-        //TODO: Cambiar los numero si refleja estado de docs documentandolo
-        //TODO: Creo que va a tocar meter un while se este reciviendo input del cliente o algo por el estilo
-
-        //TODO: Iba a implementar la cosa con un while de un tutorial(https://www.baeldung.com/a-guide-to-java-sockets ) pero se ve super sucio entonces usare yieldya que en teoria estariamos manejando multiples conexiones y no me gustaria que se quede bloqueado en un thread mientras que otros esperan. Me toca verificar con harold o geovanny si tengo la idea correcta
-        //Como la veo con esto tocaria poner muchos whiles internos
-        //Voy a meter un try catch por que se queja con los read lines
         try{
             //The latest message that the server has read from the client.
             String currentReceivedMessage;
@@ -344,7 +319,6 @@ public class ServerThread extends Thread{
              */
 
             //WAIT FOR CLIENT TO SEND "INICIO" MESSAGE (UNENCRYPTED)
-            //TODO: Preguntar si se tiene que como hacer algo especial si alguien rompe el protoclo (digamos aqui se le olvido andar inicio al cliente por x o y razon, como que hago solo paro todo?
             if(!(currentReceivedMessage = incomingMessageChanel.readLine()).equals("INICIO")){
                 //If the received message is anything different from INICIO then the connection to the client is closed(protocol has not been followed) and the protocol of communication is immediately terminated
                 closeAllConnectionsToClient();
@@ -419,26 +393,23 @@ public class ServerThread extends Thread{
 
             status = recordList.searchForPackage(username,packageId);
 
-            //ENCRYPT AND SEND PACKAGE STATUS  -> es' = C(LS,es)
+            //ENCRYPT AND SEND PACKAGE STATUS-(response)  -> es' = C(LS,es)
             sendMessage(encryptPackageStatusWithSymmetricKey(status));
 
-            //WAIT FOR CLIENT TO EXTRACT PACKAGE STATUS AND RECEIVE ACK (from client)
+            //WAIT FOR CLIENT TO EXTRACT PACKAGE STATUS(response) AND RECEIVE ACK (from client)
             if(!(currentReceivedMessage = incomingMessageChanel.readLine()).equals("ACK")){
                 //If the received message is anything different from INICIO then the connection to the client is closed(protocol has not been followed) and the protocol of communication is immediately terminated
                 closeAllConnectionsToClient();
                 return;
             }
 
-            //23) GENERATE DIGEST WITH HMAC -> HMAC(LS,digest)
-            //TODO: SEGUN SANDRA DIGEST ES LO MISMO QUE ESTATUS. NOT REALLY DIGEST ES
+            //GENERATE DIGEST USING THE STATUS(RESPONSE)
+            digest = createDigest(status);
 
+            //GET HMAC OF THE DIGEST AND SEND IT TO CLIENT -> HMAC(LS,digest)
+            sendMessage(calculateHMACofDigest(digest));
 
-            //24) SEND HMAC DIGEST TO CLIENT
-            String authCodeHMAC = calculateHMACofDigest(status);
-
-            //25) WAIT FOR CLIENT TO READ DIGEST INFORMATION
-
-            //26) WAIT UNTIL CLIENT SENDS "TERMINAL" AND CULMINATE THE THREAD
+            //25) WAIT FOR CLIENT TO READ DIGEST INFORMATION AND UNTIL THE CLIENT SENDS "TERMINAL" AND CULMINATE THE THREAD
             if(!(currentReceivedMessage = incomingMessageChanel.readLine()).equals("TERMINAR")){
                 //If the received message is anything different from INICIO then the connection to the client is closed(protocol has not been followed) and the protocol of communication is immediately terminated
                 closeAllConnectionsToClient();
