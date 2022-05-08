@@ -158,8 +158,10 @@ public class ServerThread extends Thread{
      * @return String corresponding to the encrypted bytes of the reto
      */
     public String encryptRetoWithPrivateKey(Long reto){
+        String retoStr = String.valueOf(reto);
+
         //Encrypts byte[] version of the parameter
-        byte[] retoByteArray = ByteUtils.longToBytes(reto);
+        byte[] retoByteArray = ByteUtils.str2byte(retoStr);
         byte[] encryptedReto = Encryption.encryptWithPrivateKey(retoByteArray, privateKeyServer);
 
         //Since there are problems with byte transmission through sockets the encrypted reto byte array is converted to a string
@@ -249,7 +251,7 @@ public class ServerThread extends Thread{
         byte[] decryptedPackageId = Decryption.decryptWithSymmetricKey(encryptedPackageIdWithSymmetricKey,sharedSecretKey);
 
         //Converts decrypted byte array to int
-        return ByteUtils.bytesToInt(decryptedPackageId);
+        return Integer.parseInt(ByteUtils.byte2str(decryptedPackageId));
     }
 
     /**

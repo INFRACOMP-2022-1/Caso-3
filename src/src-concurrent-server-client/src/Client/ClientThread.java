@@ -1,10 +1,7 @@
 package Client;
 
 import StatusRequests.PackageStatusRequests;
-import Utils.ByteUtils;
-import Utils.Decryption;
-import Utils.Encryption;
-import Utils.KeyGenerators;
+import Utils.*;
 
 import javax.crypto.*;
 import java.io.BufferedReader;
@@ -181,8 +178,11 @@ public class ClientThread extends Thread {
      * @return String corresponding to the encrypted bytes of the package id
      */
     public String encryptPackageIdWithSymmetricKey(int packageId){
+        //Gets string version of the package id
+        String packageIdStr = String.valueOf(packageId);
+
         //Since there are problems with byte transmission through sockets the encrypted username string is converted to a byte array
-        byte[] packageIdByteArray = ByteUtils.intToBytes(packageId);
+        byte[] packageIdByteArray = ByteUtils.str2byte(packageIdStr);
         byte[] encryptedPackageId = Encryption.encryptWithSymmetricKey(packageIdByteArray,secretKey);
 
         //Since there are problems with byte transmission through sockets the encrypted reto byte array is converted to a string
@@ -206,10 +206,24 @@ public class ClientThread extends Thread {
         byte[] decryptedReto = Decryption.decryptWithPublicKey(encryptedRetoWithPublicKeyByteArray,publicKeyServer);
 
         //Converts decrypted byte array to Long
-        return ByteUtils.bytesToLong(decryptedReto);
+        return Long.parseLong(ByteUtils.byte2str(decryptedReto));
     }
 
-    public String decryptPackageStatusWithSymmetricKey
+    /**
+     * Decrypts the package status sent by the server using the secret key (LS)
+     * @param encryptedPackageStatus the package status sent by the server
+     * @return String with the package status (corresponding to the Status enums)
+     */
+    public String decryptPackageStatusWithSymmetricKey(String encryptedPackageStatus) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+        //Since there are problems with byte transmission through sockets the encrypted username string is converted to a byte array
+        byte[] encryptedPackageStatusByteArray = ByteUtils.str2byte(encryptedPackageStatus);
+
+        //Decrypts the package status with decrypt method and returns byte array
+        byte[] decryptedReto = Decryption.decryptWithSymmetricKey(encryptedPackageStatusByteArray,secretKey);
+
+        //Converts decrypted byte array to Long
+        return ByteUtils.byte2str(decryptedReto);
+    }
 
     //----------------------------------------------------------------------
     // RUN
@@ -299,19 +313,38 @@ public class ClientThread extends Thread {
             //DECRYPT STATUS(response) ASSOCIATED TO THE SEARCHED PACKAGE
             status = decryptPackageStatusWithSymmetricKey(currentReceivedMessage);
 
-            //21) Decifrar el estado del paquete encriptado con la llave secreta
+            //SEND ACK
+            sendMessage("ACK");
 
-            //22) Mandar ACK
+            //WAIT FOR SERVER TO GENERATE THE DIGEST AND SEND IT IN AN HMAC
+            if((currentReceivedMessage = incomingMessageChanel.readLine()) == null){
+                closeAllConnectionsToServer();
+                return;
+            }
 
-            //23) esperara a que se genere digest y que se firme
+            //RECEIVE HMAC, CALCULATE DIGEST USING STATUS (response)
+            //Note: currentReceivedMessage is the HMAC in string format at this point
 
-            //24) esperar a que se mande digest con hmac certificado de autentica cion
+            //Gets byte array of currentReceivedMessage , that in this case is the HMAC sent by the server
+            byte[] hmacDigestByteArrayServer = ByteUtils.str2byte(currentReceivedMessage);
 
-            //25) Sacar digest, ver si el certificado encaja
+            //Calculate the digest using status
+            byte[] hmacDigestByteArrayLocal = HashingAndAuthCodes.getMessageDigest(ByteUtils.str2byte(status));
 
-            //26) Mandar mensaje de  "TERMINAR"
+            //COMPARE SERVER DIGEST TO LOCALLY GENERATED DIGEST
+            if(hmacDigestByteArrayLocal != hmacDigestByteArrayServer){
+                closeAllConnectionsToServer();
+                return;
+            }
+
+            //SEND "TERMINAR" TO END PROTOCOL
+            sendMessage("TERMINAR");
 
 
+            //PRINT MESSAGE IN CONSOLE
+            System.out.println(status);
+
+            //CLOSES ALL CONNECTIONS TO SERVER
             closeAllConnectionsToServer();
         }
         catch (Exception e){
