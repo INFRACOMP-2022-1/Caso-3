@@ -34,12 +34,10 @@ public class Encryption {
      * @throws IllegalBlockSizeException
      * @throws BadPaddingException
      */
-    //TODO: REVISAR CON GEOVANNY SI ESTO ESTA BIEN
     public static byte[] encryptWithSymmetricKey(byte[] unencryptedMessageBytes, SecretKey secretKey) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
-        byte[] iv = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-        IvParameterSpec ivspec = new IvParameterSpec(iv);//TODO: Esta esto del IV bien, o me toca generarlo de una forma mas inteligente
+        //Note: in some documentation the option to create an IV (initialization vector) is also given, but taller 8 doesn't use it so im going to skip over that
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-        cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivspec);
+        cipher.init(Cipher.ENCRYPT_MODE, secretKey);
         byte[] encryptedMessageBytes = cipher.doFinal(unencryptedMessageBytes);
         return encryptedMessageBytes;
     }
@@ -72,7 +70,6 @@ public class Encryption {
      * @throws InvalidKeyException
      */
     public static byte[] signWithHMAC(byte[] messageBytes, SecretKey secretKey) throws NoSuchAlgorithmException, InvalidKeyException {
-        //TODO: No tengo muy claro si HMAC usa la llave LS o no
         String hmacSHA256Algorithm = "HmacSHA256";
 
         Mac mac = Mac.getInstance(hmacSHA256Algorithm);
