@@ -123,46 +123,10 @@ public class ServerThread extends Thread{
     //----------------------------------------------------------------------
 
     /**
-     * This method is responsible for sending to the client the servers private key. It does so unencrypted and in plain text.
-     */
-    public void sendServerPrivateKey(){
-        outgoingMessageChanel.println(privateKeyServer);
-    }
-
-    /**
      * Sends a message to the client indicating that it has acknowledged ("ACK" in the protocol) the previous received message
      */
     public void acknowledgeClient(){
         outgoingMessageChanel.println("ACK");
-    }
-
-    //TODO: Crear metodo para generar el digest
-    public String generateDigest(){
-        return " ";
-    }
-
-    //TODO: Crear metodo para llamar en RecordList el metodo que busque usuarios existentes
-
-    /**
-     * Searches for existing users in the record list. If the user exists then its saved as username in the thread and returns true. The contrary its returned false.
-     * @param searchedUsername the searched username
-     * @return True if searchedUsername exists, false the contary
-     */
-    public boolean searchForExistingUsers(String searchedUsername){
-        if(recordList.searchForUsername(searchedUsername)){
-            username = searchedUsername;
-            return true;
-        }
-        return false;
-    }
-
-    //TODO: Crear metodo para llamar en RecordList el metodo que busque paquetes existentes (paquetes asociados a usaurios, pero toca antes preguntar si es asi)
-    public boolean searchForExistingPackages(String username,int packageId){
-        if(recordList.checkIfPackageExists(username,packageId)){
-            status = recordList.searchForPackage(username,packageId);
-            return true;
-        }
-        return false;
     }
 
     /**
@@ -170,14 +134,16 @@ public class ServerThread extends Thread{
      * This method will be called when the connection is to be terminated, either because of an error in the protocol (like the username or id haven't been found in the table) or when the protocol ends with "TERMINAR"
      * @throws IOException Exception in closing the incomingMessageChannel (BufferedReader)
      */
-    //TODO: Crear metodo para cerrar el socket, el printwriter, el buffer reader
     public void closeAllConnectionsToClient() throws IOException {
         incomingMessageChanel.close();
         outgoingMessageChanel.close();
         clientSocket.close();
     }
 
-    //TODO: Document. This is a general purpose method. As all messages are sent as strings (even if encrypted) then this is a general message sender
+    /**
+     * Send message is a general purpose method that is responsible for sending to the client a message given by parameter
+     * @param message The string that is to be sent to the client.
+     */
     public void sendMessage(String message){
         outgoingMessageChanel.println(message);
     }
@@ -191,7 +157,7 @@ public class ServerThread extends Thread{
      * @param reto 24-digit number originally sent by the client
      * @return String corresponding to the encrypted bytes of the reto
      */
-    public String encryptRetoWithPrivateKey(Long reto) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+    public String encryptRetoWithPrivateKey(Long reto){
         //Encrypts byte[] version of the parameter
         byte[] retoByteArray = ByteUtils.longToBytes(reto);
         byte[] encryptedReto = Encryption.encryptWithPrivateKey(retoByteArray, publicKeyServer);
@@ -205,7 +171,7 @@ public class ServerThread extends Thread{
      * @param status the status of the searched package
      * @return String corresponding to the bytes of the encrypted status
      */
-    public String encryptPackageStatusWithSymmetricKey(String status) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+    public String encryptPackageStatusWithSymmetricKey(String status){
         //Encrypts byte[] version of the parameter
         byte[] statusByteArray = ByteUtils.str2byte(status);
         byte[] encryptedStatus = Encryption.encryptWithSymmetricKey(statusByteArray,sharedSecretKey);
@@ -223,7 +189,7 @@ public class ServerThread extends Thread{
      * @param digest the digest containing the information about the message (its a hash, calculated with message digest, see createDigest for more information)
      * @return String containing the bytes for the HMAC (hash) of the digest
      */
-    public String calculateHMACofDigest(String digest) throws NoSuchAlgorithmException, InvalidKeyException {
+    public String calculateHMACofDigest(String digest){
         //Converts to byte array
         byte[] digestByteArray = ByteUtils.str2byte(digest);
 
