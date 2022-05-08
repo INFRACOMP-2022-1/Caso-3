@@ -161,6 +161,20 @@ public class ClientThread extends Thread {
         return byte2str(encryptedSecretKey);
     }
 
+    /**
+     * Encrypts the username using the servers public key.
+     * @param username username of the package that is being searched
+     * @return String corresponding to the encrypted bytes of the username
+     */
+    public String encryptUsernameWithPublicKey(String username){
+        //Encrypts byte[] version of the parameter
+        byte[] usernameByteArray = ByteUtils.str2byte(username);
+        byte[] encryptedUsername = Encryption.encryptWithPublicKey(usernameByteArray, publicKeyServer);
+
+        //Since there are problems with byte transmission through sockets the encrypted reto byte array is converted to a string
+        return byte2str(encryptedUsername);
+    }
+
     //----------------------------------------------------------------------
     // DECRYPTION
     //----------------------------------------------------------------------
@@ -204,7 +218,7 @@ public class ClientThread extends Thread {
             sendMessage("INICIO");
 
             //WAITS TO RECEIVE ACK FROM SERVER
-            if(!(currentReceivedMessage = incomingMessageChanel.readLine()).equals("ACK")){
+            if(!((currentReceivedMessage = incomingMessageChanel.readLine()).equals("ACK"))){
                 closeAllConnectionsToServer();
                 return;
             }
@@ -234,14 +248,16 @@ public class ClientThread extends Thread {
             //ENCRYPT THE SECRET KEY/LS WITH THE SERVERS PUBLIC KEY -> LS'=C(K_S+,LS)
             sendMessage(encryptSecretKeyWithPublicKey());
 
+            //WAIT FOR SERVER TO EXTRACT SECRET KEY AND SEND ACK MESSAGE
+            if(!((currentReceivedMessage = incomingMessageChanel.readLine()).equals("ACK"))){
+                closeAllConnectionsToServer();
+                return;
+            }
 
-            //11) Cifrar LS con llave publica del servidor
+            //ENCRYPT THE USERNAME ASSOCIATED TO THE SEARCHED PACKAGE AND SENT IT TO THE SERVER
+            sendMessage(encryptUsernameWithPublicKey(username));
 
-            //12) Mandar llave secreta a servidor
 
-            //13) Esperar a que el servidor decifre la llave secreta
-
-            //14) Esperar a que el servidor haga "ACK"
 
             //15) Encriptar nombre de usuario a sacar y mandar nombre de usuario encriptado
 
