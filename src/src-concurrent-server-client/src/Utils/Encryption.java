@@ -34,12 +34,18 @@ public class Encryption {
      * @throws IllegalBlockSizeException
      * @throws BadPaddingException
      */
-    public static byte[] encryptWithSymmetricKey(byte[] unencryptedMessageBytes, SecretKey secretKey) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
-        //Note: in some documentation the option to create an IV (initialization vector) is also given, but taller 8 doesn't use it so im going to skip over that
-        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-        cipher.init(Cipher.ENCRYPT_MODE, secretKey);
-        byte[] encryptedMessageBytes = cipher.doFinal(unencryptedMessageBytes);
-        return encryptedMessageBytes;
+    public static byte[] encryptWithSymmetricKey(byte[] unencryptedMessageBytes, SecretKey secretKey){
+        try{
+            //Note: in some documentation the option to create an IV (initialization vector) is also given, but taller 8 doesn't use it so im going to skip over that
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+            cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+            byte[] encryptedMessageBytes = cipher.doFinal(unencryptedMessageBytes);
+            return encryptedMessageBytes;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**
@@ -53,12 +59,17 @@ public class Encryption {
      * @throws IllegalBlockSizeException
      * @throws BadPaddingException
      */
-    public static byte[] encryptWithPrivateKey(byte[] unencryptedMessageBytes, PublicKey publicKey) throws InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException, IllegalBlockSizeException, BadPaddingException {
-        //REFERENCE -> https://www.baeldung.com/java-rsa
-        Cipher cipher = Cipher.getInstance("RSA");
-        cipher.init(Cipher.ENCRYPT_MODE, publicKey);
-        byte[] encryptedMessageBytes = cipher.doFinal(unencryptedMessageBytes);
-        return encryptedMessageBytes;
+    public static byte[] encryptWithPrivateKey(byte[] unencryptedMessageBytes, PublicKey publicKey){
+        try{
+            Cipher cipher = Cipher.getInstance("RSA");
+            cipher.init(Cipher.ENCRYPT_MODE, publicKey);
+            byte[] encryptedMessageBytes = cipher.doFinal(unencryptedMessageBytes);
+            return encryptedMessageBytes;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**
@@ -69,12 +80,18 @@ public class Encryption {
      * @throws NoSuchAlgorithmException
      * @throws InvalidKeyException
      */
-    public static byte[] signWithHMAC(byte[] messageBytes, SecretKey secretKey) throws NoSuchAlgorithmException, InvalidKeyException {
-        String hmacSHA256Algorithm = "HmacSHA256";
+    public static byte[] signWithHMAC(byte[] messageBytes, SecretKey secretKey){
+        try{
+            String hmacSHA256Algorithm = "HmacSHA256";
 
-        Mac mac = Mac.getInstance(hmacSHA256Algorithm);
-        mac.init(secretKey);
-        return mac.doFinal(messageBytes);
+            Mac mac = Mac.getInstance(hmacSHA256Algorithm);
+            mac.init(secretKey);
+            return mac.doFinal(messageBytes);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**
@@ -84,10 +101,16 @@ public class Encryption {
      * @return a byte array containing the produced hash, the digest
      * @throws NoSuchAlgorithmException
      */
-    public static byte[] getMessageDigest(byte[] messageBytes) throws NoSuchAlgorithmException {
-        String algorithm = "SHA-256";
-        MessageDigest digest = MessageDigest.getInstance(algorithm);
-        digest.update(messageBytes);
-        return digest.digest();
+    public static byte[] getMessageDigest(byte[] messageBytes){
+        try{
+            String algorithm = "SHA-256";
+            MessageDigest digest = MessageDigest.getInstance(algorithm);
+            digest.update(messageBytes);
+            return digest.digest();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 }
