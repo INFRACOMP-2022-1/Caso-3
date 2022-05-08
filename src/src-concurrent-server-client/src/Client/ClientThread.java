@@ -1,14 +1,16 @@
 package Client;
 
 import StatusRequests.PackageStatusRequests;
+import Utils.ByteUtils;
+import Utils.Decryption;
 
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
+import javax.crypto.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.util.Random;
@@ -158,39 +160,69 @@ public class ClientThread extends Thread {
     // DECRYPTION
     //----------------------------------------------------------------------
 
+    /**
+     * Decrypts the reto sent by the server using the servers public key.
+     * @param encryptedServerReto the reto sent by the server (It's in string format)
+     * @return Long with the 24-digit number that corresponds to the decrypted reto.
+     */
+    public Long decryptServerRetoWithPublicKey(String encryptedServerReto) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+        //Since there are problems with byte transmission through sockets the encrypted username string is converted to a byte array
+        byte[] encryptedRetoWithPublicKeyByteArray = ByteUtils.str2byte(encryptedServerReto);
+
+        //Decrypts the reto with decrypt method and returns byte array
+        byte[] decryptedReto = Decryption.decryptWithPublicKey(encryptedRetoWithPublicKeyByteArray,publicKeyServer);
+
+        //Converts decrypted byte array to Long
+        return Long.parseLong(ByteUtils.byte2str(decryptedReto));
+    }
+
     //----------------------------------------------------------------------
     // RUN
     //----------------------------------------------------------------------
 
     public void run(){
         try {
-            //TODO: Document
+            /*
+            Opens the reading and writing channels to read and write to the server
+             */
             outgoingMessageChanel = new PrintWriter(serverSocket.getOutputStream(),true);
             incomingMessageChanel = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
 
-            //TODO: Document
+            //Stores the current message read
             String currentReceivedMessage;
 
+            /*
+            CLIENT PROTOCOL
+             */
 
-            //2) Manda mensaje de incio
+            //SENDS THE "INICIO" MESSAGE TO THE SERVER, STARTS THE PROTOCOL
             sendMessage("INICIO");
 
-            //3) Espera mensaje de ACK de parte del servidor
-            while(!(currentReceivedMessage = incomingMessageChanel.readLine()).equals("ACK")){
-                Thread.yield();
+            //WAITS TO RECEIVE ACK FROM SERVER
+            if(!(currentReceivedMessage = incomingMessageChanel.readLine()).equals("ACK")){
+                closeAllConnectionsToServer();
+                return;
             }
 
-            //4) Generar reto
-            String retoStr = generateReto();//By default, the method also saves the long format version of the reto
+            //GENERATES THE RETO (24-digit random number) AND SENDS IT TO THE SERVER IN PLAIN TEXT
+            sendMessage(generateReto());
 
-            //5) Mandar reto
-            sendMessage(retoStr);
-
-            //6) Esperar a que el servidor cifre el reto
-            //7) Esperar a que el servidro mande el reto cifrado
-            while((currentReceivedMessage = incomingMessageChanel.readLine()) == null){
-                Thread.yield();
+            //WAIT FOR THE SERVER TO ENCRYPT THE RETO AND SEND IT
+            if((currentReceivedMessage = incomingMessageChanel.readLine()) == null){
+                closeAllConnectionsToServer();
+                return;
             }
+
+            //DECRYPT SENT RETO
+            Long serverReto = unencryptRetoWithPublicKey(currentReceivedMessage);
+
+
+
+
+
+
+
+
 
             //8) Decifrar reto cifrado
 

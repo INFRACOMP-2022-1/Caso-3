@@ -4,6 +4,7 @@ import javax.crypto.*;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
+import java.security.PublicKey;
 
 /**
  * Class responsible for decrypting data with a variety of algorithms and decryption types.
@@ -50,6 +51,24 @@ public class Decryption {
     public static byte[] decryptWithPrivateKey(byte[] encryptedMessageBytes, PrivateKey privateKey) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
         Cipher cipher = Cipher.getInstance(PRIVATE_KEY_ALGORITHM);//Uses RSA
         cipher.init(Cipher.DECRYPT_MODE,privateKey);
+        return cipher.doFinal(encryptedMessageBytes);
+    }
+
+    /**
+     * Decrypts a message using the public key given by parameter.
+     * The method will only work if the public key used is a pair to the private key used to encrypt the message.
+     * @param encryptedMessageBytes the encrypted message in the format of a byte array
+     * @param publicKey the public key used to decrypt the message. (It should be the pair of the private key used to encrypt the message)
+     * @return A byte array with the unencrypted message
+     * @throws NoSuchPaddingException
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidKeyException
+     * @throws IllegalBlockSizeException
+     * @throws BadPaddingException
+     */
+    public static byte[] decryptWithPublicKey(byte[] encryptedMessageBytes, PublicKey publicKey) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+        Cipher cipher = Cipher.getInstance(PRIVATE_KEY_ALGORITHM);//Uses RSA
+        cipher.init(Cipher.DECRYPT_MODE,publicKey);
         return cipher.doFinal(encryptedMessageBytes);
     }
 

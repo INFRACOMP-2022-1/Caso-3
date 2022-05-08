@@ -296,7 +296,6 @@ public class ServerThread extends Thread{
 
             //WAIT FOR CLIENT TO GENERATE THE reto
             if((currentReceivedMessage = incomingMessageChanel.readLine()) == null){
-                //If the received message is anything different from INICIO then the connection to the client is closed(protocol has not been followed) and the protocol of communication is immediately terminated
                 closeAllConnectionsToClient();
                 return;
             }
@@ -311,7 +310,6 @@ public class ServerThread extends Thread{
 
             //WAIT FOR CLIENT TO GENERATE SHARED SECRET (LS) AND SEND IT ENCRYPTED WITH THE SERVERS PUBLIC KEY-> LS'=C(K_S+,LS)
             if((currentReceivedMessage = incomingMessageChanel.readLine()) == null){
-                //If the received message is anything different from INICIO then the connection to the client is closed(protocol has not been followed) and the protocol of communication is immediately terminated
                 closeAllConnectionsToClient();
                 return;
             }
@@ -324,7 +322,6 @@ public class ServerThread extends Thread{
 
             //WAIT FOR USER TO SEND THE ENCRYPTED USERNAME TO BE SEARCHED -> username'=C(K_S+,username)
             if((currentReceivedMessage = incomingMessageChanel.readLine()) == null){
-                //If the received message is anything different from INICIO then the connection to the client is closed(protocol has not been followed) and the protocol of communication is immediately terminated
                 closeAllConnectionsToClient();
                 return;
             }
@@ -342,7 +339,6 @@ public class ServerThread extends Thread{
 
             //WAIT FOR CLIENT TO SEND ENCRYPTED PACKAGE ID -> id_pkg' = C(LS,id_pkg)
             if((currentReceivedMessage = incomingMessageChanel.readLine()) == null){
-                //If the received message is anything different from INICIO then the connection to the client is closed(protocol has not been followed) and the protocol of communication is immediately terminated
                 closeAllConnectionsToClient();
                 return;
             }
@@ -364,7 +360,6 @@ public class ServerThread extends Thread{
 
             //WAIT FOR CLIENT TO EXTRACT PACKAGE STATUS(response) AND RECEIVE ACK (from client)
             if(!(currentReceivedMessage = incomingMessageChanel.readLine()).equals("ACK")){
-                //If the received message is anything different from INICIO then the connection to the client is closed(protocol has not been followed) and the protocol of communication is immediately terminated
                 closeAllConnectionsToClient();
                 return;
             }
@@ -377,7 +372,6 @@ public class ServerThread extends Thread{
 
             //25) WAIT FOR CLIENT TO READ DIGEST INFORMATION AND UNTIL THE CLIENT SENDS "TERMINAL" AND CULMINATE THE THREAD
             if(!(currentReceivedMessage = incomingMessageChanel.readLine()).equals("TERMINAR")){
-                //If the received message is anything different from INICIO then the connection to the client is closed(protocol has not been followed) and the protocol of communication is immediately terminated
                 closeAllConnectionsToClient();
                 return;
             }
