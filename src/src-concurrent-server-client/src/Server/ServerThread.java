@@ -179,7 +179,16 @@ public class ServerThread extends Thread{
     // ENCRYPTION
     //----------------------------------------------------------------------
 
-    //TODO: ENCRYPT RETOO USING PRIVATE KEY
+    /**
+     * The encryption of a reto using the servers private key
+     * @param reto 24-digit number originally sent by the client
+     * @return String corresponding to the encrypted bytes of the reto
+     * @throws NoSuchPaddingException
+     * @throws IllegalBlockSizeException
+     * @throws NoSuchAlgorithmException
+     * @throws BadPaddingException
+     * @throws InvalidKeyException
+     */
     public String encryptRetoWithPrivateKey(Long reto) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         //Encrypts byte[] version of the parameter
         byte[] retoByteArray = ByteUtils.longToBytes(reto);
@@ -189,7 +198,17 @@ public class ServerThread extends Thread{
         return byte2str(encryptedReto);
     }
 
-    //TODO: ENCRYPT STATUS WITH SYMMETRIC KEY
+    /**
+     * Encrypts a package status using the symmetric key LS
+     * @param status the status of the searched package
+     * @return String corresponding to the bytes of the encrypted status
+     * @throws InvalidAlgorithmParameterException
+     * @throws NoSuchPaddingException
+     * @throws IllegalBlockSizeException
+     * @throws NoSuchAlgorithmException
+     * @throws BadPaddingException
+     * @throws InvalidKeyException
+     */
     public String encryptPackageStatusWithSymmetricKey(String status) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         //Encrypts byte[] version of the parameter
         byte[] statusByteArray = ByteUtils.str2byte(status);
@@ -199,23 +218,58 @@ public class ServerThread extends Thread{
         return byte2str(encryptedStatus);
     }
 
-    //TODO: ENCRYPT DIGEST WITH HMAC
-    public String encryptDigestWithHMAC(String digest) throws NoSuchAlgorithmException, InvalidKeyException {
-        //Encrypts byte[] version of the parameter
+    //----------------------------------------------------------------------
+    // AUTHENTICATION CODES AND HASHES
+    //----------------------------------------------------------------------
+
+    /**
+     * Calculates the HMAC (Authentication code) for a given digest
+     * @param digest the digest containing the information about the message (its a hash, calculated with message digest, see createDigest for more information)
+     * @return String containing the bytes for the HMAC (hash) of the digest
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidKeyException
+     */
+    public String calculateHMACofDigest(String digest) throws NoSuchAlgorithmException, InvalidKeyException {
+        //Converts to byte array
         byte[] digestByteArray = ByteUtils.str2byte(digest);
+
+        //Gets HMAC of digest
         byte[] authenticationCodeHMAC = HashingAndAuthCodes.signWithHMAC(digestByteArray,sharedSecretKey);
 
         //Since there are problems with byte transmission through sockets the encrypted authentication code byte array is converted to a string
         return byte2str(authenticationCodeHMAC);
     }
 
+    /**
+     * Creates a message digest using the status response on a package
+     * @param response contains the status of the requested package
+     * @return a String containing the bytes of the message digest
+     */
+    public String createDigest(String response){
+        //Converts to byte array
+        byte[] responseByteArray = ByteUtils.str2byte(response);
+
+        //Gets Message Digest
+        byte[] messageDigest = HashingAndAuthCodes.getMessageDigest(responseByteArray);
+
+        //Since there are problems with byte transmission through sockets the encrypted authentication code byte array is converted to a string
+        return byte2str(messageDigest);
+    }
+
     //----------------------------------------------------------------------
     // DECRYPTION
     //----------------------------------------------------------------------
 
-    //TODO: TOCA PROCESAR EN TODOS LADOS LO DE BYTES
-
-    //TODO: DECRYPT SYMMETRIC KEY USING PRIVATE KEY
+    /**
+     * Decrypts the shared symmetric key (Secret, LS) using the servers private key
+     * @param encryptedSharedSymmetricKey String version of the encrypted bytes of the symmetric key
+     * @return SecretKey object that corresonds to the secret key that will be used to do symmetric encryption
+     * @throws NoSuchPaddingException
+     * @throws IllegalBlockSizeException
+     * @throws NoSuchAlgorithmException
+     * @throws BadPaddingException
+     * @throws InvalidKeyException
+     */
     public SecretKey decryptSharedSymmetricKeyWithPrivateKey(String encryptedSharedSymmetricKey) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         //Since there are problems with byte transmission through sockets the encrypted sharedSymmetricKey string is converted to a byte array
         byte[] encryptedSharedSymmetricKeyByteArray = ByteUtils.str2byte(encryptedSharedSymmetricKey);
@@ -224,12 +278,19 @@ public class ServerThread extends Thread{
         byte[] decryptedSharedSymmetricKeyByteArray = Decryption.decryptWithPrivateKey(encryptedSharedSymmetricKeyByteArray,privateKeyServer);
 
         //Converts decrypted byte array to a secret key
-        //TODO: "REPLACE AES WITH REFERENCE TO KEY GENERATORS
-        //TODO: Could use SecretKeySpec(byte[] key,String algorithm) but I found the example with parameters public SecretKeySpec(byte[] key,int offset,int len,String algorithm)
         return new SecretKeySpec(decryptedSharedSymmetricKeyByteArray,0,decryptedSharedSymmetricKeyByteArray.length, "AES");
     }
 
-    //TODO: DECRYPT SYMMETRIC KEY USING SYMMETRIC KEY
+    /**
+     * Decrypts the encrypted package id using the servers secret key (symmetric key).
+     * @param encryptedPackageId the encrypted package id bytes in a string format
+     * @return int corresponding to the encrypted package id.
+     * @throws NoSuchPaddingException
+     * @throws IllegalBlockSizeException
+     * @throws NoSuchAlgorithmException
+     * @throws BadPaddingException
+     * @throws InvalidKeyException
+     */
     private int decryptPackageIdWithSymmetricKey(String encryptedPackageId) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         //Since there are problems with byte transmission through sockets the encrypted package id string is converted to a byte array
         byte[] encryptedPackageIdWithSymmetricKey = ByteUtils.str2byte(encryptedPackageId);
@@ -241,7 +302,16 @@ public class ServerThread extends Thread{
         return Integer.parseInt(ByteUtils.byte2str(decryptedPackageId));
     }
 
-    //TODO: DECRYPT USERNAME WITH PRIVATE KEY
+    /**
+     * Decrypts the encrypted username using the servers private key
+     * @param encryptedUsername the encrypted username bytes in a string format
+     * @return String with the unencrypted username
+     * @throws NoSuchPaddingException
+     * @throws IllegalBlockSizeException
+     * @throws NoSuchAlgorithmException
+     * @throws BadPaddingException
+     * @throws InvalidKeyException
+     */
     public String decryptUsernameWithPrivateKey(String encryptedUsername) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         //Since there are problems with byte transmission through sockets the encrypted username string is converted to a byte array
         byte[] encryptedPackageIdWithSymmetricKey = ByteUtils.str2byte(encryptedUsername);
@@ -342,20 +412,17 @@ public class ServerThread extends Thread{
 
             //SEARCH FOR PACKAGE ASSOCIATED TO USERNAME, ACT ACCORDINGLY.
             if(!recordList.searchForPackageId(packageId)){
-
+                sendMessage("ERROR");
+                closeAllConnectionsToClient();
+                return;
             }
+
             status = recordList.searchForPackage(username,packageId);
-            //ENCRYPT PACKAGE STATUS  -> es' = C(LS,es)
 
+            //ENCRYPT AND SEND PACKAGE STATUS  -> es' = C(LS,es)
+            sendMessage(encryptPackageStatusWithSymmetricKey(status));
 
-            //TODO: Revisar que toca hacer en los casos en esta parte del protocolo
-
-
-            //20) SEND ENCRYPTED es TO CLIENT
-            String packageStatusStr = encryptPackageStatusWithSymmetricKey(status);
-            sendMessage(packageStatusStr);
-
-            //21&22) WAIT FOR CLIENT TO EXTRACT PACKAGE STATUS AND RECEIVE ACK (from client)
+            //WAIT FOR CLIENT TO EXTRACT PACKAGE STATUS AND RECEIVE ACK (from client)
             if(!(currentReceivedMessage = incomingMessageChanel.readLine()).equals("ACK")){
                 //If the received message is anything different from INICIO then the connection to the client is closed(protocol has not been followed) and the protocol of communication is immediately terminated
                 closeAllConnectionsToClient();
@@ -365,8 +432,9 @@ public class ServerThread extends Thread{
             //23) GENERATE DIGEST WITH HMAC -> HMAC(LS,digest)
             //TODO: SEGUN SANDRA DIGEST ES LO MISMO QUE ESTATUS. NOT REALLY DIGEST ES
 
+
             //24) SEND HMAC DIGEST TO CLIENT
-            String authCodeHMAC = encryptDigestWithHMAC(status);
+            String authCodeHMAC = calculateHMACofDigest(status);
 
             //25) WAIT FOR CLIENT TO READ DIGEST INFORMATION
 
