@@ -266,21 +266,23 @@ public class ServerThread extends Thread{
         try{
             String currentReceivedMessage;//The latest message that the server has read from the client.
 
-            //1) SEND THE SERVERS PUBLIC KEY TO THE CLIENT
-            //TODO: IMPLEMENTAR QUE EL CLIENTE LEA LA LLAVE PUBLICA DEL SERVIDOR DEL ARCHIVO
-
-            //TODO: Arreglar esto de yield
             //2) WAIT FOR CLIENT TO SEND "INICIO" MESSAGE (UNENCRYPTED)
-            while(!(currentReceivedMessage = incomingMessageChanel.readLine()).equals("INICIO")){
-                Thread.yield();
+
+            //TODO: Preguntar si se tiene que como hacer algo especial si alguien rompe el protoclo (digamos aqui se le olvido andar inicio al cliente por x o y razon, como que hago solo paro todo?
+            if(!(currentReceivedMessage = incomingMessageChanel.readLine()).equals("INICIO")){
+                //If the received message is anything different from INICIO then the connection to the client is closed(protocol has not been followed) and the protocol of communication is immediately terminated
+                closeAllConnectionsToClient();
+                return;
             }
 
             //3) ACKNOWLEDGE CLIENTS INICIO WITH "ACK"
             acknowledgeClient();
 
             //4&5&6) WAIT FOR CLIENT TO GENERATE THE reto AND SEND IT. SAVE THE reto
-            while((currentReceivedMessage = incomingMessageChanel.readLine()) == null){
-                Thread.yield();
+            if((currentReceivedMessage = incomingMessageChanel.readLine()) == null){
+                //If the received message is anything different from INICIO then the connection to the client is closed(protocol has not been followed) and the protocol of communication is immediately terminated
+                closeAllConnectionsToClient();
+                return;
             }
 
             //Stores the reto in its unencrypted form in the corresponding attribute (long)
@@ -293,8 +295,10 @@ public class ServerThread extends Thread{
             //8&9) WAIT FOR CLIENT TO DECRYPT AND CHECK PREVIOUSLY SENT ENCRYPTED reto
 
             //10&11&12) WAIT FOR CLIENT TO GENERATE SHARED SECRET (LS) AND SEND IT ENCRYPTED WITH THE SERVERS PUBLIC KEY-> LS'=C(K_S+,LS)
-            while((currentReceivedMessage = incomingMessageChanel.readLine()) == null){
-                Thread.yield();
+            if((currentReceivedMessage = incomingMessageChanel.readLine()) == null){
+                //If the received message is anything different from INICIO then the connection to the client is closed(protocol has not been followed) and the protocol of communication is immediately terminated
+                closeAllConnectionsToClient();
+                return;
             }
 
             //13) RECEIVE ENCRYPTED SHARED SECRET (LS') AND DECRYPT IT -> LS = D(K_S-,LS')
@@ -304,8 +308,10 @@ public class ServerThread extends Thread{
             acknowledgeClient();
 
             //15) WAIT FOR USER TO SEND THE ENCRYPTED USERNAME TO BE SEARCHED -> username'=C(K_S+,username)
-            while((currentReceivedMessage = incomingMessageChanel.readLine()) == null){
-                Thread.yield();
+            if((currentReceivedMessage = incomingMessageChanel.readLine()) == null){
+                //If the received message is anything different from INICIO then the connection to the client is closed(protocol has not been followed) and the protocol of communication is immediately terminated
+                closeAllConnectionsToClient();
+                return;
             }
 
             //16) DECRYPT RECEIVED USERNAME -> username = D(K_S-,username'). SEARCH IF USERNAME IN DATABASE, ACT ACCORDINGLY.
@@ -320,8 +326,10 @@ public class ServerThread extends Thread{
             acknowledgeClient();
 
             //18) WAIT FOR CLIENT TO SEND ENCRYPTED PACKAGE ID -> id_pkg' = C(LS,id_pkg)
-            while((currentReceivedMessage = incomingMessageChanel.readLine()) == null){
-                Thread.yield();
+            if((currentReceivedMessage = incomingMessageChanel.readLine()) == null){
+                //If the received message is anything different from INICIO then the connection to the client is closed(protocol has not been followed) and the protocol of communication is immediately terminated
+                closeAllConnectionsToClient();
+                return;
             }
 
             //19) DECRYPT RECEIVED PACKAGE ID -> id = D(LS,id_pkg')
@@ -337,8 +345,10 @@ public class ServerThread extends Thread{
             sendMessage(packageStatusStr);
 
             //21&22) WAIT FOR CLIENT TO EXTRACT PACKAGE STATUS AND RECEIVE ACK (from client)
-            while(!(currentReceivedMessage = incomingMessageChanel.readLine()).equals("ACK")){
-                Thread.yield();
+            if(!(currentReceivedMessage = incomingMessageChanel.readLine()).equals("ACK")){
+                //If the received message is anything different from INICIO then the connection to the client is closed(protocol has not been followed) and the protocol of communication is immediately terminated
+                closeAllConnectionsToClient();
+                return;
             }
 
             //23) GENERATE DIGEST WITH HMAC -> HMAC(LS,digest)
@@ -350,8 +360,10 @@ public class ServerThread extends Thread{
             //25) WAIT FOR CLIENT TO READ DIGEST INFORMATION
 
             //26) WAIT UNTIL CLIENT SENDS "TERMINAL" AND CULMINATE THE THREAD
-            while(!(currentReceivedMessage = incomingMessageChanel.readLine()).equals("TERMINAR")){
-                Thread.yield();
+            if(!(currentReceivedMessage = incomingMessageChanel.readLine()).equals("TERMINAR")){
+                //If the received message is anything different from INICIO then the connection to the client is closed(protocol has not been followed) and the protocol of communication is immediately terminated
+                closeAllConnectionsToClient();
+                return;
             }
 
             //Closes all connections to the client,closes the incomingMessageChanel(BufferedReader), the outgoingMessageChannel(PrintWriter)
