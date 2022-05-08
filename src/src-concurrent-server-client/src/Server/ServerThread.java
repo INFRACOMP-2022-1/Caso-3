@@ -342,7 +342,7 @@ public class ServerThread extends Thread{
             }
 
             //23) GENERATE DIGEST WITH HMAC -> HMAC(LS,digest)
-            //TODO: SEGUN SANDRA DIGEST ES LO MISMO QUE ESTATUS
+            //TODO: SEGUN SANDRA DIGEST ES LO MISMO QUE ESTATUS. NOT REALLY DIGEST ES
 
             //24) SEND HMAC DIGEST TO CLIENT
             String authCodeHMAC = encryptDigestWithHMAC(status);

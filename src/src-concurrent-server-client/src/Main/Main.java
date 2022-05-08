@@ -3,8 +3,6 @@ package Main;
 import Client.Client;
 import Server.Server;
 import StatusRequests.PackageStatusRequests;
-
-import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
