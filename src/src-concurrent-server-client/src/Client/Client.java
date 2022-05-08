@@ -60,8 +60,9 @@ public class Client {
      * @param publicKeyStorageFileName the file where the servers public key is stored
      * @param clientRequestsNumber the number of clients that are going to be making a petition to the server. It will also correspond to the number of created server threads to deal with the petitions.
      * @param packageStatusRequestList the list that contains the information for making the client requests that each thread will be doing (username, packageId)
+     * @param debug if debug mode is turned on
      */
-    public Client(String publicKeyStorageFileName, int clientRequestsNumber, ArrayList<PackageStatusRequests> packageStatusRequestList) throws IOException, NoSuchAlgorithmException, ClassNotFoundException {
+    public Client(String publicKeyStorageFileName, int clientRequestsNumber, ArrayList<PackageStatusRequests> packageStatusRequestList,boolean debug) throws IOException, NoSuchAlgorithmException, ClassNotFoundException {
         System.out.println("Im the client");
 
         //Stores the file name where the public key is going to be retreived from
@@ -81,7 +82,7 @@ public class Client {
             Socket socketToServer = new Socket(HOST, PORT);
 
             //Creates the client thread that is going to be launched and follow the request making protocol
-            ClientThread thread = new ClientThread(socketToServer,serverPublicKey,request);
+            ClientThread thread = new ClientThread(socketToServer,serverPublicKey,request,debug);
 
             //Starts the client thread protocol
             thread.start();

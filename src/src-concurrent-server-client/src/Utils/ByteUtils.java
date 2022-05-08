@@ -1,6 +1,7 @@
 package Utils;
 
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 
 /**
  * The byte utils class contains a range of methods that convert from a variety of
@@ -35,6 +36,7 @@ public class ByteUtils {
             ret += (g.length()==1?"0":"") + g;
         }
         return ret;
+
     }
 
     /**
@@ -51,6 +53,7 @@ public class ByteUtils {
             ret[i] = (byte) Integer.parseInt(ss.substring(i*2,(i+1)*2), 16);
         }
         return ret;
+
     }
 
 }

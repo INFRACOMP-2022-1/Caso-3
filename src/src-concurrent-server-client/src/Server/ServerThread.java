@@ -54,7 +54,7 @@ public class ServerThread extends Thread{
     /*
     The "reto" sent by the client
      */
-    public long reto;
+    public String reto;
 
     /*
     The LS secret key shared by the client and the server
@@ -157,11 +157,9 @@ public class ServerThread extends Thread{
      * @param reto 24-digit number originally sent by the client
      * @return String corresponding to the encrypted bytes of the reto
      */
-    public String encryptRetoWithPrivateKey(Long reto){
-        String retoStr = String.valueOf(reto);
-
+    public String encryptRetoWithPrivateKey(String reto){
         //Encrypts byte[] version of the parameter
-        byte[] retoByteArray = ByteUtils.str2byte(retoStr);
+        byte[] retoByteArray = ByteUtils.str2byte(reto);
         byte[] encryptedReto = Encryption.encryptWithPrivateKey(retoByteArray, privateKeyServer);
 
         //Since there are problems with byte transmission through sockets the encrypted reto byte array is converted to a string
@@ -305,7 +303,7 @@ public class ServerThread extends Thread{
             //RECEIVE THE RETO AND SAVE IT
 
             //Stores the reto in its unencrypted form in the corresponding attribute (long)
-            reto = Long.parseLong(currentReceivedMessage);
+            reto = currentReceivedMessage;
 
             //ENCRYPT THE reto USING SERVER PRIVATE KEY AND SEND IT -> reto' = C(K_S-,reto)
             sendMessage(encryptRetoWithPrivateKey(reto));

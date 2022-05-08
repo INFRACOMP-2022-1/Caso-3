@@ -8,6 +8,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.math.BigInteger;
 import java.net.Socket;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -29,9 +30,16 @@ public class ClientThread extends Thread {
     // CONSTANTS
     //----------------------------------------------------------------------
 
+
+
     //----------------------------------------------------------------------
     // ATTRIBUTES
     //----------------------------------------------------------------------
+
+    /*
+    If debug mode is turned on
+     */
+    public boolean debug;
 
     /*
     This is the server socket. It represents the connection to the server, it has all his info in such a way we can send information to it.
@@ -51,7 +59,7 @@ public class ClientThread extends Thread {
     /*
     The reto is a 24-digit number that is sent to the server
      */
-    public Long reto;
+    public String reto;
 
     /*
     The username associated to the package that is going to be searched
@@ -83,6 +91,8 @@ public class ClientThread extends Thread {
      */
     public BufferedReader incomingMessageChanel;
 
+
+
     //----------------------------------------------------------------------
     // CONSTRUCTOR
     //----------------------------------------------------------------------
@@ -91,8 +101,10 @@ public class ClientThread extends Thread {
      * The constructor for a client thread. It builds a client thread with a specific request in hand.
      * @param serverSocket the server socket where the client will be conecting to in the server
      * @param publicKeyServer the public key of the server
+     * @param debug if debug mode is turned on
      */
-    public ClientThread(Socket serverSocket , PublicKey publicKeyServer, PackageStatusRequests packageStatusRequest){
+    public ClientThread(Socket serverSocket , PublicKey publicKeyServer, PackageStatusRequests packageStatusRequest,boolean debug){
+        this.debug = debug;
         this.serverSocket = serverSocket;
         this.publicKeyServer = publicKeyServer;
         this.username = packageStatusRequest.getUsername();
@@ -135,7 +147,6 @@ public class ClientThread extends Thread {
 
         //Gets the string format and the long format of the reto
         String retoStr = str.toString();
-        reto = Long.parseLong(retoStr);//stores long reto in its corresponding attribute
 
         //This is in charge returning the 24 numeric string
         return retoStr;
@@ -198,7 +209,7 @@ public class ClientThread extends Thread {
      * @param encryptedServerReto the reto sent by the server (It's in string format)
      * @return Long with the 24-digit number that corresponds to the decrypted reto.
      */
-    public Long decryptServerRetoWithPublicKey(String encryptedServerReto) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+    public String decryptServerRetoWithPublicKey(String encryptedServerReto) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         //Since there are problems with byte transmission through sockets the encrypted username string is converted to a byte array
         byte[] encryptedRetoWithPublicKeyByteArray = ByteUtils.str2byte(encryptedServerReto);
 
@@ -206,7 +217,7 @@ public class ClientThread extends Thread {
         byte[] decryptedReto = Decryption.decryptWithPublicKey(encryptedRetoWithPublicKeyByteArray,publicKeyServer);
 
         //Converts decrypted byte array to Long
-        return Long.parseLong(ByteUtils.byte2str(decryptedReto));
+        return ByteUtils.byte2str(decryptedReto);
     }
 
     /**
@@ -246,6 +257,9 @@ public class ClientThread extends Thread {
 
             //SENDS THE "INICIO" MESSAGE TO THE SERVER, STARTS THE PROTOCOL
             sendMessage("INICIO");
+            if(debug){
+                System.out.println("SENT INICIO");
+            }
 
             //WAITS TO RECEIVE ACK FROM SERVER
             if(!((currentReceivedMessage = incomingMessageChanel.readLine()).equals("ACK"))){
@@ -254,7 +268,12 @@ public class ClientThread extends Thread {
             }
 
             //GENERATES THE RETO (24-digit random number) AND SENDS IT TO THE SERVER IN PLAIN TEXT
-            sendMessage(generateReto());
+            String strReto = generateReto();
+            reto = strReto;
+            sendMessage(strReto);
+            if(debug){
+                System.out.println("SENT RETO " + strReto);
+            }
 
             //WAIT FOR THE SERVER TO ENCRYPT THE RETO AND SEND IT
             if((currentReceivedMessage = incomingMessageChanel.readLine()) == null){
@@ -263,20 +282,36 @@ public class ClientThread extends Thread {
             }
 
             //DECRYPT SENT RETO
-            Long serverReto = decryptServerRetoWithPublicKey(currentReceivedMessage);
+            String serverReto = decryptServerRetoWithPublicKey(currentReceivedMessage);
+            if(debug){
+                System.out.println("RECEIVED ENCRYPTED RETO " + currentReceivedMessage);
+            }
+            if(debug){
+                System.out.println("DECRYPTED RECEIVED RETO IS " + serverReto);
+            }
 
             //VALIDATE IF SERVER_RETO CORRESPONDS TO THE ORIGINALLY CALCULATED RETO
-            if(!Objects.equals(serverReto, reto)){
+            if(!serverReto.equals(reto)){
                 //If the decrypted server reto isn't the same as the original reto the communication to the server should end
                 closeAllConnectionsToServer();
                 return;
             }
+            if(debug){
+                System.out.println("RETO VALIDATION RETURNED " + Objects.equals(serverReto, reto));
+            }
 
             //GENERATE THE SECRET KEY (SYMMETRIC KEY, LS)
             secretKey = KeyGenerators.generateSecretKeyLS();
+            if(debug){
+                System.out.println("GENERATED SECRET KEY IS " + secretKey);
+            }
 
             //ENCRYPT THE SECRET KEY/LS WITH THE SERVERS PUBLIC KEY -> LS'=C(K_S+,LS)
-            sendMessage(encryptSecretKeyWithPublicKey());
+            String encryptedSecretKey = encryptSecretKeyWithPublicKey();
+            sendMessage(encryptedSecretKey);
+            if(debug){
+                System.out.println("ENCRYPTED SECRET KEY IS " + secretKey);
+            }
 
             //WAIT FOR SERVER TO EXTRACT SECRET KEY AND SEND ACK MESSAGE
             if(!((currentReceivedMessage = incomingMessageChanel.readLine()).equals("ACK"))){
@@ -285,7 +320,11 @@ public class ClientThread extends Thread {
             }
 
             //ENCRYPT THE USERNAME ASSOCIATED TO THE SEARCHED PACKAGE AND SENT IT TO THE SERVER
-            sendMessage(encryptUsernameWithPublicKey(username));
+            String encryptedUsername = encryptUsernameWithPublicKey(username);
+            sendMessage(encryptedUsername);
+            if(debug){
+                System.out.println("SENT ENCRYPTED USERNAME " + encryptedUsername);
+            }
 
             //WAIT FOR THE SERVER TO SEARCH IN THE RECORD TABLE FOR THE USERNAME
 
@@ -294,14 +333,26 @@ public class ClientThread extends Thread {
                 closeAllConnectionsToServer();
                 return;
             }
+            if(debug){
+                System.out.println("RECEIVED ACK");
+            }
 
             //ENCRYPT THE PACKAGE ID ASSOCIATED TO THE SEARCHED PACKAGE AND SEND IT TO THE SERVER
-            sendMessage(encryptPackageIdWithSymmetricKey(packageId));
+            String encryptedPackageId = encryptPackageIdWithSymmetricKey(packageId);
+            sendMessage(encryptedPackageId);
+            if(debug){
+                System.out.println("SENT ENCRYPTED PACKAGE ID " + encryptedPackageId);
+            }
 
             //WAIT FOR THE SERVER TO SEARCH FOR THE PACKAGE ID
             if((currentReceivedMessage = incomingMessageChanel.readLine()).equals("ERROR")){
                 closeAllConnectionsToServer();
                 return;
+            }
+            if(debug){
+                if(currentReceivedMessage.equals("ERROR")){
+                    System.out.println("RECEIVED ERROR MESSAGE ");
+                }
             }
 
             //WAIT FOR THE SERVER TO SEARCH FOR THE PACKAGE AND SENDING IT ENCRYPTED
@@ -313,8 +364,16 @@ public class ClientThread extends Thread {
             //DECRYPT STATUS(response) ASSOCIATED TO THE SEARCHED PACKAGE
             status = decryptPackageStatusWithSymmetricKey(currentReceivedMessage);
 
+            if(debug){
+                System.out.println("RECEIVED ENCRYPTED STATUS MESSAGE " + currentReceivedMessage);
+                System.out.println("UNENCRYPTED STATUS MESSAGE AS" + status);
+            }
+
             //SEND ACK
             sendMessage("ACK");
+            if(debug){
+                System.out.println("SENT ACK ");
+            }
 
             //WAIT FOR SERVER TO GENERATE THE DIGEST AND SEND IT IN AN HMAC
             if((currentReceivedMessage = incomingMessageChanel.readLine()) == null){
@@ -322,23 +381,36 @@ public class ClientThread extends Thread {
                 return;
             }
 
+
             //RECEIVE HMAC, CALCULATE DIGEST USING STATUS (response)
             //Note: currentReceivedMessage is the HMAC in string format at this point
 
             //Gets byte array of currentReceivedMessage , that in this case is the HMAC sent by the server
             byte[] hmacDigestByteArrayServer = ByteUtils.str2byte(currentReceivedMessage);
+            if(debug){
+                System.out.println("RECEIVED HMAC DIGEST AS" + hmacDigestByteArrayServer);
+            }
 
             //Calculate the digest using status
             byte[] hmacDigestByteArrayLocal = HashingAndAuthCodes.getMessageDigest(ByteUtils.str2byte(status));
+            if(debug){
+                System.out.println("CALCULATED LOCAL HMAC DIGEST AS" + hmacDigestByteArrayLocal);
+            }
 
             //COMPARE SERVER DIGEST TO LOCALLY GENERATED DIGEST
             if(hmacDigestByteArrayLocal != hmacDigestByteArrayServer){
                 closeAllConnectionsToServer();
                 return;
             }
+            if(debug){
+                System.out.println("HMAC COMPARISON RESULTS ARE " + (hmacDigestByteArrayLocal == hmacDigestByteArrayServer));
+            }
 
             //SEND "TERMINAR" TO END PROTOCOL
             sendMessage("TERMINAR");
+            if(debug){
+                System.out.println("SENT TERMINAR");
+            }
 
 
             //PRINT MESSAGE IN CONSOLE
