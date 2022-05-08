@@ -16,7 +16,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.security.*;
+import java.util.Base64;
+
 import static Utils.ByteUtils.byte2str;
 
 /**
@@ -159,7 +163,7 @@ public class ServerThread extends Thread{
      */
     public String encryptRetoWithPrivateKey(String reto){
         //Encrypts byte[] version of the parameter
-        byte[] retoByteArray = ByteUtils.str2byte(reto);
+        byte[] retoByteArray = reto.getBytes(StandardCharsets.UTF_8);
         byte[] encryptedReto = Encryption.encryptWithPrivateKey(retoByteArray, privateKeyServer);
 
         //Since there are problems with byte transmission through sockets the encrypted reto byte array is converted to a string
@@ -169,11 +173,11 @@ public class ServerThread extends Thread{
     /**
      * Encrypts a package status using the symmetric key LS
      * @param status the status of the searched package
-     * @return String corresponding to the bytes of the encrypted status
+     * @return Hex String corresponding to the bytes of the encrypted status
      */
     public String encryptPackageStatusWithSymmetricKey(String status){
         //Encrypts byte[] version of the parameter
-        byte[] statusByteArray = ByteUtils.str2byte(status);
+        byte[] statusByteArray = status.getBytes(StandardCharsets.UTF_8);
         byte[] encryptedStatus = Encryption.encryptWithSymmetricKey(statusByteArray,sharedSecretKey);
 
         //Since there are problems with byte transmission through sockets the encrypted status byte array is converted to a string
@@ -191,7 +195,7 @@ public class ServerThread extends Thread{
      */
     public String calculateHMACofDigest(String digest){
         //Converts to byte array
-        byte[] digestByteArray = ByteUtils.str2byte(digest);
+        byte[] digestByteArray = digest.getBytes(StandardCharsets.UTF_8);
 
         //Gets HMAC of digest
         byte[] authenticationCodeHMAC = HashingAndAuthCodes.signWithHMAC(digestByteArray,sharedSecretKey);
@@ -207,7 +211,7 @@ public class ServerThread extends Thread{
      */
     public String createDigest(String response){
         //Converts to byte array
-        byte[] responseByteArray = ByteUtils.str2byte(response);
+        byte[] responseByteArray = response.getBytes(StandardCharsets.UTF_8);
 
         //Gets Message Digest
         byte[] messageDigest = HashingAndAuthCodes.getMessageDigest(responseByteArray);
@@ -249,7 +253,7 @@ public class ServerThread extends Thread{
         byte[] decryptedPackageId = Decryption.decryptWithSymmetricKey(encryptedPackageIdWithSymmetricKey,sharedSecretKey);
 
         //Converts decrypted byte array to int
-        return Integer.parseInt(ByteUtils.byte2str(decryptedPackageId));
+        return Integer.parseInt(new String(decryptedPackageId, StandardCharsets.UTF_8) );
     }
 
     /**
@@ -259,13 +263,13 @@ public class ServerThread extends Thread{
      */
     public String decryptUsernameWithPrivateKey(String encryptedUsername) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         //Since there are problems with byte transmission through sockets the encrypted username string is converted to a byte array
-        byte[] encryptedPackageIdWithSymmetricKey = ByteUtils.str2byte(encryptedUsername);
+        byte[] encryptedUsernameWithSymmetricKey = ByteUtils.str2byte(encryptedUsername);
 
         //Decrypts the username with decrypt method and returns byte array
-        byte[] decryptedPackageId = Decryption.decryptWithPrivateKey(encryptedPackageIdWithSymmetricKey,privateKeyServer);
+        byte[] decryptedUsername = Decryption.decryptWithPrivateKey(encryptedUsernameWithSymmetricKey,privateKeyServer);
 
         //Converts decrypted byte array to string
-        return ByteUtils.byte2str(decryptedPackageId);
+        return new String(decryptedUsername, StandardCharsets.UTF_8);
     }
 
     //----------------------------------------------------------------------
@@ -306,7 +310,8 @@ public class ServerThread extends Thread{
             reto = currentReceivedMessage;
 
             //ENCRYPT THE reto USING SERVER PRIVATE KEY AND SEND IT -> reto' = C(K_S-,reto)
-            sendMessage(encryptRetoWithPrivateKey(reto));
+            String encryptedReto = encryptRetoWithPrivateKey(reto);
+            sendMessage(encryptedReto);
 
             //WAIT FOR CLIENT TO GENERATE SHARED SECRET (LS) AND SEND IT ENCRYPTED WITH THE SERVERS PUBLIC KEY-> LS'=C(K_S+,LS)
             if((currentReceivedMessage = incomingMessageChanel.readLine()) == null){
@@ -327,7 +332,7 @@ public class ServerThread extends Thread{
             }
 
             //DECRYPT RECEIVED USERNAME -> username = D(K_S-,username'). SEARCH IF USERNAME IN DATABASE, ACT ACCORDINGLY.
-            username = decryptUsernameWithPrivateKey(currentReceivedMessage).toString();
+            username = decryptUsernameWithPrivateKey(currentReceivedMessage);
             if(!recordList.searchForUsername(username)){
                 sendMessage("ERROR");
                 closeAllConnectionsToClient();
@@ -356,7 +361,8 @@ public class ServerThread extends Thread{
             status = recordList.searchForPackage(username,packageId);
 
             //ENCRYPT AND SEND PACKAGE STATUS-(response)  -> es' = C(LS,es)
-            sendMessage(encryptPackageStatusWithSymmetricKey(status));
+            String encryptedStatus =encryptPackageStatusWithSymmetricKey(status);
+            sendMessage(encryptedStatus);
 
             //WAIT FOR CLIENT TO EXTRACT PACKAGE STATUS(response) AND RECEIVE ACK (from client)
             if(!(currentReceivedMessage = incomingMessageChanel.readLine()).equals("ACK")){

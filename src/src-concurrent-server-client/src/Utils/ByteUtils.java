@@ -33,6 +33,7 @@ public class ByteUtils {
         String ret = "";
         for (int i = 0 ; i < b.length ; i++) {
             String g = Integer.toHexString(((char)b[i])&0x00ff);
+
             ret += (g.length()==1?"0":"") + g;
         }
         return ret;

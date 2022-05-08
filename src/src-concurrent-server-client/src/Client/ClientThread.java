@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.math.BigInteger;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
@@ -176,7 +177,7 @@ public class ClientThread extends Thread {
      */
     public String encryptUsernameWithPublicKey(String username){
         //Encrypts byte[] version of the parameter
-        byte[] usernameByteArray = ByteUtils.str2byte(username);
+        byte[] usernameByteArray = username.getBytes();
         byte[] encryptedUsername = Encryption.encryptWithPublicKey(usernameByteArray, publicKeyServer);
 
         //Since there are problems with byte transmission through sockets the encrypted reto byte array is converted to a string
@@ -193,7 +194,7 @@ public class ClientThread extends Thread {
         String packageIdStr = String.valueOf(packageId);
 
         //Since there are problems with byte transmission through sockets the encrypted username string is converted to a byte array
-        byte[] packageIdByteArray = ByteUtils.str2byte(packageIdStr);
+        byte[] packageIdByteArray = packageIdStr.getBytes(StandardCharsets.UTF_8);
         byte[] encryptedPackageId = Encryption.encryptWithSymmetricKey(packageIdByteArray,secretKey);
 
         //Since there are problems with byte transmission through sockets the encrypted reto byte array is converted to a string
@@ -207,7 +208,7 @@ public class ClientThread extends Thread {
     /**
      * Decrypts the reto sent by the server using the servers public key.
      * @param encryptedServerReto the reto sent by the server (It's in string format)
-     * @return Long with the 24-digit number that corresponds to the decrypted reto.
+     * @return String with the 24-digit number that corresponds to the decrypted reto.
      */
     public String decryptServerRetoWithPublicKey(String encryptedServerReto) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         //Since there are problems with byte transmission through sockets the encrypted username string is converted to a byte array
@@ -217,7 +218,7 @@ public class ClientThread extends Thread {
         byte[] decryptedReto = Decryption.decryptWithPublicKey(encryptedRetoWithPublicKeyByteArray,publicKeyServer);
 
         //Converts decrypted byte array to Long
-        return ByteUtils.byte2str(decryptedReto);
+        return new String(decryptedReto, StandardCharsets.UTF_8);
     }
 
     /**
@@ -233,7 +234,7 @@ public class ClientThread extends Thread {
         byte[] decryptedReto = Decryption.decryptWithSymmetricKey(encryptedPackageStatusByteArray,secretKey);
 
         //Converts decrypted byte array to Long
-        return ByteUtils.byte2str(decryptedReto);
+        return new String(decryptedReto, StandardCharsets.UTF_8);
     }
 
     //----------------------------------------------------------------------
@@ -264,6 +265,7 @@ public class ClientThread extends Thread {
             //WAITS TO RECEIVE ACK FROM SERVER
             if(!((currentReceivedMessage = incomingMessageChanel.readLine()).equals("ACK"))){
                 closeAllConnectionsToServer();
+                System.out.println("SENT INICIO");
                 return;
             }
 
@@ -344,7 +346,7 @@ public class ClientThread extends Thread {
                 System.out.println("SENT ENCRYPTED PACKAGE ID " + encryptedPackageId);
             }
 
-            //WAIT FOR THE SERVER TO SEARCH FOR THE PACKAGE ID
+            //WAIT FOR THE SERVER TO SEARCH FOR THE PACKAGE ID AND ENCRYPT IT
             if((currentReceivedMessage = incomingMessageChanel.readLine()).equals("ERROR")){
                 closeAllConnectionsToServer();
                 return;
@@ -355,11 +357,6 @@ public class ClientThread extends Thread {
                 }
             }
 
-            //WAIT FOR THE SERVER TO SEARCH FOR THE PACKAGE AND SENDING IT ENCRYPTED
-            if((currentReceivedMessage = incomingMessageChanel.readLine()) == null){
-                closeAllConnectionsToServer();
-                return;
-            }
 
             //DECRYPT STATUS(response) ASSOCIATED TO THE SEARCHED PACKAGE
             status = decryptPackageStatusWithSymmetricKey(currentReceivedMessage);

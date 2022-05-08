@@ -54,15 +54,15 @@ public class ClientMain {
         //TODO: Should do a check that ensures that there are no repeated user ids
         //This creates the list of requests that are going to be made
         ArrayList<PackageStatusRequests> packageStatusRequestsList = new ArrayList<>();
-        PackageStatusRequests p1 = new PackageStatusRequests("a",1);
+        PackageStatusRequests p1 = new PackageStatusRequests("user1",1);
         packageStatusRequestsList.add(p1);
-        PackageStatusRequests p2 = new PackageStatusRequests("b",2);
+        PackageStatusRequests p2 = new PackageStatusRequests("user2",2);
         //packageStatusRequestsList.add(p2);
-        PackageStatusRequests p3 = new PackageStatusRequests("c",3);
+        PackageStatusRequests p3 = new PackageStatusRequests("user3",3);
         //packageStatusRequestsList.add(p3);
-        PackageStatusRequests p4 = new PackageStatusRequests("d",4);
+        PackageStatusRequests p4 = new PackageStatusRequests("user4",4);
         //packageStatusRequestsList.add(p4);
-        PackageStatusRequests p5 = new PackageStatusRequests("e",5);
+        PackageStatusRequests p5 = new PackageStatusRequests("user5",5);
         //packageStatusRequestsList.add(p5);
 
         //Gets the number of clients that need to be created to fulfill all the requests
