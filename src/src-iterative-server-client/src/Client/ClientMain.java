@@ -61,8 +61,12 @@ public class ClientMain {
     //----------------------------------------------------------------------
     // METHODS
     //----------------------------------------------------------------------
-    //TODO: Hacer los metodos de procesamiento de datos y metricas
 
+    /**
+     * Creates N package consults in the format that is in the recordTable, so all of them should be successful) and stores them in a list
+     * @param consultNumber the number of consults to be generated
+     * @return An arraylist containing all the consults
+     */
     public static ArrayList<PackageStatusRequests> testNConsults(int consultNumber){
         ArrayList<PackageStatusRequests> packageStatusRequestsArrayList = new ArrayList<>();
 

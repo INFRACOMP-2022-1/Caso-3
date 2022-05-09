@@ -70,6 +70,10 @@ public class Client {
      */
     private static int numberOfRequestsDone = 0;
 
+    /*
+    Start time for the current reto being tested
+     */
+
     //----------------------------------------------------------------------
     // CONSTRUCTOR
     //----------------------------------------------------------------------
@@ -263,7 +267,7 @@ public class Client {
     /**
      * Decrypts the reto sent by the server using the servers public key.
      * @param encryptedServerReto the reto sent by the server (It's in string format)
-     * @return Long with the 24-digit number that corresponds to the decrypted reto.
+     * @return String with the 24-digit number that corresponds to the decrypted reto.
      */
     public String decryptServerRetoWithPublicKey(String encryptedServerReto, PublicKey publicKeyServer) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         //Since there are problems with byte transmission through sockets the encrypted username string is converted to a byte array
@@ -271,6 +275,22 @@ public class Client {
 
         //Decrypts the reto with decrypt method and returns byte array
         byte[] decryptedReto = Decryption.decryptWithPublicKey(encryptedRetoWithPublicKeyByteArray,publicKeyServer);
+
+        //Converts decrypted byte array to Long
+        return new String(decryptedReto, StandardCharsets.UTF_8);
+    }
+
+    /**
+     * Decrypts the reto sent by the server using the shared secret key.
+     * @param encryptedServerReto the reto sent by the server (It's in string format)
+     * @return String with the 24-digit number that corresponds to the decrypted reto.
+     */
+    public String decryptServerRetoWithSymmetricKey(String encryptedServerReto, SecretKey secretKey) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+        //Since there are problems with byte transmission through sockets the encrypted username string is converted to a byte array
+        byte[] encryptedRetoWithPublicKeyByteArray = ByteUtils.str2byte(encryptedServerReto);
+
+        //Decrypts the reto with decrypt method and returns byte array
+        byte[] decryptedReto = Decryption.decryptWithSymmetricKey(encryptedRetoWithPublicKeyByteArray,secretKey);
 
         //Converts decrypted byte array to Long
         return new String(decryptedReto, StandardCharsets.UTF_8);
