@@ -294,7 +294,7 @@ public class ClientThread extends Thread {
             incomingMessageChanel = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
 
             //Stores the current message read
-            String currentReceivedMessage = threadColour;
+            String currentReceivedMessage;
 
             /*
             CLIENT PROTOCOL
@@ -309,16 +309,20 @@ public class ClientThread extends Thread {
             //WAITS TO RECEIVE ACK FROM SERVER
             if(!((currentReceivedMessage = incomingMessageChanel.readLine()).equals("ACK"))){
                 closeAllConnectionsToServer();
-                System.out.println(threadColour+"SENT INICIO");
+                if(debug){
+                    System.out.println(threadColour+"ERROR SOMETHING WENT WRONG");
+                }
                 return;
+            }
+            if(debug){
+                System.out.println(threadColour+"RECEIVED ACK");
             }
 
             //GENERATES THE RETO (24-digit random number) AND SENDS IT TO THE SERVER IN PLAIN TEXT
-            String strReto = generateReto();
-            reto = strReto;
-            sendMessage(strReto);
+            reto = generateReto();
+            sendMessage(reto);
             if(debug){
-                System.out.println(threadColour+"SENT RETO " + strReto);
+                System.out.println(threadColour+"SENT RETO " + reto);
             }
 
             //WAIT FOR THE SERVER TO ENCRYPT THE RETO AND SEND IT
@@ -356,13 +360,16 @@ public class ClientThread extends Thread {
             String encryptedSecretKey = encryptSecretKeyWithPublicKey();
             sendMessage(encryptedSecretKey);
             if(debug){
-                System.out.println(threadColour+"ENCRYPTED SECRET KEY IS " + secretKey);
+                System.out.println(threadColour+"ENCRYPTED SECRET KEY IS " + encryptedSecretKey);
             }
 
             //WAIT FOR SERVER TO EXTRACT SECRET KEY AND SEND ACK MESSAGE
             if(!((currentReceivedMessage = incomingMessageChanel.readLine()).equals("ACK"))){
                 closeAllConnectionsToServer();
                 return;
+            }
+            if(debug){
+                System.out.println(threadColour+"RECEIVE ACK");
             }
 
             //ENCRYPT THE USERNAME ASSOCIATED TO THE SEARCHED PACKAGE AND SENT IT TO THE SERVER

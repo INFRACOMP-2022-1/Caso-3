@@ -12,9 +12,14 @@ public class ClientMain {
     //----------------------------------------------------------------------
 
     /*
+    If debug is turned on
+     */
+    private static final boolean DEBUG = true;
+
+    /*
     This contains the info of the file where the servers public key is writen to
      */
-    private static final String publicKeyStorageFileName = "src/src-concurrent-server-client/src/Client/publicKeyStorageFile";
+    private static final String publicKeyStorageFileName = "src/src-iterative-server-client/src/Client/publicKeyStorageFile";
 
     /*
     This contains the information of how many active clients are to be initialized.
@@ -64,7 +69,7 @@ public class ClientMain {
         numberOfActiveClients = packageStatusRequestsList.size();
 
         //Then it has to initialize a given number of clients and make each client thread run
-        clientManager = new Client(publicKeyStorageFileName,numberOfActiveClients,packageStatusRequestsList);
+        clientManager = new Client(publicKeyStorageFileName,numberOfActiveClients,packageStatusRequestsList,DEBUG);
     }
 
     //----------------------------------------------------------------------

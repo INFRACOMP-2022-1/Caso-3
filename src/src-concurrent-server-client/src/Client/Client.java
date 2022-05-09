@@ -22,6 +22,12 @@ public class Client {
     //----------------------------------------------------------------------
 
     /*
+    If debug is turned on
+     */
+    private static final boolean DEBUG = true;
+
+
+    /*
     The port the client threads will connect to.It's the logical endpoint of the network connection that is used to exchange information between a server and a client. This is what the server socket(Socket) will be attached to
      */
     public static final int PORT = 3333;
@@ -72,7 +78,7 @@ public class Client {
         Client.clientRequestsNumber = clientRequestsNumber;
 
         //Read the servers public key from the storage file
-        serverPublicKey = readPrivateKeyFromFile();
+        serverPublicKey = readServerPublicKeyFromFile();
 
         for(int i = 0; i < clientRequestsNumber; i++){
             //Get the request that this client thread is going to make
@@ -97,10 +103,10 @@ public class Client {
     //----------------------------------------------------------------------
 
     /**
-     * Reads the private key from the file where the server stored the serialized object.
+     * Reads the public key from the file where the server stored the serialized object.
      * @return The server public key
      */
-    public PublicKey readPrivateKeyFromFile() throws IOException, ClassNotFoundException {
+    public PublicKey readServerPublicKeyFromFile() throws IOException, ClassNotFoundException {
         //Creates file input stream for the file with the public key
         FileInputStream file = new FileInputStream(publicKeyStorageFileName);
 
