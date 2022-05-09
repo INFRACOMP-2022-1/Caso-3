@@ -1,8 +1,9 @@
 package Utils;
 
-import javax.crypto.*;
-import javax.crypto.spec.IvParameterSpec;
-import java.security.*;
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 
 /**
  * Class responsible for encrypting data with a variety of algorithms and encryption types.
@@ -30,7 +31,7 @@ public class Encryption {
     public static byte[] encryptWithSymmetricKey(byte[] unencryptedMessageBytes, SecretKey secretKey){
         try{
             //Note: in some documentation the option to create an IV (initialization vector) is also given, but taller 8 doesn't use it so im going to skip over that
-            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
             cipher.init(Cipher.ENCRYPT_MODE, secretKey);
             return cipher.doFinal(unencryptedMessageBytes);
         }

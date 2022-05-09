@@ -100,7 +100,7 @@ public class RecordList {
     public String searchForPackage(String username,int packageId) {
         try{
             for(Record rec: recordList){
-                if(rec.getUsername().toLowerCase() == username.toLowerCase()){
+                if(rec.getUsername().equalsIgnoreCase(username)){
                     if(rec.getPackageId() == packageId){
                         return rec.getStatus().toString();
                     }
@@ -124,7 +124,7 @@ public class RecordList {
 
         try{
             for(Record rec: recordList){
-                if(rec.getUsername().toLowerCase() == username.toLowerCase()){
+                if(rec.getUsername().equalsIgnoreCase(username)){
                     if(rec.getPackageId() == packageId){
                         return true;
                     }

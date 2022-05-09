@@ -1,7 +1,5 @@
 package Utils;
 
-import java.nio.ByteBuffer;
-
 /**
  * The byte utils class contains a range of methods that convert from a variety of
  * data types (String,Long,Integer,etc) to Byte Arrays (byte[]) and vice versa.
@@ -32,9 +30,11 @@ public class ByteUtils {
         String ret = "";
         for (int i = 0 ; i < b.length ; i++) {
             String g = Integer.toHexString(((char)b[i])&0x00ff);
+
             ret += (g.length()==1?"0":"") + g;
         }
         return ret;
+
     }
 
     /**
@@ -51,6 +51,7 @@ public class ByteUtils {
             ret[i] = (byte) Integer.parseInt(ss.substring(i*2,(i+1)*2), 16);
         }
         return ret;
+
     }
 
 }

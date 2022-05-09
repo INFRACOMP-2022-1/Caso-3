@@ -65,6 +65,11 @@ public class Client {
      */
     private static String publicKeyStorageFileName;
 
+    /*
+    The current number of requests that have been done
+     */
+    private static int numberOfRequestsDone = 0;
+
     //----------------------------------------------------------------------
     // CONSTRUCTOR
     //----------------------------------------------------------------------
@@ -92,14 +97,16 @@ public class Client {
         //Read the servers public key from the storage file
         serverPublicKey = readServerPublicKeyFromFile();
 
-        //Creates the socket that the client is going to be attached to
-        Socket socketToServer = new Socket(HOST, PORT);
+
 
         //ResponseArray
         ArrayList<String> responseList = new ArrayList<>();
 
         //As this is the iterative version we will do the requests one by one
         for(int i = 0; i< clientRequestsNumber;i++){
+            //Creates the socket that the client is going to be attached to
+            Socket socketToServer = new Socket(HOST, PORT);
+
             PackageStatusRequests currentPackageStatusRequest = packageStatusRequestList.get(i);
 
             //Gets the thread colour that is visible when debug mode is turned on
@@ -496,7 +503,7 @@ public class Client {
             status = decryptPackageStatusWithSymmetricKey(currentReceivedMessage,secretKey);
             if(debug){
                 System.out.println(threadColour+"RECEIVED ENCRYPTED STATUS MESSAGE " + currentReceivedMessage);
-                System.out.println(threadColour+"UNENCRYPTED STATUS MESSAGE AS" + status);
+                System.out.println(threadColour+"UNENCRYPTED STATUS MESSAGE AS " + status);
             }
 
             //SEND ACK
@@ -544,11 +551,22 @@ public class Client {
                 System.out.println(threadColour+"SENT TERMINAR");
             }
 
-            //CLOSES ALL CONNECTIONS TO SERVER
-            closeAllConnectionsToServer(incomingMessageChanel,outgoingMessageChanel,serverSocket);
-
             //PRINT MESSAGE IN CONSOLE
             System.out.println(status);
+
+            //Updates the number of requests done
+            /*
+            numberOfRequestsDone+=1;
+             */
+            //Check if all the requests have been made and close the socket
+            /*
+            if(numberOfRequestsDone==clientRequestsNumber){
+                closeAllConnectionsToServer(incomingMessageChanel,outgoingMessageChanel,serverSocket);
+            }
+            */
+
+            closeAllConnectionsToServer(incomingMessageChanel,outgoingMessageChanel,serverSocket);
+
             return status;
 
 

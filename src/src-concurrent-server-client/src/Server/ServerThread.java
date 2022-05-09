@@ -434,7 +434,7 @@ public class ServerThread extends Thread{
                 System.out.println(threadColour+"SENT HMAC OF DIGEST " + digestHmac);
             }
 
-            //25) WAIT FOR CLIENT TO READ DIGEST INFORMATION AND UNTIL THE CLIENT SENDS "TERMINAL" AND CULMINATE THE THREAD
+            //WAIT FOR CLIENT TO READ DIGEST INFORMATION AND UNTIL THE CLIENT SENDS "TERMINAL" AND CULMINATE THE THREAD
             if(!(currentReceivedMessage = incomingMessageChanel.readLine()).equals("TERMINAR")){
                 closeAllConnectionsToClient();
                 return;

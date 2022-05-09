@@ -1,11 +1,11 @@
 package Utils;
 
-import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
-import java.security.*;
-import java.util.ArrayList;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * This class contains the key generators used to generate key paris (asymmetric) and secret keys (symmetric)

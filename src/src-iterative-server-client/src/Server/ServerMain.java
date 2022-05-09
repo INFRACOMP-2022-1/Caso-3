@@ -9,9 +9,14 @@ public class ServerMain {
     //----------------------------------------------------------------------
 
     /*
+    If debug is turned on
+     */
+    private static final boolean DEBUG = true;
+
+    /*
     This contains the info of the file where the servers public key is writen to
      */
-    private static final String publicKeyStorageFileName = "src/src-concurrent-server-client/src/Client/publicKeyStorageFile";
+    private static final String publicKeyStorageFileName = "src/src-iterative-server-client/src/Client/publicKeyStorageFile";
 
     //----------------------------------------------------------------------
     // CONSTANTS
@@ -37,7 +42,7 @@ public class ServerMain {
         //TODO: Ver que metricas me toca keep track of toca configurar todo para que se generen reportes de todos los datos que toque recolectar
 
         //Firsts it has to initialize the server
-        serverManager = new Server(publicKeyStorageFileName);
+        serverManager = new Server(publicKeyStorageFileName,DEBUG);
 
     }
 
