@@ -2,6 +2,7 @@ package Server;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 
 public class ServerMain {
     //----------------------------------------------------------------------
@@ -42,7 +43,10 @@ public class ServerMain {
         //TODO: Ver que metricas me toca keep track of toca configurar todo para que se generen reportes de todos los datos que toque recolectar
 
         //Firsts it has to initialize the server
-        serverManager = new Server(publicKeyStorageFileName,DEBUG);
+        ArrayList<String> responseList = new ArrayList<>();
+        ArrayList<Long> retoCypherTimeList = new ArrayList<>();
+        boolean symmetricRetoCypher = true;
+        serverManager = new Server(publicKeyStorageFileName,responseList,retoCypherTimeList,symmetricRetoCypher,DEBUG);
 
     }
 

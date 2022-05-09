@@ -1,10 +1,10 @@
 package Server;
 
-import Utils.ByteUtils;
-import Utils.Decryption;
-import Utils.Encryption;
+import SecurityUtils.ByteUtils;
+import SecurityUtils.Decryption;
+import SecurityUtils.Encryption;
 import Records.RecordList;
-import Utils.HashingAndAuthCodes;
+import SecurityUtils.HashingAndAuthCodes;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -16,12 +16,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
-import java.util.Base64;
 
-import static Utils.ByteUtils.byte2str;
+import static SecurityUtils.ByteUtils.byte2str;
 
 /**
  * ServerThread represents a thread created by the server to attend to a clients request for package status.

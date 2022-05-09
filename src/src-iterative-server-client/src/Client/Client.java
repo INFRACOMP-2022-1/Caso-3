@@ -1,7 +1,7 @@
 package Client;
 
+import SecurityUtils.*;
 import StatusRequests.PackageStatusRequests;
-import Utils.*;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Random;
 
-import static Utils.ByteUtils.byte2str;
+import static SecurityUtils.ByteUtils.byte2str;
 
 /**
  * Client class is responsible for initiating and managing all the client requests.
@@ -70,9 +70,7 @@ public class Client {
      */
     private static int numberOfRequestsDone = 0;
 
-    /*
-    Start time for the current reto being tested
-     */
+
 
     //----------------------------------------------------------------------
     // CONSTRUCTOR

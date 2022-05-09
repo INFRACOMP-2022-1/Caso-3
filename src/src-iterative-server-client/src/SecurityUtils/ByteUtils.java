@@ -1,7 +1,4 @@
-package Utils;
-
-import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
+package SecurityUtils;
 
 /**
  * The byte utils class contains a range of methods that convert from a variety of

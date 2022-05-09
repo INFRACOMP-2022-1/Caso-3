@@ -1,8 +1,9 @@
-package Utils;
+package SecurityUtils;
 
-import javax.crypto.*;
-import javax.crypto.spec.IvParameterSpec;
-import java.security.*;
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 
 /**
  * Class responsible for encrypting data with a variety of algorithms and encryption types.

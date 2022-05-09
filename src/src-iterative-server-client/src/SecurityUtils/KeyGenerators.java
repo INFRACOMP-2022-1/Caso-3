@@ -1,4 +1,4 @@
-package Utils;
+package SecurityUtils;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;

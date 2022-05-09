@@ -1,6 +1,6 @@
 package Server;
 
-import Utils.KeyGenerators;
+import SecurityUtils.KeyGenerators;
 import Records.RecordList;
 
 import java.io.*;

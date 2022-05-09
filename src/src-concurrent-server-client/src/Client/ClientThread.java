@@ -1,14 +1,13 @@
 package Client;
 
 import StatusRequests.PackageStatusRequests;
-import Utils.*;
+import SecurityUtils.*;
 
 import javax.crypto.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.math.BigInteger;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
@@ -17,7 +16,7 @@ import java.security.PublicKey;
 import java.util.Objects;
 import java.util.Random;
 
-import static Utils.ByteUtils.byte2str;
+import static SecurityUtils.ByteUtils.byte2str;
 
 /**
  * ClientThread represents a client entity that is realizing a request to the server about the state of a package.

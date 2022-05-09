@@ -1,6 +1,6 @@
 package Server;
 
-import Utils.*;
+import SecurityUtils.*;
 import Records.RecordList;
 
 import javax.crypto.BadPaddingException;
@@ -14,10 +14,9 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.Random;
 
-import static Utils.ByteUtils.byte2str;
+import static SecurityUtils.ByteUtils.byte2str;
 
 /**
  * Server. It's responsible for dispatching the answering the clients requests.
@@ -65,6 +64,22 @@ public class Server {
      */
     private static String publicKeyStorageFileName;
 
+    /*
+    Start time for the current reto being tested
+     */
+    long retoCypherStartTime;
+
+    /*
+    End time for the current reto being tested
+     */
+    long retoCypherEndTime;
+
+    /*
+    Boolean that determines if Symmetric Encryption or Asymmetric Encryption is being used for encrypting the reto.
+    If True, then Symmetric encryption is being used. If false, then Asymmetric Encryption is being used.
+     */
+    boolean symmetricRetoCypherMode;
+
     //----------------------------------------------------------------------
     // CONSTRUCTOR
     //----------------------------------------------------------------------
@@ -75,13 +90,16 @@ public class Server {
      * @param debug if debug mode is turned on or not
      * @throws NoSuchAlgorithmException
      */
-    public Server(String publicKeyStorageFileName,boolean debug) throws NoSuchAlgorithmException, IOException {
+    public Server(String publicKeyStorageFileName,ArrayList<String> responseList,ArrayList<Long> retoCypherTimeList,boolean symmetricRetoCypherMode, boolean debug) throws NoSuchAlgorithmException, IOException {
         System.out.println("Im the server");
 
         //Generates the private and public key
         KeyPair kp = KeyGenerators.generateKeyPair();
         privateKey = kp.getPrivate();
         publicKey = kp.getPublic();
+
+        //Checks if symmetric reto encryption is to be used
+        this.symmetricRetoCypherMode = symmetricRetoCypherMode;
 
         //Writes the public key storage file name
         this.publicKeyStorageFileName = publicKeyStorageFileName;
@@ -104,10 +122,6 @@ public class Server {
             e.printStackTrace();
         }
 
-        //Response list
-        ArrayList<String> responseList = new ArrayList<>();
-
-
 
         //The server will be permanently listening for any incoming connection until its shut off.
         while(true){
@@ -126,6 +140,10 @@ public class Server {
             //Iteratively answers each client request
             String statusResponse = serverProtocol(clientSocket,privateKey,publicKey,recordList,debug,threadColour);
             responseList.add(statusResponse);
+
+            //Calculate time to cypher the reto
+            long timeElapsed = retoCypherEndTime - retoCypherStartTime;
+            retoCypherTimeList.add(timeElapsed);
         }
     }
 
@@ -417,12 +435,15 @@ public class Server {
                 System.out.println(threadColour+"RECEIVED RETO " + reto);
             }
 
+            //symmetricRetoCypher
+
             //ENCRYPT THE reto USING SERVER PRIVATE KEY AND SEND IT -> reto' = C(K_S-,reto)
             String encryptedReto = encryptRetoWithPrivateKey(reto,privateKeyServer);
             sendMessage(encryptedReto,outgoingMessageChanel);
             if(debug){
                 System.out.println(threadColour+"SENT ENCRYPTED RETO " + encryptedReto);
             }
+
 
             //WAIT FOR CLIENT TO GENERATE SHARED SECRET (LS) AND SEND IT ENCRYPTED WITH THE SERVERS PUBLIC KEY-> LS'=C(K_S+,LS)
             if((currentReceivedMessage = incomingMessageChanel.readLine()) == null){

@@ -1,4 +1,4 @@
-package Utils;
+package SecurityUtils;
 
 import javax.crypto.*;
 import java.security.InvalidKeyException;
