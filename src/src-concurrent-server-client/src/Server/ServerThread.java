@@ -189,6 +189,20 @@ public class ServerThread extends Thread{
     }
 
     /**
+     * The encryption of a reto using the servers private key
+     * @param reto 24-digit number originally sent by the client
+     * @return String corresponding to the encrypted bytes of the reto
+     */
+    public String encryptRetoWithSymmetricKey(String reto){
+        //Encrypts byte[] version of the parameter
+        byte[] retoByteArray = reto.getBytes(StandardCharsets.UTF_8);
+        byte[] encryptedReto = Encryption.encryptWithSymmetricKey(retoByteArray, sharedSecretKey);
+
+        //Since there are problems with byte transmission through sockets the encrypted reto byte array is converted to a string
+        return byte2str(encryptedReto);
+    }
+
+    /**
      * Encrypts a package status using the symmetric key LS
      * @param status the status of the searched package
      * @return Hex String corresponding to the bytes of the encrypted status
