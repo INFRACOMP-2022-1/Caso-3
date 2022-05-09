@@ -238,6 +238,43 @@ public class ClientThread extends Thread {
     }
 
     //----------------------------------------------------------------------
+    // HASHING AND AUTHENTICATION CODES
+    //----------------------------------------------------------------------
+
+    /**
+     * Calculates the HMAC (Authentication code) for a given digest
+     * @return String containing the bytes for the HMAC (hash) of the digest
+     */
+    public String calculateHMACofDigest(){
+        //Calculate the digest
+        String digest = createDigest();
+
+        //Converts to byte array
+        byte[] digestByteArray = digest.getBytes(StandardCharsets.UTF_8);
+
+        //Gets HMAC of digest
+        byte[] authenticationCodeHMAC = HashingAndAuthCodes.signWithHMAC(digestByteArray,secretKey);
+
+        //Since there are problems with byte transmission through sockets the encrypted authentication code byte array is converted to a string
+        return byte2str(authenticationCodeHMAC);
+    }
+
+    /**
+     * Creates a message digest using the status response on a package
+     * @return a String containing the bytes of the message digest
+     */
+    public String createDigest(){
+        //Converts to byte array
+        byte[] responseByteArray = status.getBytes(StandardCharsets.UTF_8);
+
+        //Gets Message Digest
+        byte[] messageDigest = HashingAndAuthCodes.getMessageDigest(responseByteArray);
+
+        //Since there are problems with byte transmission through sockets the encrypted authentication code byte array is converted to a string
+        return byte2str(messageDigest);
+    }
+
+    //----------------------------------------------------------------------
     // RUN
     //----------------------------------------------------------------------
 
@@ -383,24 +420,24 @@ public class ClientThread extends Thread {
             //Note: currentReceivedMessage is the HMAC in string format at this point
 
             //Gets byte array of currentReceivedMessage , that in this case is the HMAC sent by the server
-            byte[] hmacDigestByteArrayServer = ByteUtils.str2byte(currentReceivedMessage);
+            String hmacDigestByteArrayServer = currentReceivedMessage;
             if(debug){
                 System.out.println("RECEIVED HMAC DIGEST AS" + hmacDigestByteArrayServer);
             }
 
             //Calculate the digest using status
-            byte[] hmacDigestByteArrayLocal = HashingAndAuthCodes.getMessageDigest(ByteUtils.str2byte(status));
+            String hmacDigestByteArrayLocal = calculateHMACofDigest();
             if(debug){
                 System.out.println("CALCULATED LOCAL HMAC DIGEST AS" + hmacDigestByteArrayLocal);
             }
 
             //COMPARE SERVER DIGEST TO LOCALLY GENERATED DIGEST
-            if(hmacDigestByteArrayLocal != hmacDigestByteArrayServer){
+            if(!hmacDigestByteArrayLocal.equals(hmacDigestByteArrayServer)){
                 closeAllConnectionsToServer();
                 return;
             }
             if(debug){
-                System.out.println("HMAC COMPARISON RESULTS ARE " + (hmacDigestByteArrayLocal == hmacDigestByteArrayServer));
+                System.out.println("HMAC COMPARISON RESULTS ARE " + (hmacDigestByteArrayLocal.equals(hmacDigestByteArrayServer)));
             }
 
             //SEND "TERMINAR" TO END PROTOCOL

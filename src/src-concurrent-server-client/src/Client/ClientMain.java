@@ -57,13 +57,13 @@ public class ClientMain {
         PackageStatusRequests p1 = new PackageStatusRequests("user1",1);
         packageStatusRequestsList.add(p1);
         PackageStatusRequests p2 = new PackageStatusRequests("user2",2);
-        //packageStatusRequestsList.add(p2);
+        packageStatusRequestsList.add(p2);
         PackageStatusRequests p3 = new PackageStatusRequests("user3",3);
-        //packageStatusRequestsList.add(p3);
+        packageStatusRequestsList.add(p3);
         PackageStatusRequests p4 = new PackageStatusRequests("user4",4);
-        //packageStatusRequestsList.add(p4);
+        packageStatusRequestsList.add(p4);
         PackageStatusRequests p5 = new PackageStatusRequests("user5",5);
-        //packageStatusRequestsList.add(p5);
+        packageStatusRequestsList.add(p5);
 
         //Gets the number of clients that need to be created to fulfill all the requests
         numberOfActiveClients = packageStatusRequestsList.size();

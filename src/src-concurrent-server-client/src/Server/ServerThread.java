@@ -374,7 +374,8 @@ public class ServerThread extends Thread{
             digest = createDigest(status);
 
             //GET HMAC OF THE DIGEST AND SEND IT TO CLIENT -> HMAC(LS,digest)
-            sendMessage(calculateHMACofDigest(digest));
+            String digestHmac = calculateHMACofDigest(digest);
+            sendMessage(digestHmac);
 
             //25) WAIT FOR CLIENT TO READ DIGEST INFORMATION AND UNTIL THE CLIENT SENDS "TERMINAL" AND CULMINATE THE THREAD
             if(!(currentReceivedMessage = incomingMessageChanel.readLine()).equals("TERMINAR")){
