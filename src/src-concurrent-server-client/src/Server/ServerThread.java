@@ -183,7 +183,7 @@ public class ServerThread extends Thread{
         byte[] encryptedReto = Encryption.encryptWithPrivateKey(retoByteArray, privateKeyServer);
 
         //Since there are problems with byte transmission through sockets the encrypted reto byte array is converted to a string
-        return byte2str(encryptedReto);
+        return ByteUtils.byte2str(encryptedReto);
     }
 
     /**

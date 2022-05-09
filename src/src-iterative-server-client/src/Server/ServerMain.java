@@ -15,13 +15,38 @@ public class ServerMain {
     private static final boolean DEBUG = true;
 
     /*
+    Default running mode
+     */
+    private static final int DEFAULT = 0;
+
+    /*
+    Testing Asymmetric running mode
+     */
+    private static final int TEST_ASYMMETRIC = 1;
+
+    /*
+    Testing Symmetric running mode
+     */
+    private static final int TEST_SYMMETRIC = 2;
+
+    /*
     This contains the info of the file where the servers public key is writen to
      */
     private static final String publicKeyStorageFileName = "src/src-iterative-server-client/src/Client/publicKeyStorageFile";
 
     //----------------------------------------------------------------------
-    // CONSTANTS
+    // ATTRIBUTES
     //----------------------------------------------------------------------
+
+    /*
+    If debug is turned on
+     */
+    private static int MODE = DEFAULT;
+
+    /*
+    If the reto is going to be cyphered SYMMETRICALLY(true) or ASYMMETRICALLY(false)
+     */
+    private static boolean RETO_ASYMMETRIC;
 
     /*
     The server manager. Its responsible for dispatching the serverThreads that handle client requests according to demand.
@@ -39,20 +64,88 @@ public class ServerMain {
      */
     public static void main(String[] args) throws NoSuchAlgorithmException, IOException, ClassNotFoundException {
 
-        //Record data
-        //TODO: Ver que metricas me toca keep track of toca configurar todo para que se generen reportes de todos los datos que toque recolectar
-
-        //Firsts it has to initialize the server
-        ArrayList<String> responseList = new ArrayList<>();
-        ArrayList<Long> retoCypherTimeList = new ArrayList<>();
-        boolean symmetricRetoCypher = true;
-        serverManager = new Server(publicKeyStorageFileName,responseList,retoCypherTimeList,symmetricRetoCypher,DEBUG);
+        //Runs serving according to what mode has been selected by default
+        if(MODE == DEFAULT){
+            runStandardConfiguration();
+        }
+        else if(MODE == TEST_ASYMMETRIC){
+            runAsymmetricRetoTest();
+        }
+        else if(MODE == TEST_SYMMETRIC){
+            runSymmetricRetoTest();
+        }
 
     }
 
     //----------------------------------------------------------------------
     // METHODS
     //----------------------------------------------------------------------
-    //TODO: Hacer los metodos de procesamiento de datos y metricas
+
+    /**
+     * Runs the asymmetric reto encryption time test
+     */
+    public static void runAsymmetricRetoTest() throws NoSuchAlgorithmException, IOException {
+        //Firsts it has to initialize the list where the times are going to be stored
+        ArrayList<Long> retoCypherTimeList = new ArrayList<>();
+
+        //Specify what encryption method will be used for the algorithm (ASYMMETRIC)
+        RETO_ASYMMETRIC = true;
+
+        //Launch the server
+        serverManager = new Server(publicKeyStorageFileName,retoCypherTimeList,false,DEBUG);
+
+        //Collect data from tests
+        collectDataFromTests(retoCypherTimeList);
+    }
+
+    /**
+     * Runs the symmetric reto encryption time test
+     */
+    public static void runSymmetricRetoTest() throws NoSuchAlgorithmException, IOException {
+        //Firsts it has to initialize the server
+        ArrayList<String> responseList = new ArrayList<>();
+        ArrayList<Long> retoCypherTimeList = new ArrayList<>();
+
+        //Specify what encryption method will be used for the algorithm (SYMMETRIC)
+        RETO_ASYMMETRIC = false;
+
+        //Launch the server
+        serverManager = new Server(publicKeyStorageFileName,retoCypherTimeList,false,DEBUG);
+
+        //Collect data from tests
+        collectDataFromTests(retoCypherTimeList);
+    }
+
+    /**
+     * Runs the default configuration of the server as specified in the original protocol.
+     * As in the normal protocol, the reto is encrypted asymmetricaly.
+     * @throws NoSuchAlgorithmException
+     * @throws IOException
+     */
+    public static void runStandardConfiguration() throws NoSuchAlgorithmException, IOException {
+        //By default, the reto is encrypted the servers private key, so ASYMMETRIC
+        RETO_ASYMMETRIC = true;
+
+        //Run server
+        serverManager = new Server(publicKeyStorageFileName,DEBUG);
+    }
+
+    /**
+     * Collects data about the cypher times.
+     * @param retoCypherTimeList
+     */
+    public static void collectDataFromTests(ArrayList<Long> retoCypherTimeList){
+        //Saves information for symmetric retos
+        if(RETO_ASYMMETRIC == true){
+            //TODO: SAVE DATA ON CSV
+            //TODO: CALCULATE DIFFERENT STATISTICS ON THE RESPONSE TIMES
+            //TODO: WRITE AND STORE A MINI REPORT
+        }
+        else{
+            //TODO: SAVE DATA ON CSV
+            //TODO: CALCULATE DIFFERENT STATISTICS ON THE RESPONSE TIMES
+            //TODO: WRITE AND STORE A MINI REPORT
+        }
+    }
 
 }
