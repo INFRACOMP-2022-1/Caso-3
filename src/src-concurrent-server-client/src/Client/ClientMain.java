@@ -54,17 +54,7 @@ public class ClientMain {
         //TODO: THIS WILL NOT BE THE FULL TESTING INTERFACE, WHEN I GET TO TESTS MAYBE CREATE A METOD TO DELEGATE THIS
         //TODO: Should do a check that ensures that there are no repeated user ids
         //This creates the list of requests that are going to be made
-        ArrayList<PackageStatusRequests> packageStatusRequestsList = new ArrayList<>();
-        PackageStatusRequests p1 = new PackageStatusRequests("user1",1);
-        packageStatusRequestsList.add(p1);
-        PackageStatusRequests p2 = new PackageStatusRequests("user2",2);
-        packageStatusRequestsList.add(p2);
-        PackageStatusRequests p3 = new PackageStatusRequests("user3",3);
-        packageStatusRequestsList.add(p3);
-        PackageStatusRequests p4 = new PackageStatusRequests("user4",4);
-        packageStatusRequestsList.add(p4);
-        PackageStatusRequests p5 = new PackageStatusRequests("user5",5);
-        packageStatusRequestsList.add(p5);
+        ArrayList<PackageStatusRequests> packageStatusRequestsList = testNConsults(32);
 
         //Gets the number of clients that need to be created to fulfill all the requests
         numberOfActiveClients = packageStatusRequestsList.size();
@@ -77,5 +67,17 @@ public class ClientMain {
     // METHODS
     //----------------------------------------------------------------------
     //TODO: Hacer los metodos de procesamiento de datos y metricas
+    public static ArrayList<PackageStatusRequests> testNConsults(int consultNumber){
+        ArrayList<PackageStatusRequests> packageStatusRequestsArrayList = new ArrayList<>();
+
+        //Generate usernames and ids
+        for(int i = 1; i<consultNumber+1;i++){
+            String username = "user" + i;
+            PackageStatusRequests tempPackage = new PackageStatusRequests(username,i);
+            packageStatusRequestsArrayList.add(tempPackage);
+        }
+
+        return packageStatusRequestsArrayList;
+    }
 
 }
