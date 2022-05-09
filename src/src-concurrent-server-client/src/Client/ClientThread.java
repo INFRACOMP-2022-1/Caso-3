@@ -31,11 +31,16 @@ public class ClientThread extends Thread {
     // CONSTANTS
     //----------------------------------------------------------------------
 
-
+    public static final String TEXT_RESET = "\u001B[0m";
 
     //----------------------------------------------------------------------
     // ATTRIBUTES
     //----------------------------------------------------------------------
+
+    /*
+    Thread colour. (Its only visible in debug mode)
+     */
+    public String threadColour;
 
     /*
     If debug mode is turned on
@@ -103,13 +108,15 @@ public class ClientThread extends Thread {
      * @param serverSocket the server socket where the client will be conecting to in the server
      * @param publicKeyServer the public key of the server
      * @param debug if debug mode is turned on
+     * @param threadColour if debug mode is turned on it makes the thread a set colour (makes it easier to read)
      */
-    public ClientThread(Socket serverSocket , PublicKey publicKeyServer, PackageStatusRequests packageStatusRequest,boolean debug){
+    public ClientThread(Socket serverSocket , PublicKey publicKeyServer, PackageStatusRequests packageStatusRequest,boolean debug,String threadColour){
         this.debug = debug;
         this.serverSocket = serverSocket;
         this.publicKeyServer = publicKeyServer;
         this.username = packageStatusRequest.getUsername();
         this.packageId = packageStatusRequest.getPackageId();
+        this.threadColour = threadColour;
     }
 
     //----------------------------------------------------------------------
@@ -287,7 +294,7 @@ public class ClientThread extends Thread {
             incomingMessageChanel = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
 
             //Stores the current message read
-            String currentReceivedMessage;
+            String currentReceivedMessage = threadColour;
 
             /*
             CLIENT PROTOCOL
@@ -296,13 +303,13 @@ public class ClientThread extends Thread {
             //SENDS THE "INICIO" MESSAGE TO THE SERVER, STARTS THE PROTOCOL
             sendMessage("INICIO");
             if(debug){
-                System.out.println("SENT INICIO");
+                System.out.println(threadColour+"SENT INICIO");
             }
 
             //WAITS TO RECEIVE ACK FROM SERVER
             if(!((currentReceivedMessage = incomingMessageChanel.readLine()).equals("ACK"))){
                 closeAllConnectionsToServer();
-                System.out.println("SENT INICIO");
+                System.out.println(threadColour+"SENT INICIO");
                 return;
             }
 
@@ -311,7 +318,7 @@ public class ClientThread extends Thread {
             reto = strReto;
             sendMessage(strReto);
             if(debug){
-                System.out.println("SENT RETO " + strReto);
+                System.out.println(threadColour+"SENT RETO " + strReto);
             }
 
             //WAIT FOR THE SERVER TO ENCRYPT THE RETO AND SEND IT
@@ -323,10 +330,10 @@ public class ClientThread extends Thread {
             //DECRYPT SENT RETO
             String serverReto = decryptServerRetoWithPublicKey(currentReceivedMessage);
             if(debug){
-                System.out.println("RECEIVED ENCRYPTED RETO " + currentReceivedMessage);
+                System.out.println(threadColour+"RECEIVED ENCRYPTED RETO " + currentReceivedMessage);
             }
             if(debug){
-                System.out.println("DECRYPTED RECEIVED RETO IS " + serverReto);
+                System.out.println(threadColour+"DECRYPTED RECEIVED RETO IS " + serverReto);
             }
 
             //VALIDATE IF SERVER_RETO CORRESPONDS TO THE ORIGINALLY CALCULATED RETO
@@ -336,20 +343,20 @@ public class ClientThread extends Thread {
                 return;
             }
             if(debug){
-                System.out.println("RETO VALIDATION RETURNED " + Objects.equals(serverReto, reto));
+                System.out.println(threadColour+"RETO VALIDATION RETURNED " + Objects.equals(serverReto, reto));
             }
 
             //GENERATE THE SECRET KEY (SYMMETRIC KEY, LS)
             secretKey = KeyGenerators.generateSecretKeyLS();
             if(debug){
-                System.out.println("GENERATED SECRET KEY IS " + secretKey);
+                System.out.println(threadColour+"GENERATED SECRET KEY IS " + secretKey);
             }
 
             //ENCRYPT THE SECRET KEY/LS WITH THE SERVERS PUBLIC KEY -> LS'=C(K_S+,LS)
             String encryptedSecretKey = encryptSecretKeyWithPublicKey();
             sendMessage(encryptedSecretKey);
             if(debug){
-                System.out.println("ENCRYPTED SECRET KEY IS " + secretKey);
+                System.out.println(threadColour+"ENCRYPTED SECRET KEY IS " + secretKey);
             }
 
             //WAIT FOR SERVER TO EXTRACT SECRET KEY AND SEND ACK MESSAGE
@@ -362,7 +369,7 @@ public class ClientThread extends Thread {
             String encryptedUsername = encryptUsernameWithPublicKey(username);
             sendMessage(encryptedUsername);
             if(debug){
-                System.out.println("SENT ENCRYPTED USERNAME " + encryptedUsername);
+                System.out.println(threadColour+"SENT ENCRYPTED USERNAME " + encryptedUsername);
             }
 
             //WAIT FOR THE SERVER TO SEARCH IN THE RECORD TABLE FOR THE USERNAME
@@ -373,14 +380,14 @@ public class ClientThread extends Thread {
                 return;
             }
             if(debug){
-                System.out.println("RECEIVED ACK");
+                System.out.println(threadColour+"RECEIVED ACK");
             }
 
             //ENCRYPT THE PACKAGE ID ASSOCIATED TO THE SEARCHED PACKAGE AND SEND IT TO THE SERVER
             String encryptedPackageId = encryptPackageIdWithSymmetricKey(packageId);
             sendMessage(encryptedPackageId);
             if(debug){
-                System.out.println("SENT ENCRYPTED PACKAGE ID " + encryptedPackageId);
+                System.out.println(threadColour+"SENT ENCRYPTED PACKAGE ID " + encryptedPackageId);
             }
 
             //WAIT FOR THE SERVER TO SEARCH FOR THE PACKAGE ID AND ENCRYPT IT
@@ -390,7 +397,7 @@ public class ClientThread extends Thread {
             }
             if(debug){
                 if(currentReceivedMessage.equals("ERROR")){
-                    System.out.println("RECEIVED ERROR MESSAGE ");
+                    System.out.println(threadColour+"RECEIVED ERROR MESSAGE ");
                 }
             }
 
@@ -399,14 +406,14 @@ public class ClientThread extends Thread {
             status = decryptPackageStatusWithSymmetricKey(currentReceivedMessage);
 
             if(debug){
-                System.out.println("RECEIVED ENCRYPTED STATUS MESSAGE " + currentReceivedMessage);
-                System.out.println("UNENCRYPTED STATUS MESSAGE AS" + status);
+                System.out.println(threadColour+"RECEIVED ENCRYPTED STATUS MESSAGE " + currentReceivedMessage);
+                System.out.println(threadColour+"UNENCRYPTED STATUS MESSAGE AS" + status);
             }
 
             //SEND ACK
             sendMessage("ACK");
             if(debug){
-                System.out.println("SENT ACK ");
+                System.out.println(threadColour+"SENT ACK ");
             }
 
             //WAIT FOR SERVER TO GENERATE THE DIGEST AND SEND IT IN AN HMAC
@@ -422,13 +429,13 @@ public class ClientThread extends Thread {
             //Gets byte array of currentReceivedMessage , that in this case is the HMAC sent by the server
             String hmacDigestByteArrayServer = currentReceivedMessage;
             if(debug){
-                System.out.println("RECEIVED HMAC DIGEST AS" + hmacDigestByteArrayServer);
+                System.out.println(threadColour+"RECEIVED HMAC DIGEST AS" + hmacDigestByteArrayServer);
             }
 
             //Calculate the digest using status
             String hmacDigestByteArrayLocal = calculateHMACofDigest();
             if(debug){
-                System.out.println("CALCULATED LOCAL HMAC DIGEST AS" + hmacDigestByteArrayLocal);
+                System.out.println(threadColour+"CALCULATED LOCAL HMAC DIGEST AS" + hmacDigestByteArrayLocal);
             }
 
             //COMPARE SERVER DIGEST TO LOCALLY GENERATED DIGEST
@@ -437,18 +444,18 @@ public class ClientThread extends Thread {
                 return;
             }
             if(debug){
-                System.out.println("HMAC COMPARISON RESULTS ARE " + (hmacDigestByteArrayLocal.equals(hmacDigestByteArrayServer)));
+                System.out.println(threadColour+"HMAC COMPARISON RESULTS ARE " + (hmacDigestByteArrayLocal.equals(hmacDigestByteArrayServer)));
             }
 
             //SEND "TERMINAR" TO END PROTOCOL
             sendMessage("TERMINAR");
             if(debug){
-                System.out.println("SENT TERMINAR");
+                System.out.println(threadColour+"SENT TERMINAR");
             }
 
 
-            //PRINT MESSAGE IN CONSOLE
-            System.out.println(status);
+            //PRINT MESSAGE IN CONSOLE (text reset is to reset the thread colour to default)
+            System.out.println(threadColour+status);
 
             //CLOSES ALL CONNECTIONS TO SERVER
             closeAllConnectionsToServer();

@@ -32,8 +32,23 @@ import static Utils.ByteUtils.byte2str;
  */
 public class ServerThread extends Thread{
     //----------------------------------------------------------------------
+    // CONSTANTS
+    //----------------------------------------------------------------------
+
+    public static final String TEXT_RESET = "\u001B[0m";
+
+    //----------------------------------------------------------------------
     // ATTRIBUTES
     //----------------------------------------------------------------------
+    /*
+    Thread colour. (Its only visible in debug mode)
+     */
+    public String threadColour;
+
+    /*
+    If debug mode is turned on
+     */
+    public boolean debug;
 
     /*
     This socket will hold the endpoint of the network connection with the client. It holds the clients direction and port that the server will be sending information to.
@@ -106,12 +121,15 @@ public class ServerThread extends Thread{
      * @param privateKeyServer the servers private key (K_S-)
      * @param publicKeyServer the servers public key (K_S+)
      * @param recordList the table that contains all the records of usernames, package id's and statuses
+     * @param threadColour the thread colour set for debug mode
      */
-    public ServerThread(Socket clientSocket, PrivateKey privateKeyServer, PublicKey publicKeyServer, RecordList recordList){
+    public ServerThread(Socket clientSocket, PrivateKey privateKeyServer, PublicKey publicKeyServer, RecordList recordList,boolean debug,String threadColour){
         this.clientSocket = clientSocket;
         this.privateKeyServer = privateKeyServer;
         this.publicKeyServer = publicKeyServer;
         this.recordList = recordList;
+        this.debug = debug;
+        this.threadColour = threadColour;
 
         try{
             outgoingMessageChanel = new PrintWriter(clientSocket.getOutputStream(),true);
@@ -297,6 +315,9 @@ public class ServerThread extends Thread{
 
             //ACKNOWLEDGE CLIENTS INICIO WITH "ACK"
             acknowledgeClient();
+            if(debug){
+                System.out.println(threadColour+"SENT ACK");
+            }
 
             //WAIT FOR CLIENT TO GENERATE THE reto
             if((currentReceivedMessage = incomingMessageChanel.readLine()) == null){
@@ -306,12 +327,18 @@ public class ServerThread extends Thread{
 
             //RECEIVE THE RETO AND SAVE IT
 
-            //Stores the reto in its unencrypted form in the corresponding attribute (long)
+            //Stores the reto in its unencrypted form in the corresponding attribute
             reto = currentReceivedMessage;
+            if(debug){
+                System.out.println(threadColour+"RECEIVED RETO " + reto);
+            }
 
             //ENCRYPT THE reto USING SERVER PRIVATE KEY AND SEND IT -> reto' = C(K_S-,reto)
             String encryptedReto = encryptRetoWithPrivateKey(reto);
             sendMessage(encryptedReto);
+            if(debug){
+                System.out.println(threadColour+"SENT ENCRYPTED RETO " + encryptedReto);
+            }
 
             //WAIT FOR CLIENT TO GENERATE SHARED SECRET (LS) AND SEND IT ENCRYPTED WITH THE SERVERS PUBLIC KEY-> LS'=C(K_S+,LS)
             if((currentReceivedMessage = incomingMessageChanel.readLine()) == null){
@@ -321,9 +348,15 @@ public class ServerThread extends Thread{
 
             //RECEIVE ENCRYPTED SHARED SECRET (LS') AND DECRYPT IT -> LS = D(K_S-,LS')
             sharedSecretKey = decryptSharedSymmetricKeyWithPrivateKey(currentReceivedMessage);
+            if(debug){
+                System.out.println(threadColour+"RECEIVED SECRET KEY " + sharedSecretKey);
+            }
 
             //ACKNOWLEDGE CLIENTS LS WITH "ACK"
             acknowledgeClient();
+            if(debug){
+                System.out.println(threadColour+"SENT ACK");
+            }
 
             //WAIT FOR USER TO SEND THE ENCRYPTED USERNAME TO BE SEARCHED -> username'=C(K_S+,username)
             if((currentReceivedMessage = incomingMessageChanel.readLine()) == null){
@@ -338,9 +371,15 @@ public class ServerThread extends Thread{
                 closeAllConnectionsToClient();
                 return;
             }
+            if(debug){
+                System.out.println(threadColour+"RECEIVED USERNAME " + username);
+            }
 
             //ACKNOWLEDGE CLIENTS EXISTING USERNAME WITH "ACK"
             acknowledgeClient();
+            if(debug){
+                System.out.println(threadColour+"SENT ACK");
+            }
 
             //WAIT FOR CLIENT TO SEND ENCRYPTED PACKAGE ID -> id_pkg' = C(LS,id_pkg)
             if((currentReceivedMessage = incomingMessageChanel.readLine()) == null){
@@ -350,6 +389,9 @@ public class ServerThread extends Thread{
 
             //DECRYPT RECEIVED PACKAGE ID -> id = D(LS,id_pkg')
             packageId = decryptPackageIdWithSymmetricKey(currentReceivedMessage);
+            if(debug){
+                System.out.println(threadColour+"RECEIVED PACKAGE ID " + packageId);
+            }
 
             //SEARCH FOR PACKAGE ASSOCIATED TO USERNAME, ACT ACCORDINGLY.
             if(!recordList.searchForPackageId(packageId)){
@@ -359,28 +401,46 @@ public class ServerThread extends Thread{
             }
 
             status = recordList.searchForPackage(username,packageId);
+            if(debug){
+                System.out.println(threadColour+"FOUND PACKAGE STATUS " + status);
+            }
 
             //ENCRYPT AND SEND PACKAGE STATUS-(response)  -> es' = C(LS,es)
             String encryptedStatus =encryptPackageStatusWithSymmetricKey(status);
             sendMessage(encryptedStatus);
+            if(debug){
+                System.out.println(threadColour+"SENT ENCRYPTED STATUS " + encryptedStatus);
+            }
 
             //WAIT FOR CLIENT TO EXTRACT PACKAGE STATUS(response) AND RECEIVE ACK (from client)
             if(!(currentReceivedMessage = incomingMessageChanel.readLine()).equals("ACK")){
                 closeAllConnectionsToClient();
                 return;
             }
+            if(debug){
+                System.out.println(threadColour+"RECEIVED ACK ");
+            }
 
             //GENERATE DIGEST USING THE STATUS(RESPONSE)
             digest = createDigest(status);
+            if(debug){
+                System.out.println(threadColour+"GENERATED DIGEST " + digest);
+            }
 
             //GET HMAC OF THE DIGEST AND SEND IT TO CLIENT -> HMAC(LS,digest)
             String digestHmac = calculateHMACofDigest(digest);
             sendMessage(digestHmac);
+            if(debug){
+                System.out.println(threadColour+"SENT HMAC OF DIGEST " + digestHmac);
+            }
 
             //25) WAIT FOR CLIENT TO READ DIGEST INFORMATION AND UNTIL THE CLIENT SENDS "TERMINAL" AND CULMINATE THE THREAD
             if(!(currentReceivedMessage = incomingMessageChanel.readLine()).equals("TERMINAR")){
                 closeAllConnectionsToClient();
                 return;
+            }
+            if(debug){
+                System.out.println(threadColour+"RECEIVED TERMINAR ");
             }
 
             //Closes all connections to the client,closes the incomingMessageChanel(BufferedReader), the outgoingMessageChannel(PrintWriter)

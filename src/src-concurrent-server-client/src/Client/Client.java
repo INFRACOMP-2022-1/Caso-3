@@ -81,8 +81,11 @@ public class Client {
             //Creates the socket that the client is going to be attached to
             Socket socketToServer = new Socket(HOST, PORT);
 
+            //It sets a thread colour for easier visualization during debug and testing
+            String threadColour = getColour(i);
+
             //Creates the client thread that is going to be launched and follow the request making protocol
-            ClientThread thread = new ClientThread(socketToServer,serverPublicKey,request,debug);
+            ClientThread thread = new ClientThread(socketToServer,serverPublicKey,request,debug,threadColour);
 
             //Starts the client thread protocol
             thread.start();
@@ -106,6 +109,33 @@ public class Client {
 
         //Retrieves the public key stored in the file and returns it
         return (PublicKey) objectInputStream.readObject();
+    }
+
+    /**
+     * Gets a colour for the thread based on its number in the for loop
+     * @param i the number of the request being sent
+     * @return String with the colour for the thread
+     */
+    public String getColour(int i){
+        //Colour array
+        ArrayList<String> colourArray = new ArrayList<>();
+
+        //String colours
+        String TEXT_RED = "\u001B[31m";
+        colourArray.add(TEXT_RED);
+        String TEXT_GREEN = "\u001B[32m";
+        colourArray.add(TEXT_GREEN);
+        String TEXT_YELLOW = "\u001B[33m";
+        colourArray.add(TEXT_YELLOW);
+        String TEXT_BLUE = "\u001B[34m";
+        colourArray.add(TEXT_BLUE);
+        String TEXT_PURPLE = "\u001B[35m";
+        colourArray.add(TEXT_PURPLE);
+        String TEXT_CYAN = "\u001B[36m";
+        colourArray.add(TEXT_CYAN);
+
+        //Returns colour for string based on the parameter i modulo 6
+        return colourArray.get(i%6);
     }
 
 }

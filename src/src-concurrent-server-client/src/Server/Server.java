@@ -7,6 +7,8 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.*;
+import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Server. Its responsible for dispatching the server threads to respond to client requests.
@@ -59,9 +61,11 @@ public class Server {
 
     /**
      * The server constructor. It manages the creation of server threads according to user demand.
+     * @param publicKeyStorageFileName the file where the public key is stored so the client has acces to it
+     * @param debug if debug mode is turned on or not
      * @throws NoSuchAlgorithmException
      */
-    public Server(String publicKeyStorageFileName) throws NoSuchAlgorithmException, IOException {
+    public Server(String publicKeyStorageFileName,boolean debug) throws NoSuchAlgorithmException, IOException {
         System.out.println("Im the server");
 
         //Generates the private and public key
@@ -100,8 +104,13 @@ public class Server {
                 e.printStackTrace();
             }
 
+            //It sets a thread colour for easier visualization during debug and testing
+            Random random = new Random();
+            int num = random.ints(0,7).findFirst().getAsInt();
+            String threadColour = getColour(num);
+
             //Launches a new thread to deal with the client connection
-            new ServerThread(socket,privateKey,publicKey,recordList).start();
+            new ServerThread(socket,privateKey,publicKey,recordList,debug,threadColour).start();
         }
     }
 
@@ -124,5 +133,32 @@ public class Server {
 
         //Closes the object output stream
         objectOutputStream.close();
+    }
+
+    /**
+     * Gets a colour for the thread based on its number in the for loop
+     * @param i the number of the request being sent
+     * @return String with the colour for the thread
+     */
+    public String getColour(int i){
+        //Colour array
+        ArrayList<String> colourArray = new ArrayList<>();
+
+        //String colours
+        String TEXT_RED = "\u001B[31m";
+        colourArray.add(TEXT_RED);
+        String TEXT_GREEN = "\u001B[32m";
+        colourArray.add(TEXT_GREEN);
+        String TEXT_YELLOW = "\u001B[33m";
+        colourArray.add(TEXT_YELLOW);
+        String TEXT_BLUE = "\u001B[34m";
+        colourArray.add(TEXT_BLUE);
+        String TEXT_PURPLE = "\u001B[35m";
+        colourArray.add(TEXT_PURPLE);
+        String TEXT_CYAN = "\u001B[36m";
+        colourArray.add(TEXT_CYAN);
+
+        //Returns colour for string based on the parameter i modulo 6
+        return colourArray.get(i%6);
     }
 }
