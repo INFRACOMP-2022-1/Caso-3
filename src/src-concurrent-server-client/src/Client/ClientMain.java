@@ -54,7 +54,7 @@ public class ClientMain {
         //TODO: THIS WILL NOT BE THE FULL TESTING INTERFACE, WHEN I GET TO TESTS MAYBE CREATE A METOD TO DELEGATE THIS
         //TODO: Should do a check that ensures that there are no repeated user ids
         //This creates the list of requests that are going to be made
-        ArrayList<PackageStatusRequests> packageStatusRequestsList = testNConsults(32);
+        ArrayList<PackageStatusRequests> packageStatusRequestsList = testNConsults(3);
 
         //Gets the number of clients that need to be created to fulfill all the requests
         numberOfActiveClients = packageStatusRequestsList.size();

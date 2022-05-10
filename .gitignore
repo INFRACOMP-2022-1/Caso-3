@@ -9,10 +9,4 @@
 misc.xml
 modules.xml
 vcs.xml
-src-client/src-client.iml
-src-server/src-server.iml
-.idea/uiDesigner.xml
-.classpath
-.project
-/bin/
-/out/
+out/

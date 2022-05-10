@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="c99e4ea5-36cd-4db9-9814-6290907cf55f" name="Changes" comment="Estoy añadiendo el protocolo del cliente.">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Client/ClientMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Client/ClientMain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Client/publicKeyStorageFile" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Client/publicKeyStorageFile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Server/ServerMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Server/ServerMain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/src-iterative-server-client/src/Client/publicKeyStorageFile" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-iterative-server-client/src/Client/publicKeyStorageFile" afterDir="false" />
+    </list>
+    <list id="803dfcef-5c0c-4782-9582-7e448662f284" name="Changes by diego" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/src/src-concurrent-server-client/src/Server/ServerThread.java" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="28atfPFqwDuZPl1Vx9zcpTK4wSL" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "jdk.selected.JAVA_MODULE": "openjdk-18",
+    "last_directory_selection": "C:/Users/veron/OneDrive/Documents/Universidad/Infraestructura Computacional/Caso 3/Caso-3/src/src-concurrent-server-client/src",
+    "last_opened_file_path": "C:/Users/veron/OneDrive/Documents/Universidad/Infraestructura Computacional/Caso 3/Caso-3/IterativeClientServerTests/SymmetricRetoEncryption",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\veron\OneDrive\Documents\Universidad\Infraestructura Computacional\Caso 3\Caso-3\IterativeClientServerTests\SymmetricRetoEncryption" />
+      <recent name="C:\Users\veron\OneDrive\Documents\Universidad\Infraestructura Computacional\Caso 3\Caso-3\src\src-concurrent-server-client\src\Records" />
+      <recent name="C:\Users\veron\OneDrive\Documents\Universidad\Infraestructura Computacional\Caso 3\Caso-3\src\src-iterative-server-client\src\Records" />
+      <recent name="C:\Users\veron\OneDrive\Documents\Universidad\Infraestructura Computacional\Caso 3\Caso-3\src\src-iterative-server-client\src" />
+      <recent name="C:\Users\veron\OneDrive\Documents\Universidad\Infraestructura Computacional\Caso 3\Caso-3\src\src-simple-server-client" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\veron\OneDrive\Documents\Universidad\Infraestructura Computacional\Caso 3\Caso-3\IterativeClientServerTests\SymmetricRetoEncryption" />
+      <recent name="C:\Users\veron\OneDrive\Documents\Universidad\Infraestructura Computacional\Caso 3\Caso-3" />
+      <recent name="C:\Users\veron\OneDrive\Documents\Universidad\Infraestructura Computacional\Caso 3\Caso-3\src\src-concurrent-server-client\src\Main" />
+      <recent name="C:\Users\veron\OneDrive\Documents\Universidad\Infraestructura Computacional\Caso 3\Caso-3\src\src-server\src" />
+      <recent name="C:\Users\veron\OneDrive\Documents\Universidad\Infraestructura Computacional\Caso 3\Caso-3\src\src-client" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="IterativeTestSuite" />
+      <recent name="TestUtils" />
+      <recent name="StatusRequests" />
+      <recent name="Server" />
+      <recent name="Client" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.ClientMain">
+    <configuration name="ClientMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Client.ClientMain" />
+      <module name="src-iterative-server-client" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="Client.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Client.ClientMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Client.ClientMain" />
+      <module name="src-concurrent-server-client" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="Client.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ServerMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Server.ServerMain" />
+      <module name="src-iterative-server-client" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="Server.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Server.ServerMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Server.ServerMain" />
+      <module name="src-concurrent-server-client" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="Server.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.ClientMain" />
+        <item itemvalue="Application.ServerMain" />
+        <item itemvalue="Application.Client.ClientMain" />
+        <item itemvalue="Application.Server.ServerMain" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="c99e4ea5-36cd-4db9-9814-6290907cf55f" name="Changes" comment="" />
+      <created>1651466637932</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1651466637932</updated>
+      <workItem from="1651466637951" duration="4736000" />
+      <workItem from="1651536913833" duration="4566000" />
+      <workItem from="1651585431321" duration="3469000" />
+      <workItem from="1651600976347" duration="989000" />
+      <workItem from="1651705025037" duration="12268000" />
+      <workItem from="1651732050871" duration="6439000" />
+      <workItem from="1651806939116" duration="8252000" />
+      <workItem from="1651855279505" duration="6811000" />
+      <workItem from="1651867185242" duration="1400000" />
+      <workItem from="1651880221762" duration="9335000" />
+      <workItem from="1651930906757" duration="6635000" />
+      <workItem from="1651964317307" duration="19718000" />
+      <workItem from="1652024572953" duration="8780000" />
+      <workItem from="1652043287873" duration="6976000" />
+      <workItem from="1652069194928" duration="10643000" />
+      <workItem from="1652084327233" duration="3358000" />
+      <workItem from="1652127887439" duration="74000" />
+      <workItem from="1652127969034" duration="22953000" />
+    </task>
+    <task id="LOCAL-00001" summary="Cree la estructura">
+      <created>1651467130509</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1651467130509</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Añadi el enunciado para facil acceso">
+      <created>1651467471574</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1651467471574</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Cree las clases base y puse como el layout">
+      <created>1651478700245</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1651478700245</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Meti las declaraciones de sockets en cada uno de los programas.">
+      <created>1651479191204</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1651479191204</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Cree una nueva clase de server thread despues de investigar el caso de multiples clientes. Puse link a un stackoverflow que lo explica y pone un ejemplo. Creo que es mejor que desde el inicio pesnemos que el server es multi cliente , por que despues seria una pesadilla pasarlo de monocliente a multicliente por que tocaria hacer muchos cambios.">
+      <created>1651479959909</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1651479959909</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Cree una nueva clase de server thread despues de investigar el caso de multiples clientes. Puse link a un stackoverflow que lo explica y pone un ejemplo. Creo que es mejor que desde el inicio pesnemos que el server es multi cliente , por que despues seria una pesadilla pasarlo de monocliente a multicliente por que tocaria hacer muchos cambios.">
+      <created>1651536998056</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1651536998056</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Cree la estructura" />
+    <MESSAGE value="Añadi el enunciado para facil acceso" />
+    <MESSAGE value="Cree las clases base y puse como el layout" />
+    <MESSAGE value="Meti las declaraciones de sockets en cada uno de los programas." />
+    <MESSAGE value="Cree una nueva clase de server thread despues de investigar el caso de multiples clientes. Puse link a un stackoverflow que lo explica y pone un ejemplo. Creo que es mejor que desde el inicio pesnemos que el server es multi cliente , por que despues seria una pesadilla pasarlo de monocliente a multicliente por que tocaria hacer muchos cambios." />
+    <MESSAGE value="Estoy añadiendo el protocolo del cliente." />
+    <option name="LAST_COMMIT_MESSAGE" value="Estoy añadiendo el protocolo del cliente." />
+  </component>
+  <component name="XDebuggerManager">
+    <pin-to-top-manager>
+      <pinned-members>
+        <PinnedItemInfo parentTag="java.lang.Long" memberName="value" />
+      </pinned-members>
+    </pin-to-top-manager>
+  </component>
+</project>
