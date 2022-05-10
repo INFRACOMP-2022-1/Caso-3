@@ -49,6 +49,11 @@ public class ServerThread extends Thread{
     public boolean debug;
 
     /*
+    If test mode is on then symmetric reto tells if symmetric encryption or asymmetric encryption are being used
+     */
+    public boolean symmetricReto;
+
+    /*
     This socket will hold the endpoint of the network connection with the client. It holds the clients direction and port that the server will be sending information to.
      */
     protected Socket clientSocket;
@@ -112,6 +117,9 @@ public class ServerThread extends Thread{
     // CONSTRUCTOR
     //----------------------------------------------------------------------
 
+    /*
+    DEFAULT PROTOCOL CONSTRUCTOR
+     */
     /**
      * Builds a new server thread with the given client socket and the servers public and private key.
      * It represents the connection that a single client has to the server. And is responsible for executing the protocols for communication.
@@ -128,6 +136,37 @@ public class ServerThread extends Thread{
         this.recordList = recordList;
         this.debug = debug;
         this.threadColour = threadColour;
+
+        try{
+            outgoingMessageChanel = new PrintWriter(clientSocket.getOutputStream(),true);
+            incomingMessageChanel = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    /*
+    TEST PROTOCOL CONSTRUCTOR
+     */
+
+    /**
+     * Builds a new server thread with the given client socket and the servers public and private key.
+     * It represents the connection that a single client has to the server. And is responsible for executing the protocols for communication.
+     * @param clientSocket the socket containing the endpoint of the network connection with the client.
+     * @param privateKeyServer the servers private key (K_S-)
+     * @param publicKeyServer the servers public key (K_S+)
+     * @param recordList the table that contains all the records of usernames, package id's and statuses
+     * @param threadColour the thread colour set for debug mode
+     */
+    public ServerThread(Socket clientSocket, PrivateKey privateKeyServer, PublicKey publicKeyServer, RecordList recordList,boolean symmetricReto,boolean debug,String threadColour){
+        this.clientSocket = clientSocket;
+        this.privateKeyServer = privateKeyServer;
+        this.publicKeyServer = publicKeyServer;
+        this.recordList = recordList;
+        this.debug = debug;
+        this.threadColour = threadColour;
+        this.symmetricReto = symmetricReto;
 
         try{
             outgoingMessageChanel = new PrintWriter(clientSocket.getOutputStream(),true);
@@ -305,6 +344,10 @@ public class ServerThread extends Thread{
     //----------------------------------------------------------------------
     // RUN
     //----------------------------------------------------------------------
+
+    /*
+    DEFAULT PROTOCOL RUN
+     */
 
     /**
      * The server side of the communication protocol

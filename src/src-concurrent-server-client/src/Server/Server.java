@@ -59,6 +59,10 @@ public class Server {
     // CONSTRUCTOR
     //----------------------------------------------------------------------
 
+    /*
+    PROTOCOL BASE
+     */
+
     /**
      * The server constructor. It manages the creation of server threads according to user demand.
      * @param publicKeyStorageFileName the file where the public key is stored so the client has acces to it
@@ -113,6 +117,66 @@ public class Server {
             new ServerThread(socket,privateKey,publicKey,recordList,debug,threadColour).start();
         }
     }
+
+    /*
+    PROTOCOL TESTS
+     */
+
+    /**
+     * The server constructor. It manages the creation of server threads according to user demand.
+     * @param publicKeyStorageFileName the file where the public key is stored so the client has acces to it
+     * @param debug if debug mode is turned on or not
+     * @throws NoSuchAlgorithmException
+     */
+    public Server(String publicKeyStorageFileName,boolean symmetricReto,boolean debug) throws NoSuchAlgorithmException, IOException {
+        System.out.println("Im the server");
+
+        //Generates the private and public key
+        KeyPair kp = KeyGenerators.generateKeyPair();
+        privateKey = kp.getPrivate();
+        publicKey = kp.getPublic();
+
+        //Writes the public key storage file name
+        this.publicKeyStorageFileName = publicKeyStorageFileName;
+
+        //Writes the servers public key to a file accesible by the client
+        writePublicKeyToFile();
+
+        //Creates a record list with all the usernames, package ids and statuses
+        recordList = new RecordList();
+        recordList.load();
+
+        //This socket will hold the endpoint of the network connection with the client. It holds the clients direction and port that the server will be sending information to.
+        Socket socket = null;
+
+        //The server socket is created and attached to the given port
+        try{
+            serverSocket = new ServerSocket(PORT);
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
+
+        //The server will be permanently listening for any incoming connection until its shut off.
+        while(true){
+            try{
+                //Listens for a connection and if there is one it accepts it. This creates a socket that its tied to the client in such a way that the server can communicate with him.
+                socket = serverSocket.accept();
+            }
+            catch (IOException e){
+                e.printStackTrace();
+            }
+
+            //It sets a thread colour for easier visualization during debug and testing
+            Random random = new Random();
+            int num = random.ints(0,7).findFirst().getAsInt();
+            String threadColour = getColour(num);
+
+            //Launches a new thread to deal with the client connection
+            new ServerThread(socket,privateKey,publicKey,recordList,symmetricReto,debug,threadColour).start();
+        }
+    }
+
 
     //----------------------------------------------------------------------
     // METHODS

@@ -18,13 +18,38 @@ public class ServerMain {
     private static final boolean DEBUG = true;
 
     /*
+    Default running mode
+     */
+    private static final int DEFAULT = 0;
+
+    /*
+    Testing Asymmetric running mode
+     */
+    private static final int TEST_ASYMMETRIC = 1;
+
+    /*
+    Testing Symmetric running mode
+     */
+    private static final int TEST_SYMMETRIC = 2;
+
+    /*
     This contains the info of the file where the servers public key is writen to
      */
     private static final String publicKeyStorageFileName = "src/src-concurrent-server-client/src/Client/publicKeyStorageFile";
 
     //----------------------------------------------------------------------
-    // CONSTANTS
+    // ATTRIBUTES
     //----------------------------------------------------------------------
+
+    /*
+   If debug is turned on
+    */
+    private static int MODE = TEST_ASYMMETRIC;
+
+    /*
+    If the reto is going to be cyphered SYMMETRICALLY(true) or ASYMMETRICALLY(false)
+     */
+    private static boolean RETO_SYMMETRIC=true;
 
     /*
     The server manager. Its responsible for dispatching the serverThreads that handle client requests according to demand.
@@ -42,17 +67,37 @@ public class ServerMain {
      */
     public static void main(String[] args) throws NoSuchAlgorithmException, IOException, ClassNotFoundException {
 
-        //Record data
-        //TODO: Ver que metricas me toca keep track of toca configurar todo para que se generen reportes de todos los datos que toque recolectar
-
-        //Firsts it has to initialize the server
-        serverManager = new Server(publicKeyStorageFileName,DEBUG);
-
+        //Runs serving according to what mode has been selected by default
+        if(MODE == DEFAULT){
+            runStandardConfiguration();
+        }
+        else if(MODE == TEST_ASYMMETRIC){
+            runAsymmetricRetoTest();
+        }
+        else if(MODE == TEST_SYMMETRIC){
+            runSymmetricRetoTest();
+        }
     }
 
     //----------------------------------------------------------------------
     // METHODS
     //----------------------------------------------------------------------
-    //TODO: Hacer los metodos de procesamiento de datos y metricas
+
+    private static void runAsymmetricRetoTest() throws NoSuchAlgorithmException, IOException {
+        //Firsts it has to initialize the server
+        serverManager = new Server(publicKeyStorageFileName,RETO_SYMMETRIC,DEBUG);
+    }
+
+    private static void runSymmetricRetoTest() throws NoSuchAlgorithmException, IOException {
+        //Firsts it has to initialize the server
+        serverManager = new Server(publicKeyStorageFileName,RETO_SYMMETRIC,DEBUG);
+    }
+
+    private static void runStandardConfiguration() throws NoSuchAlgorithmException, IOException {
+        //Firsts it has to initialize the server
+        serverManager = new Server(publicKeyStorageFileName,DEBUG);
+    }
+
+
 
 }
