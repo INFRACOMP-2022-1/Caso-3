@@ -19,44 +19,31 @@ public class ProcessTestData {
 
     public static final String symmetricRetoEncryptionIndividualTestFolder = "IterativeClientServerTests/SymmetricRetoEncryption";
 
-    public static final String asymmetricRetoEncryptionAccumulatedTestsFolder = "IterativeClientServerTests/AsymmetricRetoEncryption/AccumulatedReport";
 
-    public static final String symmetricRetoEncryptionAccumulatedTestsFolder = "IterativeClientServerTests/SymmetricRetoEncryption/AccumulatedReport";
-
-
+    public static String currentAccumulatedReport = "";
     //----------------------------------------------------------------------
     // METHODS
     //----------------------------------------------------------------------
 
 
     //TODO: Documentar esto
-    public void writeToIndividualTestCsv(List<Long> timeList,boolean retoSymmetric) throws IOException {
+    public static void writeToIndividualTestCsv(List<Long> timeList,boolean retoSymmetric) throws IOException {
+
         String directory = (retoSymmetric)? symmetricRetoEncryptionIndividualTestFolder : asymmetricRetoEncryptionIndividualTestFolder;
 
-        LocalDateTime currentTime = LocalDateTime.now();
-        File file = new File(String.format("%s/%s-%d%d%d%d%d.csv",(retoSymmetric)?"symmetric":"asymmetric",currentTime.getSecond(),currentTime.getMinute(), currentTime.getHour(),currentTime.getDayOfMonth()));
-
-        FileWriter csvWriter = new FileWriter(file);
-        for(Long time : timeList){
-            csvWriter.append(String.valueOf(time)).append("\n");
+        if(currentAccumulatedReport.equals("")){
+            LocalDateTime currentTime = LocalDateTime.now();
+            currentAccumulatedReport = String.format("%s/%s-%s%s%s%s%s.csv",directory,"AccumulatedReport",currentTime.getNano(),currentTime.getSecond(),currentTime.getMinute(), currentTime.getHour(),currentTime.getDayOfMonth());
         }
 
-        csvWriter.flush();
-        csvWriter.close();
-    }
-
-    //TODO: Documentar esto
-    public void writeToAccumulatedTestCsv(List<Long> timeList,boolean retoSymmetric) throws IOException {
-        String file = (retoSymmetric)?symmetricRetoEncryptionAccumulatedTestsFolder:asymmetricRetoEncryptionAccumulatedTestsFolder;
+        File file = new File(currentAccumulatedReport);
 
         FileWriter csvWriter = new FileWriter(file,true);
-
-        for(Long time : timeList){
-            csvWriter.append(String.valueOf(time)).append("\n");
-        }
+        csvWriter.append(String.valueOf(timeList.get(timeList.size()-1))).append("\n");
 
         csvWriter.flush();
         csvWriter.close();
     }
+
 
 }

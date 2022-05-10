@@ -1,5 +1,6 @@
 package Server;
 
+import IterativeTestSuite.ProcessTestData;
 import SecurityUtils.*;
 import Records.RecordList;
 
@@ -69,6 +70,7 @@ public class Server {
     If True, then Symmetric encryption is being used. If false, then Asymmetric Encryption is being used.
      */
     boolean symmetricRetoCypherMode;
+
 
     //----------------------------------------------------------------------
     // CONSTRUCTORS
@@ -195,18 +197,32 @@ public class Server {
             if(symmetricRetoCypherMode){
                 Long timeElapsed = serverProtocolSymmetricTest(clientSocket,privateKey,recordList,debug,threadColour);
                 retoCypherTimeList.add(timeElapsed);
+                collectDataFromTests(retoCypherTimeList,symmetricRetoCypherMode);
             }
             //Runs Asymmetric Reto protocol
             else{
                 Long timeElapsed = serverProtocolAsymmetricTest(clientSocket,privateKey,recordList,debug,threadColour);
                 retoCypherTimeList.add(timeElapsed);
+                collectDataFromTests(retoCypherTimeList,symmetricRetoCypherMode);
             }
+
+
         }
     }
 
     //----------------------------------------------------------------------
     // METHODS
     //----------------------------------------------------------------------
+
+    /**
+     * Collects data about the cypher times.
+     * @param retoCypherTimeList
+     */
+    public static void collectDataFromTests(ArrayList<Long> retoCypherTimeList,boolean retoSymmetric) throws IOException {
+        //Saves information for reto times acording to algorithm
+        ProcessTestData.writeToIndividualTestCsv(retoCypherTimeList,retoSymmetric);
+        //ProcessTestData.writeToAccumulatedTestCsv(retoCypherTimeList,retoSymmetric);
+    }
 
     /**
      * Writes the serialized public key to a file within the main package for it to be latter accessed by the client.

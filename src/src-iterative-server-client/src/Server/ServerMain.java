@@ -1,5 +1,7 @@
 package Server;
 
+import IterativeTestSuite.ProcessTestData;
+
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -94,9 +96,6 @@ public class ServerMain {
 
         //Launch the server
         serverManager = new Server(publicKeyStorageFileName,retoCypherTimeList,RETO_SYMMETRIC,DEBUG);
-
-        //Collect data from tests
-        collectDataFromTests(retoCypherTimeList);
     }
 
     /**
@@ -104,7 +103,6 @@ public class ServerMain {
      */
     public static void runSymmetricRetoTest() throws NoSuchAlgorithmException, IOException {
         //Firsts it has to initialize the server
-        ArrayList<String> responseList = new ArrayList<>();
         ArrayList<Long> retoCypherTimeList = new ArrayList<>();
 
         //Specify what encryption method will be used for the algorithm (SYMMETRIC)
@@ -113,8 +111,6 @@ public class ServerMain {
         //Launch the server
         serverManager = new Server(publicKeyStorageFileName,retoCypherTimeList,RETO_SYMMETRIC,DEBUG);
 
-        //Collect data from tests
-        collectDataFromTests(retoCypherTimeList);
     }
 
     /**
@@ -131,22 +127,6 @@ public class ServerMain {
         serverManager = new Server(publicKeyStorageFileName,DEBUG);
     }
 
-    /**
-     * Collects data about the cypher times.
-     * @param retoCypherTimeList
-     */
-    public static void collectDataFromTests(ArrayList<Long> retoCypherTimeList){
-        //Saves information for symmetric retos
-        if(RETO_SYMMETRIC == true){
-            //TODO: SAVE DATA ON CSV
-            //TODO: CALCULATE DIFFERENT STATISTICS ON THE RESPONSE TIMES
-            //TODO: WRITE AND STORE A MINI REPORT
-        }
-        else{
-            //TODO: SAVE DATA ON CSV
-            //TODO: CALCULATE DIFFERENT STATISTICS ON THE RESPONSE TIMES
-            //TODO: WRITE AND STORE A MINI REPORT
-        }
-    }
+
 
 }
