@@ -21,7 +21,7 @@ public class RecordList {
     /*
     The file path of the csv with all the information
      */
-    String csvFileName = "src/src-concurrent-server-client/src/Records/recordTable";
+    String csvFileName = "src/src-iterative-server-client/src/Records/recordTable";
 
     //----------------------------------------------------------------------
     // CONSTRUCTOR
