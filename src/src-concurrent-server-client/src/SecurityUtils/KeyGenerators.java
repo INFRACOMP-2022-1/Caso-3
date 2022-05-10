@@ -1,9 +1,4 @@
-package SecurityUtils;
 
-import javax.crypto.KeyGenerator;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SecretKey;
-import java.security.*;
 
 /**
  * This class contains the key generators used to generate key paris (asymmetric) and secret keys (symmetric)
