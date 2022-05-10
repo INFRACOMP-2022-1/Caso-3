@@ -60,6 +60,10 @@ public class Client {
     // CONSTRUCTOR
     //----------------------------------------------------------------------
 
+    /*
+    DEFAULT CONFIGURATION
+     */
+
     /**
      * The client constructor. It manages the creation of client threads.
      * Each client makes a request to the server, which will dispatch a thread in order to deal with his petition.
@@ -92,6 +96,57 @@ public class Client {
 
             //Creates the client thread that is going to be launched and follow the request making protocol
             ClientThread thread = new ClientThread(socketToServer,serverPublicKey,request,debug,threadColour);
+
+            //Starts the client thread protocol
+            thread.start();
+        }
+    }
+
+    /*
+    TEST CONFIGURATION
+     */
+
+    /**
+     * The client constructor. It manages the creation of client threads.
+     * Each client makes a request to the server, which will dispatch a thread in order to deal with his petition.
+     * @param publicKeyStorageFileName the file where the servers public key is stored
+     * @param clientRequestsNumber the number of clients that are going to be making a petition to the server. It will also correspond to the number of created server threads to deal with the petitions.
+     * @param packageStatusRequestList the list that contains the information for making the client requests that each thread will be doing (username, packageId)
+     * @param debug if debug mode is turned on
+     */
+    public Client(String publicKeyStorageFileName, int clientRequestsNumber, ArrayList<PackageStatusRequests> packageStatusRequestList,boolean symmetricRetoCypherMode,boolean debug) throws IOException, NoSuchAlgorithmException, ClassNotFoundException {
+        System.out.println("Im the client");
+
+        //Stores the file name where the public key is going to be retreived from
+        Client.publicKeyStorageFileName = publicKeyStorageFileName;
+
+        //The number of clients that need to be created to fullfil all the requests
+        Client.clientRequestsNumber = clientRequestsNumber;
+
+        //Read the servers public key from the storage file
+        serverPublicKey = readServerPublicKeyFromFile();
+
+        for(int i = 0; i < clientRequestsNumber; i++){
+            //Get the request that this client thread is going to make
+            PackageStatusRequests request = packageStatusRequestList.get(i);
+
+            //Creates the socket that the client is going to be attached to
+            Socket socketToServer = new Socket(HOST, PORT);
+
+            //It sets a thread colour for easier visualization during debug and testing
+            String threadColour = getColour(i);
+
+
+            //Creates the client thread that is going to be launched and follow the request making protocol
+            ClientThread thread;
+
+            if(symmetricRetoCypherMode){
+                thread = new ClientThread(socketToServer,serverPublicKey,request,symmetricRetoCypherMode ,debug,threadColour);
+            }
+            else {
+                thread = new ClientThread(socketToServer,serverPublicKey,request, symmetricRetoCypherMode,debug,threadColour);
+            }
+
 
             //Starts the client thread protocol
             thread.start();

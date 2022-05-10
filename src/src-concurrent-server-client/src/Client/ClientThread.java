@@ -96,11 +96,24 @@ public class ClientThread extends Thread {
      */
     public BufferedReader incomingMessageChanel;
 
+    /*
+    If the test client thread uses symmetric or asymmetric encryption for the reto
+     */
+    public boolean symmetricReto;
+
+    /*
+    If the thread is running with default protocol or with a test protocol
+     */
+    public boolean isDefault;
 
 
     //----------------------------------------------------------------------
     // CONSTRUCTOR
     //----------------------------------------------------------------------
+
+    /*
+    Default
+     */
 
     /**
      * The constructor for a client thread. It builds a client thread with a specific request in hand.
@@ -116,6 +129,28 @@ public class ClientThread extends Thread {
         this.username = packageStatusRequest.getUsername();
         this.packageId = packageStatusRequest.getPackageId();
         this.threadColour = threadColour;
+        this.isDefault = true;
+    }
+
+    /*
+    Tests
+     */
+    /**
+     * The constructor for a client thread. It builds a client thread with a specific request in hand.
+     * @param serverSocket the server socket where the client will be conecting to in the server
+     * @param publicKeyServer the public key of the server
+     * @param debug if debug mode is turned on
+     * @param threadColour if debug mode is turned on it makes the thread a set colour (makes it easier to read)
+     */
+    public ClientThread(Socket serverSocket , PublicKey publicKeyServer, PackageStatusRequests packageStatusRequest,boolean symmetricReto,boolean debug,String threadColour){
+        this.debug = debug;
+        this.serverSocket = serverSocket;
+        this.publicKeyServer = publicKeyServer;
+        this.username = packageStatusRequest.getUsername();
+        this.packageId = packageStatusRequest.getPackageId();
+        this.threadColour = threadColour;
+        this.symmetricReto = symmetricReto;
+        this.isDefault = false;
     }
 
     //----------------------------------------------------------------------
@@ -301,6 +336,24 @@ public class ClientThread extends Thread {
     //----------------------------------------------------------------------
 
     public void run(){
+        if(isDefault){
+            clientProtocolDefault();
+        }
+        else {
+            if(symmetricReto){
+                clientProtocolSymmetric();
+            }
+            else {
+                clientProtocolDefault();
+            }
+        }
+    }
+
+    //----------------------------------------------------------------------
+    // PROTOCOLS
+    //----------------------------------------------------------------------
+
+    public void clientProtocolDefault(){
         try {
             /*
             Opens the reading and writing channels to read and write to the server
@@ -386,6 +439,209 @@ public class ClientThread extends Thread {
             if(debug){
                 System.out.println(threadColour+"RECEIVE ACK");
             }
+
+            //ENCRYPT THE USERNAME ASSOCIATED TO THE SEARCHED PACKAGE AND SENT IT TO THE SERVER
+            String encryptedUsername = encryptUsernameWithPublicKey(username);
+            sendMessage(encryptedUsername);
+            if(debug){
+                System.out.println(threadColour+"SENT ENCRYPTED USERNAME " + encryptedUsername);
+            }
+
+            //WAIT FOR THE SERVER TO SEARCH IN THE RECORD TABLE FOR THE USERNAME
+
+            //Note: This will cover for the case that the server sends error because it couldn't find that username
+            if(!((currentReceivedMessage = incomingMessageChanel.readLine()).equals("ACK"))){
+                closeAllConnectionsToServer();
+                return;
+            }
+            if(debug){
+                System.out.println(threadColour+"RECEIVED ACK");
+            }
+
+            //ENCRYPT THE PACKAGE ID ASSOCIATED TO THE SEARCHED PACKAGE AND SEND IT TO THE SERVER
+            String encryptedPackageId = encryptPackageIdWithSymmetricKey(packageId);
+            sendMessage(encryptedPackageId);
+            if(debug){
+                System.out.println(threadColour+"SENT ENCRYPTED PACKAGE ID " + encryptedPackageId);
+            }
+
+            //WAIT FOR THE SERVER TO SEARCH FOR THE PACKAGE ID AND ENCRYPT IT
+            if((currentReceivedMessage = incomingMessageChanel.readLine()).equals("ERROR")){
+                closeAllConnectionsToServer();
+                return;
+            }
+            if(debug){
+                if(currentReceivedMessage.equals("ERROR")){
+                    System.out.println(threadColour+"RECEIVED ERROR MESSAGE ");
+                }
+            }
+
+
+            //DECRYPT STATUS(response) ASSOCIATED TO THE SEARCHED PACKAGE
+            status = decryptPackageStatusWithSymmetricKey(currentReceivedMessage);
+
+            if(debug){
+                System.out.println(threadColour+"RECEIVED ENCRYPTED STATUS MESSAGE " + currentReceivedMessage);
+                System.out.println(threadColour+"UNENCRYPTED STATUS MESSAGE AS" + status);
+            }
+
+            //SEND ACK
+            sendMessage("ACK");
+            if(debug){
+                System.out.println(threadColour+"SENT ACK ");
+            }
+
+            //WAIT FOR SERVER TO GENERATE THE DIGEST AND SEND IT IN AN HMAC
+            if((currentReceivedMessage = incomingMessageChanel.readLine()) == null){
+                closeAllConnectionsToServer();
+                return;
+            }
+
+
+            //RECEIVE HMAC, CALCULATE DIGEST USING STATUS (response)
+            //Note: currentReceivedMessage is the HMAC in string format at this point
+
+            //Gets byte array of currentReceivedMessage , that in this case is the HMAC sent by the server
+            String hmacDigestByteArrayServer = currentReceivedMessage;
+            if(debug){
+                System.out.println(threadColour+"RECEIVED HMAC DIGEST AS" + hmacDigestByteArrayServer);
+            }
+
+            //Calculate the digest using status
+            String hmacDigestByteArrayLocal = calculateHMACofDigest();
+            if(debug){
+                System.out.println(threadColour+"CALCULATED LOCAL HMAC DIGEST AS" + hmacDigestByteArrayLocal);
+            }
+
+            //COMPARE SERVER DIGEST TO LOCALLY GENERATED DIGEST
+            if(!hmacDigestByteArrayLocal.equals(hmacDigestByteArrayServer)){
+                closeAllConnectionsToServer();
+                return;
+            }
+            if(debug){
+                System.out.println(threadColour+"HMAC COMPARISON RESULTS ARE " + (hmacDigestByteArrayLocal.equals(hmacDigestByteArrayServer)));
+            }
+
+            //SEND "TERMINAR" TO END PROTOCOL
+            sendMessage("TERMINAR");
+            if(debug){
+                System.out.println(threadColour+"SENT TERMINAR");
+            }
+
+
+            //PRINT MESSAGE IN CONSOLE (text reset is to reset the thread colour to default)
+            System.out.println(threadColour+status);
+
+            //CLOSES ALL CONNECTIONS TO SERVER
+            closeAllConnectionsToServer();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+
+    public void clientProtocolSymmetric(){
+        try {
+            /*
+            Opens the reading and writing channels to read and write to the server
+             */
+            outgoingMessageChanel = new PrintWriter(serverSocket.getOutputStream(),true);
+            incomingMessageChanel = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
+
+            //Stores the current message read
+            String currentReceivedMessage;
+
+            /*
+            CLIENT PROTOCOL
+             */
+
+            //SENDS THE "INICIO" MESSAGE TO THE SERVER, STARTS THE PROTOCOL
+            sendMessage("INICIO");
+            if(debug){
+                System.out.println(threadColour+"SENT INICIO");
+            }
+
+            //WAITS TO RECEIVE ACK FROM SERVER
+            if(!((currentReceivedMessage = incomingMessageChanel.readLine()).equals("ACK"))){
+                closeAllConnectionsToServer();
+                if(debug){
+                    System.out.println(threadColour+"ERROR SOMETHING WENT WRONG");
+                }
+                return;
+            }
+            if(debug){
+                System.out.println(threadColour+"RECEIVED ACK");
+            }
+
+            //-----------------------------------SYMMETRIC PROTOCOL-------------------------------------------------------
+
+            //----------------------------
+            //SEND THE LS AND SAVE IT
+            //----------------------------
+
+            //GENERATE THE SECRET KEY (SYMMETRIC KEY, LS)
+            secretKey = KeyGenerators.generateSecretKeyLS();
+            if(debug){
+                System.out.println(threadColour+"GENERATED SECRET KEY IS " + secretKey);
+            }
+
+            //ENCRYPT THE SECRET KEY/LS WITH THE SERVERS PUBLIC KEY -> LS'=C(K_S+,LS)
+            String encryptedSecretKey = encryptSecretKeyWithPublicKey();
+            sendMessage(encryptedSecretKey);
+            if(debug){
+                System.out.println(threadColour+"ENCRYPTED SECRET KEY IS " + encryptedSecretKey);
+            }
+
+            //WAIT FOR SERVER TO EXTRACT SECRET KEY AND SEND ACK MESSAGE
+            if(!((currentReceivedMessage = incomingMessageChanel.readLine()).equals("ACK"))){
+                closeAllConnectionsToServer();
+                return;
+            }
+            if(debug){
+                System.out.println(threadColour+"RECEIVE ACK");
+            }
+
+            //----------------------------
+            //SEND THE RETO
+            //----------------------------
+
+            //GENERATES THE RETO (24-digit random number) AND SENDS IT TO THE SERVER IN PLAIN TEXT
+            reto = generateReto();
+            sendMessage(reto);
+            if(debug){
+                System.out.println(threadColour+"SENT RETO " + reto);
+            }
+
+            //WAIT FOR THE SERVER TO ENCRYPT THE RETO AND SEND IT
+            if((currentReceivedMessage = incomingMessageChanel.readLine()) == null){
+                closeAllConnectionsToServer();
+                return;
+            }
+
+            //DECRYPT SENT RETO
+            String serverReto = decryptServerRetoWithSymmetricKey(currentReceivedMessage);
+            if(debug){
+                System.out.println(threadColour+"RECEIVED ENCRYPTED RETO " + currentReceivedMessage);
+            }
+            if(debug){
+                System.out.println(threadColour+"DECRYPTED RECEIVED RETO IS " + serverReto);
+            }
+
+            //VALIDATE IF SERVER_RETO CORRESPONDS TO THE ORIGINALLY CALCULATED RETO
+            if(!serverReto.equals(reto)){
+                //If the decrypted server reto isn't the same as the original reto the communication to the server should end
+                closeAllConnectionsToServer();
+                return;
+            }
+            if(debug){
+                System.out.println(threadColour+"RETO VALIDATION RETURNED " + Objects.equals(serverReto, reto));
+            }
+
+
+
+            //-------------------------------------------------------------------------------------------------------------
+
 
             //ENCRYPT THE USERNAME ASSOCIATED TO THE SEARCHED PACKAGE AND SENT IT TO THE SERVER
             String encryptedUsername = encryptUsernameWithPublicKey(username);

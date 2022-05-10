@@ -1,5 +1,6 @@
 package Server;
 
+import ConcurrentTestSuite.ProcessTestData;
 import SecurityUtils.KeyGenerators;
 import Records.RecordList;
 
@@ -173,7 +174,10 @@ public class Server {
             String threadColour = getColour(num);
 
             //Launches a new thread to deal with the client connection
-            new ServerThread(socket,privateKey,publicKey,recordList,symmetricReto,debug,threadColour).start();
+            Long timeElapsedRetoCypher = (long)0;
+            new ServerThread(socket,privateKey,publicKey,recordList,symmetricReto,timeElapsedRetoCypher,debug,threadColour).start();
+
+            collectDataFromTests(timeElapsedRetoCypher,symmetricReto);
         }
     }
 
@@ -181,6 +185,10 @@ public class Server {
     //----------------------------------------------------------------------
     // METHODS
     //----------------------------------------------------------------------
+
+    public static void collectDataFromTests(Long timeElapsedRetoCypher,boolean symmetricReto) throws IOException {
+        ProcessTestData.writeToAccumulatedReportCsvResult(timeElapsedRetoCypher,symmetricReto);
+    }
 
     /**
      * Writes the serialized public key to a file within the main package for it to be latter accessed by the client.

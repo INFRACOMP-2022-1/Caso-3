@@ -18,6 +18,21 @@ public class ClientMain {
     private static final boolean DEBUG = true;
 
     /*
+    Default running mode
+     */
+    private static final int DEFAULT = 0;
+
+    /*
+    Testing Asymmetric running mode
+     */
+    private static final int TEST_ASYMMETRIC = 1;
+
+    /*
+    Testing Symmetric running mode
+     */
+    private static final int TEST_SYMMETRIC = 2;
+
+    /*
     This contains the info of the file where the servers public key is writen to
      */
     private static final String publicKeyStorageFileName = "src/src-concurrent-server-client/src/Client/publicKeyStorageFile";
@@ -25,11 +40,21 @@ public class ClientMain {
     /*
     This contains the information of how many active clients are to be initialized.
      */
-    public static int numberOfActiveClients;
+    public static int numberOfActiveClients =4;
 
     //----------------------------------------------------------------------
     // CONSTANTS
     //----------------------------------------------------------------------
+
+    /*
+    If debug is turned on
+     */
+    private static int MODE = TEST_SYMMETRIC;
+
+    /*
+    If the reto is going to be cyphered SYMMETRICALLY(true) or ASYMMETRICALLY(false)
+     */
+    private static boolean RETO_SYMMETRIC;
 
     /*
     The client manager. Its responsible for initializing a set number of client threads to send petitions to the server regarding package statuses.
@@ -46,21 +71,16 @@ public class ClientMain {
      * @throws NoSuchAlgorithmException
      */
     public static void main(String[] args) throws NoSuchAlgorithmException, IOException, ClassNotFoundException {
-
-        //Record data
-        //TODO: Ver que metricas me toca keep track of toca configurar todo para que se generen reportes de todos los datos que toque recolectar
-
-
-        //TODO: THIS WILL NOT BE THE FULL TESTING INTERFACE, WHEN I GET TO TESTS MAYBE CREATE A METOD TO DELEGATE THIS
-        //TODO: Should do a check that ensures that there are no repeated user ids
-        //This creates the list of requests that are going to be made
-        ArrayList<PackageStatusRequests> packageStatusRequestsList = testNConsults(3);
-
-        //Gets the number of clients that need to be created to fulfill all the requests
-        numberOfActiveClients = packageStatusRequestsList.size();
-
-        //Then it has to initialize a given number of clients and make each client thread run
-        clientManager = new Client(publicKeyStorageFileName,numberOfActiveClients,packageStatusRequestsList,DEBUG);
+        //Runs serving according to what mode has been selected by default
+        if(MODE == DEFAULT){
+            runStandardConfiguration();
+        }
+        else if(MODE == TEST_ASYMMETRIC){
+            runAsymmetricRetoTest();
+        }
+        else if(MODE == TEST_SYMMETRIC){
+            runSymmetricRetoTest();
+        }
     }
 
     //----------------------------------------------------------------------
@@ -78,6 +98,56 @@ public class ClientMain {
         }
 
         return packageStatusRequestsArrayList;
+    }
+
+    /**
+     *
+     */
+    public static void runAsymmetricRetoTest() throws IOException, NoSuchAlgorithmException, ClassNotFoundException {
+        //This creates the list of requests that are going to be made
+        ArrayList<PackageStatusRequests> packageStatusRequestsList = testNConsults(numberOfActiveClients);
+
+        //Gets the number of clients that need to be created to fulfill all the requests
+        numberOfActiveClients = packageStatusRequestsList.size();
+
+        RETO_SYMMETRIC = false;
+
+        //Then it has to initialize a given number of clients and make each client thread run
+        clientManager = new Client(publicKeyStorageFileName,numberOfActiveClients,packageStatusRequestsList,RETO_SYMMETRIC,DEBUG);
+    }
+
+    /**
+     *
+     */
+    public static void runSymmetricRetoTest() throws IOException, NoSuchAlgorithmException, ClassNotFoundException {
+        //This creates the list of requests that are going to be made
+        ArrayList<PackageStatusRequests> packageStatusRequestsList = testNConsults(numberOfActiveClients);
+
+        //Gets the number of clients that need to be created to fulfill all the requests
+        numberOfActiveClients = packageStatusRequestsList.size();
+
+        RETO_SYMMETRIC = true;
+
+        //Then it has to initialize a given number of clients and make each client thread run
+        clientManager = new Client(publicKeyStorageFileName,numberOfActiveClients,packageStatusRequestsList,RETO_SYMMETRIC,DEBUG);
+
+    }
+
+    /**
+     *
+     */
+    public static void runStandardConfiguration() throws IOException, NoSuchAlgorithmException, ClassNotFoundException {
+        //This creates the list of requests that are going to be made
+        ArrayList<PackageStatusRequests> packageStatusRequestsList = testNConsults(numberOfActiveClients);
+
+        //Gets the number of clients that need to be created to fulfill all the requests
+        numberOfActiveClients = packageStatusRequestsList.size();
+
+        RETO_SYMMETRIC = false;
+
+        //Then it has to initialize a given number of clients and make each client thread run
+        clientManager = new Client(publicKeyStorageFileName,numberOfActiveClients,packageStatusRequestsList,DEBUG);
+
     }
 
 }

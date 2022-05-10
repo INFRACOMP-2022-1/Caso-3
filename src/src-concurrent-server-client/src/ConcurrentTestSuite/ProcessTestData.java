@@ -14,9 +14,13 @@ public class ProcessTestData {
     //----------------------------------------------------------------------
 
     //TODO: Documentar esto
-    public static final String asymmetricRetoEncryptionIndividualTestFolder = "IterativeClientServerTests/AsymmetricRetoEncryption";
+    public static final String asymmetricRetoEncryptionIterativeTestFolder = "IterativeClientServerTests/AsymmetricRetoEncryption";
 
-    public static final String symmetricRetoEncryptionIndividualTestFolder = "IterativeClientServerTests/SymmetricRetoEncryption";
+    public static final String symmetricRetoEncryptionIterativeTestFolder = "IterativeClientServerTests/SymmetricRetoEncryption";
+
+    public static final String asymmetricRetoEncryptionConcurrentTestFolder = "ConcurrentClientServerTests/AsymmetricRetoEncryption";
+
+    public static final String symmetricRetoEncryptionConcurrentTestFolder = "ConcurrentClientServerTests/SymmetricRetoEncryption";
 
     public static String currentAccumulatedReport = "";
     //----------------------------------------------------------------------
@@ -27,7 +31,7 @@ public class ProcessTestData {
     //TODO: Documentar esto
     public static void writeToIndividualTestCsv(List<Long> timeList,boolean retoSymmetric) throws IOException {
 
-        String directory = (retoSymmetric)? symmetricRetoEncryptionIndividualTestFolder : asymmetricRetoEncryptionIndividualTestFolder;
+        String directory = (retoSymmetric)? symmetricRetoEncryptionIterativeTestFolder : asymmetricRetoEncryptionIterativeTestFolder;
 
         if(currentAccumulatedReport.equals("")){
             LocalDateTime currentTime = LocalDateTime.now();
@@ -41,6 +45,24 @@ public class ProcessTestData {
 
         csvWriter.flush();
         csvWriter.close();
+    }
+
+    //TODO: Documentar esto
+    public static void writeToAccumulatedReportCsvResult(Long timeElapsedRetoCypher,boolean retoSymmetric) throws IOException {
+        String directory = (retoSymmetric) ? symmetricRetoEncryptionConcurrentTestFolder:asymmetricRetoEncryptionConcurrentTestFolder;
+
+        if(currentAccumulatedReport.equals("")){
+            LocalDateTime currentTime = LocalDateTime.now();
+            currentAccumulatedReport = String.format("%s/%s-%s%s%s%s%s.csv",directory,"AccumulatedReport",currentTime.getNano(),currentTime.getSecond(),currentTime.getMinute(), currentTime.getHour(),currentTime.getDayOfMonth());
+        }
+
+        File file = new File(currentAccumulatedReport);
+        FileWriter csvWriter = new FileWriter(file,true);
+        csvWriter.append(String.valueOf(timeElapsedRetoCypher)).append("\n");
+
+        csvWriter.flush();
+        csvWriter.close();
+
     }
 
 

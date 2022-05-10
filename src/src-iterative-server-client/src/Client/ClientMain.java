@@ -150,28 +150,10 @@ public class ClientMain {
         ArrayList<PackageStatusRequests> packageStatusRequestsList = testNConsults(numberOfConsults);
 
         //By default, the reto is encrypted the servers private key, so ASYMMETRIC
-        RETO_SYMMETRIC = true;
+        RETO_SYMMETRIC = false;
 
         //Launch the client
         clientManager = new Client(publicKeyStorageFileName,numberOfConsults,packageStatusRequestsList,DEBUG);
-    }
-
-    /**
-     * Collects data about the cypher times.
-     * @param retoCypherTimeList
-     */
-    public static void collectDataFromTests(ArrayList<Long> retoCypherTimeList){
-        //Saves information for symmetric retos
-        if(RETO_SYMMETRIC == true){
-            //TODO: SAVE DATA ON CSV
-            //TODO: CALCULATE DIFFERENT STATISTICS ON THE RESPONSE TIMES
-            //TODO: WRITE AND STORE A MINI REPORT
-        }
-        else{
-            //TODO: SAVE DATA ON CSV
-            //TODO: CALCULATE DIFFERENT STATISTICS ON THE RESPONSE TIMES
-            //TODO: WRITE AND STORE A MINI REPORT
-        }
     }
 
 }

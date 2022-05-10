@@ -44,7 +44,7 @@ public class ServerMain {
     /*
    If debug is turned on
     */
-    private static int MODE = DEFAULT;
+    private static int MODE = TEST_SYMMETRIC;
 
     /*
     If the reto is going to be cyphered SYMMETRICALLY(true) or ASYMMETRICALLY(false)
