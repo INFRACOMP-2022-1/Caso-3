@@ -747,9 +747,9 @@ public class Server {
                 System.out.println(requestColour+"RECEIVED RETO " + reto);
             }
 
-            //ENCRYPT THE reto USING SECRET KEY AND SEND IT -> reto' = C(K_S-,reto)
+            //ENCRYPT THE reto USING SYMMETRIC KEY AND SEND IT -> reto' = C(LS,reto)
             retoEncryptStartTime = System.nanoTime();
-            String encryptedReto = encryptRetoWithPrivateKey(reto,privateKeyServer);
+            String encryptedReto = encryptRetoWithSymmetricKey(reto,sharedSecretKey);
             retoEncryptEndTime = System.nanoTime();
             sendMessage(encryptedReto,outgoingMessageChanel);
             if(debug){
