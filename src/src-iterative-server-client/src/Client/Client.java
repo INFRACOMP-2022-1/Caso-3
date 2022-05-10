@@ -772,8 +772,8 @@ public class Client {
                 return "ERROR";
             }
 
-            //DECRYPT SENT RETO
-            String serverReto = decryptServerRetoWithPublicKey(currentReceivedMessage,serverPublicKey);
+            //DECRYPT SENT RETO WITH SYMMETRIC KEY
+            String serverReto = decryptServerRetoWithSymmetricKey(currentReceivedMessage,secretKey);
             if(debug){
                 System.out.println(requestColour+"RECEIVED ENCRYPTED RETO " + currentReceivedMessage);
             }
