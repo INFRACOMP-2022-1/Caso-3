@@ -507,8 +507,6 @@ public class Server {
                 System.out.println(threadColour+"RECEIVED RETO " + reto);
             }
 
-            //symmetricRetoCypher
-
             //ENCRYPT THE reto USING SERVER PRIVATE KEY AND SEND IT -> reto' = C(K_S-,reto)
             String encryptedReto = encryptRetoWithPrivateKey(reto,privateKeyServer);
             sendMessage(encryptedReto,outgoingMessageChanel);

@@ -40,7 +40,7 @@ public class ClientMain {
     /*
     This contains the information of how many active clients are to be initialized.
      */
-    public static int numberOfActiveClients =32;
+    public static int numberOfActiveClients = 4;
 
     //----------------------------------------------------------------------
     // CONSTANTS

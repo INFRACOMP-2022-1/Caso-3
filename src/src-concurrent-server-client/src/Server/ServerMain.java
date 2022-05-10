@@ -49,7 +49,7 @@ public class ServerMain {
     /*
     If the reto is going to be cyphered SYMMETRICALLY(true) or ASYMMETRICALLY(false)
      */
-    private static boolean RETO_SYMMETRIC=true;
+    private static boolean RETO_SYMMETRIC;
 
     /*
     The server manager. Its responsible for dispatching the serverThreads that handle client requests according to demand.
@@ -85,11 +85,15 @@ public class ServerMain {
 
     private static void runAsymmetricRetoTest() throws NoSuchAlgorithmException, IOException, InterruptedException {
         //Firsts it has to initialize the server
+        RETO_SYMMETRIC = false;
+
         serverManager = new Server(publicKeyStorageFileName,RETO_SYMMETRIC,DEBUG);
     }
 
     private static void runSymmetricRetoTest() throws NoSuchAlgorithmException, IOException, InterruptedException {
         //Firsts it has to initialize the server
+        RETO_SYMMETRIC = true;
+
         serverManager = new Server(publicKeyStorageFileName,RETO_SYMMETRIC,DEBUG);
     }
 

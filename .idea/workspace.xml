@@ -8,10 +8,10 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Client/ClientMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Client/ClientMain.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Client/publicKeyStorageFile" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Client/publicKeyStorageFile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Server/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Server/Server.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/src-concurrent-server-client/src/ConcurrentTestSuite/ProcessTestData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-concurrent-server-client/src/ConcurrentTestSuite/ProcessTestData.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Server/ServerMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Server/ServerMain.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Server/ServerThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Server/ServerThread.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/src-iterative-server-client/src/Client/publicKeyStorageFile" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-iterative-server-client/src/Client/publicKeyStorageFile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/src-iterative-server-client/src/Server/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-iterative-server-client/src/Server/Server.java" afterDir="false" />
     </list>
     <list id="803dfcef-5c0c-4782-9582-7e448662f284" name="Changes by diego" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -47,6 +47,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
     "codeWithMe.voiceChat.enabledByDefault": "false",
+    "extract.method.default.visibility": "private",
     "jdk.selected.JAVA_MODULE": "openjdk-18",
     "last_directory_selection": "C:/Users/veron/OneDrive/Documents/Universidad/Infraestructura Computacional/Caso 3/Caso-3/src/src-concurrent-server-client/src",
     "last_opened_file_path": "C:/Users/veron/OneDrive/Documents/Universidad/Infraestructura Computacional/Caso 3/Caso-3/ConcurrentClientServerTests/AsymmetricRetoEncryption",
@@ -168,6 +169,7 @@
       <workItem from="1652084327233" duration="3358000" />
       <workItem from="1652127887439" duration="74000" />
       <workItem from="1652127969034" duration="28861000" />
+      <workItem from="1652207004563" duration="2700000" />
     </task>
     <task id="LOCAL-00001" summary="Cree la estructura">
       <created>1651467130509</created>
@@ -238,6 +240,24 @@
     <option name="LAST_COMMIT_MESSAGE" value="Estoy añadiendo el protocolo del cliente." />
   </component>
   <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/src-concurrent-server-client/src/Server/ServerMain.java</url>
+          <line>70</line>
+          <option name="timeStamp" value="46" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/src-concurrent-server-client/src/ConcurrentTestSuite/ProcessTestData.java</url>
+          <line>40</line>
+          <properties class="ConcurrentTestSuite.ProcessTestData" method="writeToAccumulatedReportCsvResult">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="47" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
     <pin-to-top-manager>
       <pinned-members>
         <PinnedItemInfo parentTag="java.lang.Long" memberName="value" />

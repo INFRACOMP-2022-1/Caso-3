@@ -737,6 +737,9 @@ public class ServerThread extends Thread{
                 closeAllConnectionsToClient();
                 return;
             }
+            if(debug){
+                System.out.println(threadColour+"RECEIVED INICIO");
+            }
 
             //ACKNOWLEDGE CLIENTS INICIO WITH "ACK"
             acknowledgeClient();
@@ -747,6 +750,9 @@ public class ServerThread extends Thread{
             //WAIT FOR CLIENT TO GENERATE THE reto
             if((currentReceivedMessage = incomingMessageChanel.readLine()) == null){
                 closeAllConnectionsToClient();
+                if(debug){
+                    System.out.println(threadColour+"SOMETHING WENT WRONG ERROR MESSAGE RECEIVED!");
+                }
                 return;
             }
 
@@ -772,6 +778,9 @@ public class ServerThread extends Thread{
             //WAIT FOR CLIENT TO GENERATE SHARED SECRET (LS) AND SEND IT ENCRYPTED WITH THE SERVERS PUBLIC KEY-> LS'=C(K_S+,LS)
             if((currentReceivedMessage = incomingMessageChanel.readLine()) == null){
                 closeAllConnectionsToClient();
+                if(debug){
+                    System.out.println(threadColour+"SOMETHING WENT WRONG ERROR MESSAGE RECEIVED!");
+                }
                 return;
             }
 
@@ -790,6 +799,9 @@ public class ServerThread extends Thread{
             //WAIT FOR USER TO SEND THE ENCRYPTED USERNAME TO BE SEARCHED -> username'=C(K_S+,username)
             if((currentReceivedMessage = incomingMessageChanel.readLine()) == null){
                 closeAllConnectionsToClient();
+                if(debug){
+                    System.out.println(threadColour+"SOMETHING WENT WRONG ERROR MESSAGE RECEIVED!");
+                }
                 return;
             }
 

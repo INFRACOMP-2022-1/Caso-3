@@ -30,17 +30,7 @@ public class ProcessTestData {
 
     //TODO: Documentar esto
     public static void writeToIndividualTestCsv(List<Long> timeList,boolean retoSymmetric) throws IOException {
-
-        String directory = (retoSymmetric)? symmetricRetoEncryptionIterativeTestFolder : asymmetricRetoEncryptionIterativeTestFolder;
-
-        if(currentAccumulatedReport.equals("")){
-            LocalDateTime currentTime = LocalDateTime.now();
-            currentAccumulatedReport = String.format("%s/%s-%s%s%s%s%s.csv",directory,"AccumulatedReport",currentTime.getNano(),currentTime.getSecond(),currentTime.getMinute(), currentTime.getHour(),currentTime.getDayOfMonth());
-        }
-
-        File file = new File(currentAccumulatedReport);
-
-        FileWriter csvWriter = new FileWriter(file,true);
+        FileWriter csvWriter = generateFileName(retoSymmetric, symmetricRetoEncryptionIterativeTestFolder, asymmetricRetoEncryptionIterativeTestFolder);
         csvWriter.append(String.valueOf(timeList.get(timeList.size()-1))).append("\n");
 
         csvWriter.flush();
@@ -49,7 +39,15 @@ public class ProcessTestData {
 
     //TODO: Documentar esto
     public static void writeToAccumulatedReportCsvResult(Long timeElapsedRetoCypher,boolean retoSymmetric) throws IOException {
-        String directory = (retoSymmetric) ? symmetricRetoEncryptionConcurrentTestFolder:asymmetricRetoEncryptionConcurrentTestFolder;
+        FileWriter csvWriter = generateFileName(retoSymmetric, symmetricRetoEncryptionConcurrentTestFolder, asymmetricRetoEncryptionConcurrentTestFolder);
+        csvWriter.append(String.valueOf(timeElapsedRetoCypher)).append("\n");
+
+        csvWriter.flush();
+        csvWriter.close();
+    }
+
+    private static FileWriter generateFileName(boolean retoSymmetric, String symmetricRetoEncryptionConcurrentTestFolder, String asymmetricRetoEncryptionConcurrentTestFolder) throws IOException {
+        String directory = (retoSymmetric) ? symmetricRetoEncryptionConcurrentTestFolder : asymmetricRetoEncryptionConcurrentTestFolder;
 
         if(currentAccumulatedReport.equals("")){
             LocalDateTime currentTime = LocalDateTime.now();
@@ -58,11 +56,7 @@ public class ProcessTestData {
 
         File file = new File(currentAccumulatedReport);
         FileWriter csvWriter = new FileWriter(file,true);
-        csvWriter.append(String.valueOf(timeElapsedRetoCypher)).append("\n");
-
-        csvWriter.flush();
-        csvWriter.close();
-
+        return csvWriter;
     }
 
 
