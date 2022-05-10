@@ -6,16 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="c99e4ea5-36cd-4db9-9814-6290907cf55f" name="Changes" comment="Estoy añadiendo el protocolo del cliente.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporte-caso/~$porteCaso3.docx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Client/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Client/Client.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Client/ClientMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Client/ClientMain.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Client/ClientThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Client/ClientThread.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Client/publicKeyStorageFile" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Client/publicKeyStorageFile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/src-concurrent-server-client/src/ConcurrentTestSuite/ProcessTestData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-concurrent-server-client/src/ConcurrentTestSuite/ProcessTestData.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Server/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Server/Server.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Server/ServerMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Server/ServerMain.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Server/ServerThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Server/ServerThread.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/src-iterative-server-client/src/Client/ClientMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-iterative-server-client/src/Client/ClientMain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/src-iterative-server-client/src/Client/publicKeyStorageFile" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-iterative-server-client/src/Client/publicKeyStorageFile" afterDir="false" />
     </list>
     <list id="803dfcef-5c0c-4782-9582-7e448662f284" name="Changes by diego" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -53,7 +49,7 @@
     "codeWithMe.voiceChat.enabledByDefault": "false",
     "jdk.selected.JAVA_MODULE": "openjdk-18",
     "last_directory_selection": "C:/Users/veron/OneDrive/Documents/Universidad/Infraestructura Computacional/Caso 3/Caso-3/src/src-concurrent-server-client/src",
-    "last_opened_file_path": "C:/Users/veron/OneDrive/Documents/Universidad/Infraestructura Computacional/Caso 3/Caso-3/IterativeClientServerTests/SymmetricRetoEncryption",
+    "last_opened_file_path": "C:/Users/veron/OneDrive/Documents/Universidad/Infraestructura Computacional/Caso 3/Caso-3/ConcurrentClientServerTests/AsymmetricRetoEncryption",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -63,18 +59,18 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\veron\OneDrive\Documents\Universidad\Infraestructura Computacional\Caso 3\Caso-3\ConcurrentClientServerTests\AsymmetricRetoEncryption" />
       <recent name="C:\Users\veron\OneDrive\Documents\Universidad\Infraestructura Computacional\Caso 3\Caso-3\IterativeClientServerTests\SymmetricRetoEncryption" />
       <recent name="C:\Users\veron\OneDrive\Documents\Universidad\Infraestructura Computacional\Caso 3\Caso-3\src\src-concurrent-server-client\src\Records" />
       <recent name="C:\Users\veron\OneDrive\Documents\Universidad\Infraestructura Computacional\Caso 3\Caso-3\src\src-iterative-server-client\src\Records" />
       <recent name="C:\Users\veron\OneDrive\Documents\Universidad\Infraestructura Computacional\Caso 3\Caso-3\src\src-iterative-server-client\src" />
-      <recent name="C:\Users\veron\OneDrive\Documents\Universidad\Infraestructura Computacional\Caso 3\Caso-3\src\src-simple-server-client" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\veron\OneDrive\Documents\Universidad\Infraestructura Computacional\Caso 3\Caso-3\ConcurrentClientServerTests\SymmetricRetoEncryption\32DelegadosConcurrentes" />
+      <recent name="C:\Users\veron\OneDrive\Documents\Universidad\Infraestructura Computacional\Caso 3\Caso-3\ConcurrentClientServerTests\SymmetricRetoEncryption\16DelegadosConcurrentes" />
+      <recent name="C:\Users\veron\OneDrive\Documents\Universidad\Infraestructura Computacional\Caso 3\Caso-3\ConcurrentClientServerTests\SymmetricRetoEncryption\4DelegadosConcurrentes" />
       <recent name="C:\Users\veron\OneDrive\Documents\Universidad\Infraestructura Computacional\Caso 3\Caso-3\IterativeClientServerTests\SymmetricRetoEncryption" />
       <recent name="C:\Users\veron\OneDrive\Documents\Universidad\Infraestructura Computacional\Caso 3\Caso-3" />
-      <recent name="C:\Users\veron\OneDrive\Documents\Universidad\Infraestructura Computacional\Caso 3\Caso-3\src\src-concurrent-server-client\src\Main" />
-      <recent name="C:\Users\veron\OneDrive\Documents\Universidad\Infraestructura Computacional\Caso 3\Caso-3\src\src-server\src" />
-      <recent name="C:\Users\veron\OneDrive\Documents\Universidad\Infraestructura Computacional\Caso 3\Caso-3\src\src-client" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="IterativeTestSuite" />

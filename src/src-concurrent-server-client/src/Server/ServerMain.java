@@ -44,7 +44,7 @@ public class ServerMain {
     /*
    If debug is turned on
     */
-    private static int MODE = TEST_SYMMETRIC;
+    private static int MODE = TEST_ASYMMETRIC;
 
     /*
     If the reto is going to be cyphered SYMMETRICALLY(true) or ASYMMETRICALLY(false)
@@ -65,7 +65,7 @@ public class ServerMain {
      * @param args the arguments of the program
      * @throws NoSuchAlgorithmException
      */
-    public static void main(String[] args) throws NoSuchAlgorithmException, IOException, ClassNotFoundException {
+    public static void main(String[] args) throws NoSuchAlgorithmException, IOException, ClassNotFoundException, InterruptedException {
 
         //Runs serving according to what mode has been selected by default
         if(MODE == DEFAULT){
@@ -83,12 +83,12 @@ public class ServerMain {
     // METHODS
     //----------------------------------------------------------------------
 
-    private static void runAsymmetricRetoTest() throws NoSuchAlgorithmException, IOException {
+    private static void runAsymmetricRetoTest() throws NoSuchAlgorithmException, IOException, InterruptedException {
         //Firsts it has to initialize the server
         serverManager = new Server(publicKeyStorageFileName,RETO_SYMMETRIC,DEBUG);
     }
 
-    private static void runSymmetricRetoTest() throws NoSuchAlgorithmException, IOException {
+    private static void runSymmetricRetoTest() throws NoSuchAlgorithmException, IOException, InterruptedException {
         //Firsts it has to initialize the server
         serverManager = new Server(publicKeyStorageFileName,RETO_SYMMETRIC,DEBUG);
     }

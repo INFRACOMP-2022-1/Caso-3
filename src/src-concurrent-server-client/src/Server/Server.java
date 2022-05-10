@@ -129,7 +129,7 @@ public class Server {
      * @param debug if debug mode is turned on or not
      * @throws NoSuchAlgorithmException
      */
-    public Server(String publicKeyStorageFileName,boolean symmetricReto,boolean debug) throws NoSuchAlgorithmException, IOException {
+    public Server(String publicKeyStorageFileName,boolean symmetricReto,boolean debug) throws NoSuchAlgorithmException, IOException, InterruptedException {
         System.out.println("Im the server");
 
         //Generates the private and public key
@@ -174,10 +174,12 @@ public class Server {
             String threadColour = getColour(num);
 
             //Launches a new thread to deal with the client connection
-            Long timeElapsedRetoCypher = (long)0;
-            new ServerThread(socket,privateKey,publicKey,recordList,symmetricReto,timeElapsedRetoCypher,debug,threadColour).start();
+            ServerThread serverThread = new ServerThread(socket,privateKey,publicKey,recordList,symmetricReto,debug,threadColour);
+            serverThread.start();
 
-            collectDataFromTests(timeElapsedRetoCypher,symmetricReto);
+            serverThread.join();
+
+            collectDataFromTests(serverThread.timeElapsedRetoCypher,symmetricReto);
         }
     }
 

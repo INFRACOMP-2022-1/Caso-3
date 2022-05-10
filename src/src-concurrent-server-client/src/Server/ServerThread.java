@@ -171,7 +171,7 @@ public class ServerThread extends Thread{
      * @param recordList the table that contains all the records of usernames, package id's and statuses
      * @param threadColour the thread colour set for debug mode
      */
-    public ServerThread(Socket clientSocket, PrivateKey privateKeyServer, PublicKey publicKeyServer, RecordList recordList,boolean symmetricReto,Long timeElapsedRetoCypher,boolean debug,String threadColour){
+    public ServerThread(Socket clientSocket, PrivateKey privateKeyServer, PublicKey publicKeyServer, RecordList recordList,boolean symmetricReto,boolean debug,String threadColour){
         this.clientSocket = clientSocket;
         this.privateKeyServer = privateKeyServer;
         this.publicKeyServer = publicKeyServer;
@@ -180,7 +180,6 @@ public class ServerThread extends Thread{
         this.threadColour = threadColour;
         this.symmetricReto = symmetricReto;
         this.isDefault = false;
-        this.timeElapsedRetoCypher = timeElapsedRetoCypher;
 
         try{
             outgoingMessageChanel = new PrintWriter(clientSocket.getOutputStream(),true);
@@ -609,7 +608,10 @@ public class ServerThread extends Thread{
             }
 
             //ENCRYPT THE reto USING SERVER PRIVATE KEY AND SEND IT -> reto' = C(K_S-,reto)
+            Long startTime = System.nanoTime();
             String encryptedReto = encryptRetoWithSymmetricKey(reto);
+            Long endTime = System.nanoTime();
+            timeElapsedRetoCypher = endTime - startTime;
             sendMessage(encryptedReto);
             if(debug){
                 System.out.println(threadColour+"SENT ENCRYPTED RETO " + encryptedReto);
