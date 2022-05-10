@@ -48,7 +48,7 @@ public class ClientMain {
     /*
     If debug is turned on
      */
-    private static int MODE = TEST_SYMMETRIC;
+    private static int MODE = TEST_ASYMMETRIC;
 
     /*
     If the reto is going to be cyphered SYMMETRICALLY(true) or ASYMMETRICALLY(false)
