@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="d44fc7ab-71a6-4dc3-b63c-a6be8f7eedad" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../src-concurrent-server-client/.classpath" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../src-concurrent-server-client/.project" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../src-concurrent-server-client/src-concurrent-server-client.eml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.classpath" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.project" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src-iterative-server-client.eml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.classpath" beforeDir="false" afterPath="$PROJECT_DIR$/../../.classpath" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/Caso-3.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../../.idea/Caso-3.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.project" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src-concurrent-server-client/src-concurrent-server-client.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../src-concurrent-server-client/src-concurrent-server-client.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src-concurrent-server-client/src/Client/publicKeyStorageFile" beforeDir="false" afterPath="$PROJECT_DIR$/../src-concurrent-server-client/src/Client/publicKeyStorageFile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src-concurrent-server-client/src/SecurityUtils/Encryption.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src-concurrent-server-client/src/SecurityUtils/Encryption.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src-concurrent-server-client/src/SecurityUtils/KeyGenerators.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src-concurrent-server-client/src/SecurityUtils/KeyGenerators.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src-concurrent-server-client/src/StatusRequests/PackageStatusRequests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src-iterative-server-client.iml" beforeDir="false" afterPath="$PROJECT_DIR$/src-iterative-server-client.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Client/publicKeyStorageFile" beforeDir="false" afterPath="$PROJECT_DIR$/src/Client/publicKeyStorageFile" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="ProjectId" id="28zLAjmS1vU4FHXLNoDRbiroEqb" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "C:/Users/veron/OneDrive/Documents/Universidad/Infraestructura Computacional/Caso 3/Caso-3/src"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="d44fc7ab-71a6-4dc3-b63c-a6be8f7eedad" name="Changes" comment="" />
+      <created>1652214325995</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1652214325995</updated>
+      <workItem from="1652214327185" duration="12000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

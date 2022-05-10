@@ -5,16 +5,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c99e4ea5-36cd-4db9-9814-6290907cf55f" name="Changes" comment="Estoy añadiendo el protocolo del cliente.">
+      <change afterPath="$PROJECT_DIR$/src/src-concurrent-server-client/.classpath" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/src-concurrent-server-client/.project" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/src-concurrent-server-client/src-concurrent-server-client.eml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/src-iterative-server-client/.classpath" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/src-iterative-server-client/.project" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/src-iterative-server-client/src-iterative-server-client.eml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.classpath" beforeDir="false" afterPath="$PROJECT_DIR$/.classpath" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/Caso-3.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Caso-3.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Client/ClientMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Client/ClientMain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.project" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/src-concurrent-server-client/src-concurrent-server-client.iml" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-concurrent-server-client/src-concurrent-server-client.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Client/publicKeyStorageFile" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Client/publicKeyStorageFile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Records/Record.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Records/Record.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/src-concurrent-server-client/src/SecurityUtils/Encryption.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-concurrent-server-client/src/SecurityUtils/Encryption.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/src-concurrent-server-client/src/SecurityUtils/KeyGenerators.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-concurrent-server-client/src/SecurityUtils/KeyGenerators.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Server/ServerMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Server/ServerMain.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/src-iterative-server-client/src/Client/ClientMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-iterative-server-client/src/Client/ClientMain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/src-concurrent-server-client/src/StatusRequests/PackageStatusRequests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/src-iterative-server-client/src-iterative-server-client.iml" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-iterative-server-client/src-iterative-server-client.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/src-iterative-server-client/src/Client/publicKeyStorageFile" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-iterative-server-client/src/Client/publicKeyStorageFile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/src-iterative-server-client/src/Records/Record.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-iterative-server-client/src/Records/Record.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/src-iterative-server-client/src/Server/ServerMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-iterative-server-client/src/Server/ServerMain.java" afterDir="false" />
     </list>
     <list id="803dfcef-5c0c-4782-9582-7e448662f284" name="Changes by diego" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -66,23 +73,23 @@
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\veron\OneDrive\Documents\Universidad\Infraestructura Computacional\Caso 3\Caso-3\src\src-concurrent-server-client\src" />
       <recent name="C:\Users\veron\OneDrive\Documents\Universidad\Infraestructura Computacional\Caso 3\Caso-3\src\src-concurrent-server-client\src\Records" />
       <recent name="C:\Users\veron\OneDrive\Documents\Universidad\Infraestructura Computacional\Caso 3\Caso-3\ConcurrentClientServerTests\AsymmetricRetoEncryption" />
       <recent name="C:\Users\veron\OneDrive\Documents\Universidad\Infraestructura Computacional\Caso 3\Caso-3\IterativeClientServerTests\SymmetricRetoEncryption" />
       <recent name="C:\Users\veron\OneDrive\Documents\Universidad\Infraestructura Computacional\Caso 3\Caso-3\src\src-iterative-server-client\src\Records" />
-      <recent name="C:\Users\veron\OneDrive\Documents\Universidad\Infraestructura Computacional\Caso 3\Caso-3\src\src-iterative-server-client\src" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\veron\OneDrive\Documents\Universidad\Infraestructura Computacional\Caso 3\Caso-3\src\src-concurrent-server-client\src" />
+      <recent name="C:\Users\veron\OneDrive\Documents\Universidad\Infraestructura Computacional\Caso 3\Caso-3\src\src-concurrent-server-client\src\Server" />
       <recent name="C:\Users\veron\OneDrive\Documents\Universidad\Infraestructura Computacional\Caso 3\Caso-3\ConcurrentClientServerTests\AsymmetricRetoEncryption\4DelegadosConcurrentes" />
       <recent name="C:\Users\veron\OneDrive\Documents\Universidad\Infraestructura Computacional\Caso 3\Caso-3\ConcurrentClientServerTests\AsymmetricRetoEncryption\16DelegadosConcurrentes" />
       <recent name="C:\Users\veron\OneDrive\Documents\Universidad\Infraestructura Computacional\Caso 3\Caso-3\ConcurrentClientServerTests\AsymmetricRetoEncryption\32DelegadosConcurrentes" />
-      <recent name="C:\Users\veron\OneDrive\Documents\Universidad\Infraestructura Computacional\Caso 3\Caso-3\ConcurrentClientServerTests\SymmetricRetoEncryption\32DelegadosConcurrentes" />
-      <recent name="C:\Users\veron\OneDrive\Documents\Universidad\Infraestructura Computacional\Caso 3\Caso-3\ConcurrentClientServerTests\SymmetricRetoEncryption\16DelegadosConcurrentes" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="StatusRequests" />
       <recent name="IterativeTestSuite" />
       <recent name="TestUtils" />
-      <recent name="StatusRequests" />
       <recent name="Server" />
       <recent name="Client" />
     </key>
@@ -90,7 +97,7 @@
   <component name="RunManager" selected="Application.Client.ClientMain">
     <configuration name="ClientMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Client.ClientMain" />
-      <module name="src-iterative-server-client" />
+      <module name="src-concurrent-server-client" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="Client.*" />
@@ -103,7 +110,7 @@
     </configuration>
     <configuration name="Client.ClientMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Client.ClientMain" />
-      <module name="src-concurrent-server-client" />
+      <module name="src-iterative-server-client" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="Client.*" />
@@ -116,7 +123,7 @@
     </configuration>
     <configuration name="ServerMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Server.ServerMain" />
-      <module name="src-iterative-server-client" />
+      <module name="src-concurrent-server-client" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="Server.*" />
@@ -129,7 +136,7 @@
     </configuration>
     <configuration name="Server.ServerMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Server.ServerMain" />
-      <module name="src-concurrent-server-client" />
+      <module name="src-iterative-server-client" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="Server.*" />
@@ -177,6 +184,9 @@
       <workItem from="1652127969034" duration="28861000" />
       <workItem from="1652207004563" duration="4046000" />
       <workItem from="1652211177802" duration="292000" />
+      <workItem from="1652211741421" duration="2264000" />
+      <workItem from="1652214420219" duration="36000" />
+      <workItem from="1652214524132" duration="196000" />
     </task>
     <task id="LOCAL-00001" summary="Cree la estructura">
       <created>1651467130509</created>

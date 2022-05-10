@@ -34,7 +34,7 @@ public class KeyGenerators {
      * Method responsible for generating the private and public key of the server.
      * It stores the generated keys in their respective attributes.
      */
-    public static KeyPair generateKeyPair() throws NoSuchAlgorithmException, NoSuchAlgorithmException {
+    public static KeyPair generateKeyPair() throws NoSuchAlgorithmException {
         //Chooses the algorithm to be used and the key size for the keys
         KeyPairGenerator kpg = KeyPairGenerator.getInstance(ASYMMETRIC_KEY_ALGORITHM);
         kpg.initialize(ASYMMETRIC_KEY_SIZE);
