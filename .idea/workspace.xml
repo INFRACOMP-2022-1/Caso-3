@@ -5,7 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c99e4ea5-36cd-4db9-9814-6290907cf55f" name="Changes" comment="Estoy añadiendo el protocolo del cliente.">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/src-iterative-server-client/src/Client/ClientMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-iterative-server-client/src/Client/ClientMain.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/src-iterative-server-client/src/Server/ServerMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-iterative-server-client/src/Server/ServerMain.java" afterDir="false" />
     </list>
@@ -163,7 +162,7 @@
       <workItem from="1652069194928" duration="10643000" />
       <workItem from="1652084327233" duration="3358000" />
       <workItem from="1652127887439" duration="74000" />
-      <workItem from="1652127969034" duration="23913000" />
+      <workItem from="1652127969034" duration="24224000" />
     </task>
     <task id="LOCAL-00001" summary="Cree la estructura">
       <created>1651467130509</created>
