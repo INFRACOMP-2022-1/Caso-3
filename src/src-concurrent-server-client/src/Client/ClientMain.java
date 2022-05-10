@@ -1,6 +1,6 @@
 package Client;
 
-import Server.Server;
+
 import StatusRequests.PackageStatusRequests;
 
 import java.io.IOException;
@@ -40,7 +40,7 @@ public class ClientMain {
     /*
     This contains the information of how many active clients are to be initialized.
      */
-    public static int numberOfActiveClients = 4;
+    public static int numberOfActiveClients = 10;
 
     //----------------------------------------------------------------------
     // CONSTANTS
@@ -49,7 +49,7 @@ public class ClientMain {
     /*
     If debug is turned on
      */
-    private static int MODE = TEST_ASYMMETRIC;
+    private static int MODE = DEFAULT;
 
     /*
     If the reto is going to be cyphered SYMMETRICALLY(true) or ASYMMETRICALLY(false)

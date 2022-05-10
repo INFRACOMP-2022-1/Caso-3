@@ -3,5 +3,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="src/src-client/src"/>
 	<classpathentry kind="src" path="src/src-server/src"/>
+	<classpathentry kind="src" path="src/src-concurrent-server-client/src/Server"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

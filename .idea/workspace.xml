@@ -8,10 +8,13 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Client/ClientMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Client/ClientMain.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Client/publicKeyStorageFile" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Client/publicKeyStorageFile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/src-concurrent-server-client/src/ConcurrentTestSuite/ProcessTestData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-concurrent-server-client/src/ConcurrentTestSuite/ProcessTestData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Records/Record.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Records/Record.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/src-concurrent-server-client/src/SecurityUtils/KeyGenerators.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-concurrent-server-client/src/SecurityUtils/KeyGenerators.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Server/ServerMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Server/ServerMain.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Server/ServerThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Server/ServerThread.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/src-iterative-server-client/src/Server/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-iterative-server-client/src/Server/Server.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/src-iterative-server-client/src/Client/ClientMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-iterative-server-client/src/Client/ClientMain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/src-iterative-server-client/src/Client/publicKeyStorageFile" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-iterative-server-client/src/Client/publicKeyStorageFile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/src-iterative-server-client/src/Records/Record.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-iterative-server-client/src/Records/Record.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/src-iterative-server-client/src/Server/ServerMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-iterative-server-client/src/Server/ServerMain.java" afterDir="false" />
     </list>
     <list id="803dfcef-5c0c-4782-9582-7e448662f284" name="Changes by diego" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -41,37 +44,40 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "codeWithMe.voiceChat.enabledByDefault": "false",
-    "extract.method.default.visibility": "private",
-    "jdk.selected.JAVA_MODULE": "openjdk-18",
-    "last_directory_selection": "C:/Users/veron/OneDrive/Documents/Universidad/Infraestructura Computacional/Caso 3/Caso-3/src/src-concurrent-server-client/src",
-    "last_opened_file_path": "C:/Users/veron/OneDrive/Documents/Universidad/Infraestructura Computacional/Caso 3/Caso-3/ConcurrentClientServerTests/AsymmetricRetoEncryption",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;extract.method.default.visibility&quot;: &quot;private&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;openjdk-18&quot;,
+    &quot;last_directory_selection&quot;: &quot;C:/Users/veron/OneDrive/Documents/Universidad/Infraestructura Computacional/Caso 3/Caso-3/src/src-concurrent-server-client/src&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/veron/OneDrive/Documents/Universidad/Infraestructura Computacional/Caso 3/Caso-3&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\veron\OneDrive\Documents\Universidad\Infraestructura Computacional\Caso 3\Caso-3\src\src-concurrent-server-client\src\Records" />
       <recent name="C:\Users\veron\OneDrive\Documents\Universidad\Infraestructura Computacional\Caso 3\Caso-3\ConcurrentClientServerTests\AsymmetricRetoEncryption" />
       <recent name="C:\Users\veron\OneDrive\Documents\Universidad\Infraestructura Computacional\Caso 3\Caso-3\IterativeClientServerTests\SymmetricRetoEncryption" />
-      <recent name="C:\Users\veron\OneDrive\Documents\Universidad\Infraestructura Computacional\Caso 3\Caso-3\src\src-concurrent-server-client\src\Records" />
       <recent name="C:\Users\veron\OneDrive\Documents\Universidad\Infraestructura Computacional\Caso 3\Caso-3\src\src-iterative-server-client\src\Records" />
       <recent name="C:\Users\veron\OneDrive\Documents\Universidad\Infraestructura Computacional\Caso 3\Caso-3\src\src-iterative-server-client\src" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\veron\OneDrive\Documents\Universidad\Infraestructura Computacional\Caso 3\Caso-3\ConcurrentClientServerTests\AsymmetricRetoEncryption\4DelegadosConcurrentes" />
+      <recent name="C:\Users\veron\OneDrive\Documents\Universidad\Infraestructura Computacional\Caso 3\Caso-3\ConcurrentClientServerTests\AsymmetricRetoEncryption\16DelegadosConcurrentes" />
+      <recent name="C:\Users\veron\OneDrive\Documents\Universidad\Infraestructura Computacional\Caso 3\Caso-3\ConcurrentClientServerTests\AsymmetricRetoEncryption\32DelegadosConcurrentes" />
       <recent name="C:\Users\veron\OneDrive\Documents\Universidad\Infraestructura Computacional\Caso 3\Caso-3\ConcurrentClientServerTests\SymmetricRetoEncryption\32DelegadosConcurrentes" />
       <recent name="C:\Users\veron\OneDrive\Documents\Universidad\Infraestructura Computacional\Caso 3\Caso-3\ConcurrentClientServerTests\SymmetricRetoEncryption\16DelegadosConcurrentes" />
-      <recent name="C:\Users\veron\OneDrive\Documents\Universidad\Infraestructura Computacional\Caso 3\Caso-3\ConcurrentClientServerTests\SymmetricRetoEncryption\4DelegadosConcurrentes" />
-      <recent name="C:\Users\veron\OneDrive\Documents\Universidad\Infraestructura Computacional\Caso 3\Caso-3\IterativeClientServerTests\SymmetricRetoEncryption" />
-      <recent name="C:\Users\veron\OneDrive\Documents\Universidad\Infraestructura Computacional\Caso 3\Caso-3" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="IterativeTestSuite" />
@@ -169,7 +175,8 @@
       <workItem from="1652084327233" duration="3358000" />
       <workItem from="1652127887439" duration="74000" />
       <workItem from="1652127969034" duration="28861000" />
-      <workItem from="1652207004563" duration="2700000" />
+      <workItem from="1652207004563" duration="4046000" />
+      <workItem from="1652211177802" duration="292000" />
     </task>
     <task id="LOCAL-00001" summary="Cree la estructura">
       <created>1651467130509</created>
@@ -242,11 +249,6 @@
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/src-concurrent-server-client/src/Server/ServerMain.java</url>
-          <line>70</line>
-          <option name="timeStamp" value="46" />
-        </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/src/src-concurrent-server-client/src/ConcurrentTestSuite/ProcessTestData.java</url>
           <line>40</line>
@@ -255,6 +257,15 @@
             <option name="WATCH_EXIT" value="false" />
           </properties>
           <option name="timeStamp" value="47" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/src-iterative-server-client/src/Records/RecordList.java</url>
+          <line>99</line>
+          <properties class="Records.RecordList" method="searchForPackage">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="54" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

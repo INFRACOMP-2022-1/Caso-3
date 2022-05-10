@@ -1,7 +1,5 @@
 package Server;
 
-import Client.Client;
-import StatusRequests.PackageStatusRequests;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -44,7 +42,7 @@ public class ServerMain {
     /*
    If debug is turned on
     */
-    private static int MODE = TEST_ASYMMETRIC;
+    private static int MODE = DEFAULT;
 
     /*
     If the reto is going to be cyphered SYMMETRICALLY(true) or ASYMMETRICALLY(false)

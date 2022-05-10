@@ -1,4 +1,11 @@
+package SecurityUtils;
 
+import javax.crypto.KeyGenerator;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * This class contains the key generators used to generate key paris (asymmetric) and secret keys (symmetric)
@@ -27,7 +34,7 @@ public class KeyGenerators {
      * Method responsible for generating the private and public key of the server.
      * It stores the generated keys in their respective attributes.
      */
-    public static KeyPair generateKeyPair() throws NoSuchAlgorithmException {
+    public static KeyPair generateKeyPair() throws NoSuchAlgorithmException, NoSuchAlgorithmException {
         //Chooses the algorithm to be used and the key size for the keys
         KeyPairGenerator kpg = KeyPairGenerator.getInstance(ASYMMETRIC_KEY_ALGORITHM);
         kpg.initialize(ASYMMETRIC_KEY_SIZE);

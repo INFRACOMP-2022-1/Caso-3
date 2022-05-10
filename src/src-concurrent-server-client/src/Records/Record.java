@@ -65,22 +65,22 @@ public class Record {
      * @return
      */
     public Status strToStatus(String strStatus){
-        if(strStatus == Status.PKT_DESCONOCIDO.toString()){
+        if(strStatus.equals(Status.PKT_DESCONOCIDO.toString())){
             return Status.PKT_DESCONOCIDO;
         }
-        else if(strStatus == Status.PKT_DESPACHADO.toString()){
+        else if(strStatus.equals(Status.PKT_DESPACHADO.toString())){
             return Status.PKT_DESPACHADO;
         }
-        else if(strStatus == Status.PKT_EN_CLASIFICACION.toString()){
+        else if(strStatus.equals(Status.PKT_EN_CLASIFICACION.toString())){
             return Status.PKT_EN_CLASIFICACION;
         }
-        else if(strStatus == Status.PKT_EN_ENTREGA.toString()){
+        else if(strStatus.equals(Status.PKT_EN_ENTREGA.toString())){
             return Status.PKT_EN_ENTREGA;
         }
-        else if(strStatus == Status.PKT_EN_OFICINA.toString()){
+        else if(strStatus.equals(Status.PKT_EN_OFICINA.toString())){
             return Status.PKT_EN_OFICINA;
         }
-        else if(strStatus == Status.PKT_ENTREGADO.toString()){
+        else if(strStatus.equals(Status.PKT_ENTREGADO.toString())){
             return Status.PKT_ENTREGADO;
         }
         else{
