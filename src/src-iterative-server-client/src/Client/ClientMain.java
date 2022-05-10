@@ -17,18 +17,43 @@ public class ClientMain {
     private static final boolean DEBUG = true;
 
     /*
-    This contains the info of the file where the servers public key is writen to
+    Default running mode
+     */
+    private static final int DEFAULT = 0;
+
+    /*
+    Testing Asymmetric running mode
+     */
+    private static final int TEST_ASYMMETRIC = 1;
+
+    /*
+    Testing Symmetric running mode
+     */
+    private static final int TEST_SYMMETRIC = 2;
+
+    /*
+    This contains the info of the file where the servers public key is written to
      */
     private static final String publicKeyStorageFileName = "src/src-iterative-server-client/src/Client/publicKeyStorageFile";
 
     /*
-    This contains the information of how many active clients are to be initialized.
+    This contains the information of how many consults are to be initialized.
      */
-    public static int numberOfActiveClients;
+    public static final int numberOfConsults = 32;
 
     //----------------------------------------------------------------------
     // CONSTANTS
     //----------------------------------------------------------------------
+
+    /*
+    If debug is turned on
+     */
+    private static int MODE = TEST_SYMMETRIC;
+
+    /*
+    If the reto is going to be cyphered SYMMETRICALLY(true) or ASYMMETRICALLY(false)
+     */
+    private static boolean RETO_SYMMETRIC;
 
     /*
     The client manager. Its responsible for initializing a set number of client threads to send petitions to the server regarding package statuses.
@@ -45,17 +70,16 @@ public class ClientMain {
      * @throws NoSuchAlgorithmException
      */
     public static void main(String[] args) throws NoSuchAlgorithmException, IOException, ClassNotFoundException {
-
-        //Record data
-
-        //This creates the list of requests that are going to be made
-        ArrayList<PackageStatusRequests> packageStatusRequestsList = testNConsults(32);
-
-        //Gets the number of clients that need to be created to fulfill all the requests
-        numberOfActiveClients = packageStatusRequestsList.size();
-
-        //Then it has to initialize a given number of clients and make each client thread run
-        clientManager = new Client(publicKeyStorageFileName,numberOfActiveClients,packageStatusRequestsList,DEBUG);
+        //Runs serving according to what mode has been selected by default
+        if(MODE == DEFAULT){
+            runStandardConfiguration();
+        }
+        else if(MODE == TEST_ASYMMETRIC){
+            runAsymmetricRetoTest();
+        }
+        else if(MODE == TEST_SYMMETRIC){
+            runSymmetricRetoTest();
+        }
     }
 
     //----------------------------------------------------------------------
@@ -64,7 +88,6 @@ public class ClientMain {
 
     /**
      * Creates N package consults in the format that is in the recordTable, so all of them should be successful) and stores them in a list
-     * @param consultNumber the number of consults to be generated
      * @return An arraylist containing all the consults
      */
     public static ArrayList<PackageStatusRequests> testNConsults(int consultNumber){
@@ -78,6 +101,77 @@ public class ClientMain {
         }
 
         return packageStatusRequestsArrayList;
+    }
+
+    /**
+     * Runs the asymmetric reto encryption time test
+     */
+    public static void runAsymmetricRetoTest() throws NoSuchAlgorithmException, IOException, ClassNotFoundException {
+        //Firsts it has to initialize the list where the times are going to be stored
+        ArrayList<Long> retoCypherTimeList = new ArrayList<>();
+
+        //Generate the consults
+        ArrayList<PackageStatusRequests> packageStatusRequestsList = testNConsults(numberOfConsults);
+
+        //Specify what encryption method will be used for the algorithm (ASYMMETRIC)
+        RETO_SYMMETRIC = false;
+
+        //Launch the client
+        clientManager = new Client(publicKeyStorageFileName, numberOfConsults, packageStatusRequestsList, RETO_SYMMETRIC, DEBUG) ;
+
+    }
+
+    /**
+     * Runs the symmetric reto encryption time test
+     */
+    public static void runSymmetricRetoTest() throws NoSuchAlgorithmException, IOException, ClassNotFoundException {
+        //Firsts it has to initialize the list where the times are going to be stored
+        ArrayList<Long> retoCypherTimeList = new ArrayList<>();
+
+        //Generate the consults
+        ArrayList<PackageStatusRequests> packageStatusRequestsList = testNConsults(numberOfConsults);
+
+        //Specify what encryption method will be used for the algorithm (SYMMETRIC)
+        RETO_SYMMETRIC = true;
+
+        //Launch the client
+        clientManager = new Client(publicKeyStorageFileName, numberOfConsults, packageStatusRequestsList, RETO_SYMMETRIC, DEBUG) ;
+
+    }
+
+    /**
+     * Runs the default configuration of the server as specified in the original protocol.
+     * As in the normal protocol, the reto is encrypted asymmetricaly.
+     * @throws NoSuchAlgorithmException
+     * @throws IOException
+     */
+    public static void runStandardConfiguration() throws NoSuchAlgorithmException, IOException, ClassNotFoundException {
+        //Generate the consults
+        ArrayList<PackageStatusRequests> packageStatusRequestsList = testNConsults(numberOfConsults);
+
+        //By default, the reto is encrypted the servers private key, so ASYMMETRIC
+        RETO_SYMMETRIC = true;
+
+        //Launch the client
+        clientManager = new Client(publicKeyStorageFileName,numberOfConsults,packageStatusRequestsList,DEBUG);
+    }
+
+    /**
+     * Collects data about the cypher times.
+     * @param retoCypherTimeList
+     */
+    public static void collectDataFromTests(ArrayList<Long> retoCypherTimeList){
+        //Saves information for symmetric retos
+        if(RETO_SYMMETRIC == true){
+            //TODO: SAVE DATA ON CSV
+            //TODO: CALCULATE DIFFERENT STATISTICS ON THE RESPONSE TIMES
+            //TODO: WRITE AND STORE A MINI REPORT
+        }
+        else{
+            //TODO: SAVE DATA ON CSV
+            //TODO: CALCULATE DIFFERENT STATISTICS ON THE RESPONSE TIMES
+            //TODO: WRITE AND STORE A MINI REPORT
+        }
     }
 
 }
