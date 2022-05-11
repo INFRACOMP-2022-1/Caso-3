@@ -13,7 +13,7 @@ public class ServerMain {
     /*
     If debug is turned on
      */
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
 
     /*
     Default running mode

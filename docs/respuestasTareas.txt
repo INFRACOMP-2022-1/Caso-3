@@ -1,0 +1,160 @@
+RESPUESTAS TAREAS 1 A 5:
+
+NOTA: Si quiere ver una respuesta completa a las tareas abra el reporte. Aqui solo hay un resumen.
+
+Tarea 1
+
+i)
+
+Se realizaron 14 mediciones para medir los tiempos de encripción usando tanto llave simetrica como asimetrica. En cada prueba el cliente iterativo realizo 32 consultas diferentes al servidor.
+Si desea ver los datos recopilados de estas medidas ver en IterativeClientServerTests.
+
+RESULTADOS SIMÉTRICOS:
+
+Nota: Para ver las tablas completas ver el reporte o ver en reporte caso el excel que hay con todos los datos recopilados.
+
+Las medias de ejecucion para cada una de las pruebas fueron las siguientes (en nanosegundos)
+
+Media: 	620409.375	582790.625	654740.625	588503.125	559818.75	624190.625	616481.25	616634.375	591850	632156.25	618193.75	605493.75	653784.375	618271.875
+Desviación Estandard 	2300828.98	2088067.883	2249343.839	2019213.019	1977639.602	2261069.766	2250469.043	2200269.29	2091758.31	2219189.935	2195649.281	2165524.503	2366207.154	2221580.422
+
+La media total de todas las pruebas fue de 613094.1964	nanosegundos. Sin embargo, algo interesante que debemos resaltar es que en todas las pruebas el tiempo de la primera consulta es considerablmenete mas grande
+que cualquier otro tiempo de consultas en el mismo run. No se exactamente por que puede ser esto, mi unica hipoteis es que debido a que los metodos de encripcion estan en otro modulo y en una clase por separado depronto se
+demora más tiempo en cargar esa clase/metodo a memoria para poder ejecutarlo, y que ya despues como la referencia esta guardada en una pagina en la tlb o el la tabla de paginas entonces los tiempos de acceso son mucho mas rapidos.
+
+RESULTADOS ASIMETRICOS;
+
+Nota: Para ver las tablas completas ver el reporte o ver en reporte caso el excel que hay con todos los datos recopilados.
+
+Las medias de ejecucion para cada una de las pruebas fueron las siguientes (en nanosegundos)
+
+Media	2050343.75	2000281.25	1688053.125	2048540.625	1734612.5	1937634.375	1737003.125	2024109.375	1889703.125	1835106.25	1787818.75	1648943.75	1847415.625	1597143.75
+Desviacion Estandard 	7557534.416	7129515.755	5927109.758	6696963.905	6063910.861	7183097.637	5960476.599	8291582.409	6749702.227	6741743.32	5964291.869	5522099.833	6946864.083	5778347.628
+
+La media total de todas las pruebas fue de 1844764.955	nanosegundos. En esta instancia tambien sucede que la primera consulta se demora mas tiempo que cualquier otra consulta.
+
+ii)
+
+Se realizaron 10 mediciones para cada uno de los escenarios de 4 , 16 y 32 delegados para cada uno de los casos de encripcion simetrica y asimetrica concurrente. Los archivos de estas pruebas estan en la carpeta
+de ConcurrentClientServerTests.
+
+RESULTADOS SIMETRICOS 4,16,32 DELEGADOS:
+
+Media 4 Delegados:	3029975	3364500	3100200	3332475	2306100	3394075	2670725	2583175	3337875	3454125
+Media 16 Delegados:	898068.75	857443.75	958862.5	883781.25	912231.25	1184325	864337.5	888118.75	970537.5	971543.75
+Media 32 Delegados:	626912.5	615381.25	635046.875	631175	533196.875	582028.125	580903.125	779615.625	700225	601275
+
+Estos son los promedios de cada una de las pruebas
+
+Media 4 Delegados	3057322.5	nanosegundos
+Media 16 Delegados	938925	nanosegundos
+Media 32 Delegados 	628575.9375	nanosegundos
+
+Esta es la media de todos los datos
+
+Media Total todos los casos: 	910894.6154	nanosegundos
+
+la misma observacion que en los casos iterativos, que el tiempo de encripcion del primer delegado es magnitudes mas grandes que el de los delegados que le siguen.
+
+
+RESULTADOS ASIMETRICOS 4,16,32 DELEGADOS:
+
+Media 4 Delegados:	10957675	11563625	10502200	9296600	10573350	8733925	10474175	13439325	11444650	10144225
+Media 16 Delegados:	3037912.5	3085812.5	2809287.5	3236893.75	2924906.25	3199025	3606093.75	4924337.5	2937850	3766856.25
+Media 32 Delegados: 2070968.75	1957875	2171637.5	1999878.125	2039962.5	1903446.875	2303259.375	2229303.125	1881225	2096334.375
+
+Estos son los promedios de cada una de las pruebas
+
+Media 4 Delegados general:	10712975	nanosegundos
+Media 16 Delegados Geneal:	3352897.5	nanosegundos
+Media 32 Delegados General:	2065389.063	nanosegundos
+
+Esta es la media de todos los datos
+
+Media total: 	3126744.423	nanosegundos
+
+la misma observacion que en los casos iterativos, que el tiempo de encripcion del primer delegado es magnitudes mas grandes que el de los delegados que le siguen.
+
+2)
+
+Esta tarea ya se cumplio con los datos de los promedios dados anteriormente, y si se desea ver los datos completos se pueden ver en las carpetas de COncurretnClientServerTest o en la
+carpeta de IterativeClientServerTest. O se pueden ver las tablas de una forma mas organizada en el reporte.
+
+3)
+
+Las graficas se pueden encontrar en el reporte
+
+4)
+
+CASO SIMETRICO:
+
+En general si se ve las graficas producidas en el reporte se puede ver que la eficiencia ganada por correr el servidor iterativo se nota ampliamente ya que es en esos runs
+que los tiempos de encripcion fueron los menores. Los tiempos mas altos fueron cuando se uso 4 delegados con el client server concurrente, lo cual es bastante sorprendente por que se esperaria
+alguna eficiencia ganada por el uso de concurrencia incluso en una pequeña escala. Mientras los tiempos de ejecucuion del client server iterativo son las esperadas, siendo bastante mayores a
+las de uso de 16 y 32 delegados concurrentes.
+
+CASO ASIMETRICO:
+
+En general si se ven las graficas producidas se puede ver que tambien en este caso el servidor concurrente usando 4 delegados fue el menos eficiente de todos. Mientras que el iterativo fue el mas eficiente de todos.
+Pero el servidor concurrente con 16 y 32 delegados se encuentra bastante cercano a los itempos del iteratvio.
+
+Para un analisis mas detallado ver el reporte.
+
+5)
+
+El procesador usado fue un intel i7-1165G7 con una velocidad de reloj de 2.8GHz. Adicionalmente el computador tenia 16 GB de RAM.
+
+CASO ASIMETRICO ITERATIVO
+
+Average Encryption time: 	0.001844765	Segundos
+Algoritmo usado: 	RSA 1024 bits
+Tiempo por operacion:	0.0008	Segundos
+
+Tiempo (Teorico):	1250	retos
+Tiempo(Practica):	542	retos
+
+En este caso el tiempo teorico fue calculado con informacion de una pagina donde se documentaba el tiempo que se tomaba por operacion de encripcion con un algritmo RSA con una llave de 1024 bits.
+En teoria el tiempo que se demora un algoritmo RSA de tamano llave fijo es constante puesto depende del tamaño de la llave y no del contenido del input data.
+
+CASO ASIMETRICO CONCURRENTE
+
+Caso Asimetrico Concurrente
+Average Encryption time 	0.003126744	Segundos
+Algoritmo usado 	RSA 1024 bits
+Tiempo por operación	0.0008	Segundos
+
+Tiempo (Teorico):	1250	retos
+Tiempo(Practica):	319	retos
+
+En este caso el tiempo teorico fue calculado con informacion de una pagina donde se documentaba el tiempo que se tomaba por operacion de encripcion con un algritmo RSA con una llave de 1024 bits.
+En teoria el tiempo que se demora un algoritmo RSA de tamano llave fijo es constante puesto depende del tamaño de la llave y no del contenido del input data.
+
+
+Caso Simetrico Iterativo
+Average Encryption time 	0.000613094	Segundos
+Algoritmo usado 	AES/ECB/PKCS5 256 bits
+Ciclos/Byte AES	1.3	cycles/bytes
+
+Tiempo (Teorico)	2312674698	retos
+Tiempo(Practica)	1631.070732	retos
+
+Para el tiempo teorico use lo que segun intel es uno de los tiempos de procesamiento de un algoritmo AES ECB mas rapidos usando instrucciones de maquina, intente encontrar mas informacion de
+como calcular el numero de ciclos por byte para encriptar usando AES/ECB/PKCS5 pero la informacion es escasa. Sin embargo, se hizo el calculo teorico del tiempo que se demoraria si la velocidad
+fuera 1.3 ciclos/byte.
+
+Caso Simetrico Concurrente
+Average Encryption time 	0.000910895	Segundos
+Algoritmo usado 	AES/ECB/PKCS5 256 bits
+Ciclos/Byte AES	1.3	cycles/bytes
+
+Tiempo (Teorico)	2312674698	retos
+Tiempo(Practica)	1097.821837	retos
+
+Para el tiempo teorico use lo que segun intel es uno de los tiempos de procesamiento de un algoritmo AES ECB mas rapidos usando instrucciones de maquina, intente encontrar mas informacion de
+como calcular el numero de ciclos por byte para encriptar usando AES/ECB/PKCS5 pero la informacion es escasa. Sin embargo, se hizo el calculo teorico del tiempo que se demoraria si la velocidad
+fuera 1.3 ciclos/byte.
+
+Conclusiones
+En general como era de esperar los algoritmos simetricos son mucho mas eficientes para la encripcion de datos, tanto en teoria como en practica. Ya que en tanto el caso concurrente como el iterativo
+los tiempos de encripcion son mucho menores. Obviamente los tiempos teoricos para algoritmo simetrico son mucho menores de los de mi maquina, ya que usaban un procesador de punta e instrucciones de maquina,
+lo cual no era el caso de este proyecto. Adicionamente, los tiempos de encripcion asimetricos aunque mucho mas lentos en ocasiones se acercan a los concurrentes.
