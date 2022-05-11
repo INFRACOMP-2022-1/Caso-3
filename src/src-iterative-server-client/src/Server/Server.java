@@ -1,6 +1,6 @@
 package Server;
 
-import IterativeTestSuite.ProcessTestData;
+import TestSuite.ProcessTestData;
 import SecurityUtils.*;
 import Records.RecordList;
 

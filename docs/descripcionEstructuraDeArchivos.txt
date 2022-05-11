@@ -1,0 +1,37 @@
+La estructura del proyecto esta divida en las siguientes carpetas:
+
+- ConcurrentClientServerTests
+- docs
+- IterativeClientServerTests
+- Reporte-caso
+- src
+
+En la carpeta ConcurrentClientServerTest se pueden encontrar los archivos (.csv) que se producieron al ejecutar las pruebas de encripcion del reto tanto por el uso
+de un algoritmo simetrico o un algorimto asimetrico para nuestro client-server concurrente. En la sub carpeta AsymmetricRetoEncryption se pueden encontrar
+todas las pruebas asimetricas organizadas en 3 folders (4DelegadosConcurrentes,16DelegadosConcurrentes,32DelegadosConcurrentes), cada uno correspondiendo
+a el numero de delegados usados en la ejecuccion de las pruebas. La estructura de la sub carpeta SymmetricRetoEncryption es igual a la de AsymmetricRetoEncryption,
+con la diferencia que ahi se guardan los resultados de pruebas simetricas.
+
+En la carpeta de docs se puedenencontrar cuatro archivos. El primero siendo descripcionEstructuraDeArchivos.txt (el que estan leyendo en este momento) donde se
+describe la estructura del proyecto. El segundo archivo es instruccionesEjecucion.txt donde se describen los pasos a seguir para ejecutar el client-server concurrente
+y el client-server-iterativo. El tercer archivo descripcionEsquemaDeGeneracionDeLlaves.txt da una descripcion del esquema usado para generar las llaves y los nombres de los
+archivos que las almacenan. El cuarto, y ultimo archivo, llamado respuestasTareas.txt contiene un resumen de las soluciones a las tareas 1 a 5, aunque la solucion completa a estas preguntas
+con graficas y tablas incluidas esta en nuestro reporte (el cual esta en la carpeta reporte-caso).
+
+En la carpeta IterativeClientServerTest se pueden encontrar los archivos (.csv) que se producieron al ejecutar las pruebas de encripcion del reto tanto por el uso
+de un algoritmo simetrico o un algorimto asimetrico para nuestro client-server iterativo. En la sub carpeta AsymmetricRetoEncryption se pueden encontrar una serie de archivos .csv
+en los cuales se producion un reporte de con cada uno de los 32 tiempos de ejecucion medidos para la encripcion del reto con un algoritmo asimetrico. La estructura de la sub
+carpeta SymmetricRetoEncryption es igual a la de AsymmetricRetoEncryption, con la diferencia que los tiempos recolectados corresponden al uso de un algoritmo simetrico.
+
+En la carpeta Reporte-caso pueden encontrar 2 archivos. El primero siendo el pdf del enunciado del caso 3, y el segundo siendo un pdf con el reporte completo del caso. El reporte cubre
+todos los rubros especificados y tiene una respuesta mas completa de las 5 tareas dadas en el enunciado con graficas incluidas.
+
+La carpeta src contiene dos sub carpetas, la cuales corresponden respectivamente a los source de nuestro client server iterativo (src-iterative-server-client) y al source de nuestro client server
+concurrente (src-concurrent-server-client). Cada una de estas carpeteas tiene el source del proyecto, y ambos contienen las mismas carpetas (pero con clases levemente diferentes,
+debido a que su implementacion es diferente) las cuales son : Client,Records,SecurityUtils,Server,StatusRequests,TestSuite. En Client se pueden todas las clases relacionadas a la implementacion del cliente
+(ahi esta ClientMain que es la clase con la que se implementa la ejecucion del cliente). En Records se puede encontrar las clases con las que se implemento la "base de datos" de paquetes
+(usuario,package_id,status) y tambien contiene el .csv donde esta la tabla usada para guardar los datos. En SecurityUtils se puede encontrar todas las clases que implementan los algoritmos de encripcion,
+decripcion, creacion de codigos de autenticacion, hashing , generadores de llaves y otros elementos utiles para implementar seguirdad. En Server se pueden encontrar todas las clases
+relacionadas a la implementacion del servidor (ahi est a ServerMain que es la clase con la que se ejecuta el servidor). En TestSuite esta guardada una clase creada especificamente para
+procesar los datos generados por las pruebas que pedian en las tareas 1 a 5.
+

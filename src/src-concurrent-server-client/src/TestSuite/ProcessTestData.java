@@ -1,4 +1,4 @@
-package ConcurrentTestSuite;
+package TestSuite;
 
 import java.io.File;
 import java.io.FileWriter;

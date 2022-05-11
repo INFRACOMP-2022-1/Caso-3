@@ -1,10 +1,9 @@
-package IterativeTestSuite;
+package TestSuite;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Iterator;
 import java.util.List;
 
 //TODO: Documentar esto

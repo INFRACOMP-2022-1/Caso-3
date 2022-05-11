@@ -1,6 +1,6 @@
 package Server;
 
-import ConcurrentTestSuite.ProcessTestData;
+import TestSuite.ProcessTestData;
 import SecurityUtils.KeyGenerators;
 import Records.RecordList;
 
