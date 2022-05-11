@@ -5,7 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c99e4ea5-36cd-4db9-9814-6290907cf55f" name="Changes" comment="Estoy añadiendo el protocolo del cliente.">
-      <change beforePath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Records/RecordList.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Records/RecordList.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Client/publicKeyStorageFile" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-concurrent-server-client/src/Client/publicKeyStorageFile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/src-iterative-server-client/src/Client/ClientMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-iterative-server-client/src/Client/ClientMain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/src-iterative-server-client/src/Client/publicKeyStorageFile" beforeDir="false" afterPath="$PROJECT_DIR$/src/src-iterative-server-client/src/Client/publicKeyStorageFile" afterDir="false" />
     </list>
     <list id="803dfcef-5c0c-4782-9582-7e448662f284" name="Changes by diego" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -171,6 +174,7 @@
       <workItem from="1652211741421" duration="2264000" />
       <workItem from="1652214420219" duration="36000" />
       <workItem from="1652214524132" duration="196000" />
+      <workItem from="1652218532186" duration="2494000" />
     </task>
     <task id="LOCAL-00001" summary="Cree la estructura">
       <created>1651467130509</created>

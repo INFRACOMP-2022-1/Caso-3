@@ -39,7 +39,7 @@ public class ClientMain {
     /*
     This contains the information of how many consults are to be initialized.
      */
-    public static final int numberOfConsults = 32;
+    public static final int numberOfConsults = 10;
 
     //----------------------------------------------------------------------
     // CONSTANTS
