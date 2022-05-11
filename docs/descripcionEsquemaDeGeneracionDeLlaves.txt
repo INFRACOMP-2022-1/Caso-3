@@ -1,0 +1,8 @@
+ESQUEMA GENERACIONI DE LLAVES
+
+Para generar las llaves publicas y privadas utilizamos la clase KeyPairGenerator y KeyGenerator para generar las llaves asimetricas(Public y Privada) y simetricas respectivamente(Llave secreta).
+Cuando ServerMain se pone a correr (tanto en el iterativo como el concurrente) este primero genera las llaves publica y privadas que se van a usar, esto lo hace por medio de la clase KeyGenerators
+la cual esta en la carpeta de SecurityUtils (tanto en el iterativo como en el concurrente). Esta clase contiene dos metdoso, uno para generar la llave asimetrica llamado generateKeyPair() y otro para
+generar la llave simetrica lamado generateSecretKeyLS() . Una vez se genera la llave publica y privada ServerMain es responsable de guardar esa llave como un objeto serializado en la carpeta de
+Client en un archivo con el nombre de publicKeyStorageFile , de tal forma que cuando el cliente quiera conocer la llave solo debe abrir ese archivo y deserializar la llave (esto es lo mismo para el iterativo y el concurrente).
+Algo importante que conotar es que cada vez que se corre el ServerMain se crea una nueva llave que se guarda en el archivo de publicKeyStorageFile.
