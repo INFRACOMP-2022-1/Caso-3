@@ -1,0 +1,35 @@
+INSTRUCCIONES DE EJECUCION:
+
+En adicion a las instrucciones dadas en este archivo tambien hicimos un video de demo de como ejecutar el proyecto en tanto intelij como eclipse:
+https://youtu.be/Jb2wjbLCV84
+
+CLIENT-SERVER ITERATIVO
+
+Para ejecutar el client server iterativo debe ir a src/src-iterative-server-client y abrir la carpeta que dice src. Una vez ahi abrir las carpetas(paquetes/modulos)
+de Client y Server. Dentro de la carpeta de Client debe encontrar 3 archivos (Client,ClientMain,publicKeyStorageFile) y dentro de Server debe encontrar 2 clases (Server, ServerMain).
+Para iniciar la ejecucion debe ejecutar primero ServerMain.java (esta en la carpeta de Server) , despues debe ejecutar ClientMain.java (esta en la carpeta de Client).
+Una vez ejecutado client se lleva a cabo la ejecucion del protocolo completo. ServerMain permanece corriendo infinitamente hasta que se pare su ejecucion a mano.
+Si desea volver a correr el protocolo desde cero tiene que primero asegurarse que ServerMain no este ejecutando y tiene que volver a correr ServerMain.java y despues correr a ClientMain.java.
+
+Si desea ver el funcionamiento interno del protocolo en consola se puede prender el modo debug(dando el valor a la constante DEBUG como true), el cual se encuentra en las constantes de tanto ServerMain.java como en ClientMain.java en las lineas 15 y 17 respectivamente.
+Si desea correr las pruebas de test asimetrico o test simetrico para tiene que modificar el atributo de MODE (linea 44 en ServerMain y linea 51 en ClientMain) cambiandolo de DEFAULT a TEST_ASYMMETRIC o TEST_SYMMETRIC tal como dese,
+pero para que funcione tiene que cambiar eel atributo de mode en tanto ClientMain como ServerMain (no puede tener MODO en ServerMain como DEFAULT mientras que en ClientMain esta como TEST_ASYMMETRIC, ahi ocurrira un error a la hora de ejecucion).
+
+CLIENT-SERVER CONCURRENTE
+
+Para ejecutar el client server concurrente debe ir a src/src-concurrent-server-client y abrir la carpeta que dice src. Una vez ahi abrir las carpetas(paquetes/modulos)
+de Client y Server. Dentro de la carpeta de Client debe encontrar 4 archivos (Client,ClientMain,ClientThread,publicKeyStorageFile) y dentro de Server debe encontrar 3 clases (Server, ServerThread,ServerMain).
+Para iniciar la ejecucion debe ejecutar primero ServerMain.java (esta en la carpeta de Server) , despues debe ejecutar ClientMain.java (esta en la carpeta de Client).
+Una vez ejecutado client se lleva a cabo la ejecucion del protocolo completo. ServerMain permanece corriendo infinitamente hasta que se pare su ejecucion a mano.
+Si desea volver a correr el protocolo desde cero tiene que primero asegurarse que ServerMain no este ejecutando y tiene que volver a correr ServerMain.java y despues correr a ClientMain.java.
+
+Si desea ver el funcionamiento interno del protocolo en consola se puede prender el modo debug(dando el valor a la constante DEBUG como true), el cual se encuentra en las constantes de tanto ServerMain.java como en ClientMain.java en las lineas 16 y 18 respectivamente.
+Si desea correr las pruebas de test asimetrico o test simetrico para tiene que modificar el atributo de MODE (linea 45 en ServerMain y linea 52 en ClientMain) cambiandolo de DEFAULT a TEST_ASYMMETRIC o TEST_SYMMETRIC tal como dese,
+pero para que funcione tiene que cambiar eel atributo de mode en tanto ClientMain como ServerMain (no puede tener MODO en ServerMain como DEFAULT mientras que en ClientMain esta como TEST_ASYMMETRIC, ahi ocurrira un error a la hora de ejecucion).
+
+NOTA
+
+Si tiene problemas ejecutando el programa tambien en el envio se incluyo una carpeta llamada "Caso 3 Eclipse Versions" la cual contiene dos proyectos. Uno llamado Caso-3-Eclipse-Concurrent  y otro llamado Caso-3-Eclipse-Iterative ,
+los cuales corresponden al server client concurrente y al server client iterativo respectivamente. Estos proyectos son copias del src del archivo principal entregado (en el que estan leyendo esto) pero que sirven en eclipse.
+La razon por la que los incluimos es por que hemos tenido varios problemas importando el proyecto a eclipse (nosotros hicimos este proyecto en intelj). La forma de correr los proyectos es basicamente identica a la descrita pero si nesecita
+mas informacion por favor ver el video en este link https://youtu.be/Jb2wjbLCV84 .
