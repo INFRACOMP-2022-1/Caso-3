@@ -9,5 +9,6 @@ Autores: Santiago Vela, Verónica Escobar
 ## Descripción
 El projecto consiste en implementar un protocolo de comunicacion entre un cliente y un servidor de una empresa de transportes. El protocolo contiene una variedad de medidas de seguirdad tal como encripcion usando llave publica, llave privada y otras tacticas de seguridad como hashing  para asi asegurar la integridad y confidencialidad de los datos siendo transmitidos.
 
-## Reporte (DOCX)
-El reporte de este caso se puede encontrar en la ruta 
+## Datos adicionales
+El reporte de este caso se puede encontrar en la ruta reporte-caso/ReporteCaso3.pdf
+Si se quiere consultar el enunciado del caso este se puede encontrar en la ruta reporte-caso/Enunciado.pdf
